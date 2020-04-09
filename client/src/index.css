@@ -1,0 +1,9 @@
+.rosesContainer {
+  display:grid;
+  height: 100%;
+  grid-template-columns: 1fr, 1fr, 1fr;
+} 
+.componentContainer {
+  border-style: 1px,solid,green; ;
+
+}
