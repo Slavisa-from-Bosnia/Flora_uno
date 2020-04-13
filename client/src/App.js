@@ -11,9 +11,9 @@ import Dashboard from "./components/dashboard/Dashboard.js";
 function App() {
   return (
     <Fragment>
-        <div>
+       
           <Dashboard/>
-        </div>
+
     </Fragment>
     
  
