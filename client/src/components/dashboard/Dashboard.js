@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import {lighten, makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
@@ -21,8 +21,8 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './ListItems';
 import Chart from './Chart.js';
 import Deposits from './Deposits.js';
-import Orders from './Orders.js';
-import Table from '../table/Table';
+import Table from './Table';
+
 
 function Copyright() {
   return (
@@ -186,17 +186,9 @@ export default function Dashboard() {
                 <Deposits />
               </Paper>
             </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-             
-                <Table/>
-              
-            </Grid>
+            <Grid item xs={12} md={12} lg={12}>
+              <Table/>  
+            </Grid>  
           </Grid>
           <Box pt={4}>
             <Copyright />
