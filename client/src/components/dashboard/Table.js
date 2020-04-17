@@ -16,17 +16,18 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-function createData(name, adress, city, phone, email) {
-  return { name, adress, city, phone, email };
+function createData(name, calories, fat, carbs, protein) {
+  return { name, calories, fat, carbs, protein };
 }
 
 const rows = [
   createData('Suada Suadić', 'Armije BIH 35', 'Sarajevo', '065 525 684', 'suada@hotmail.com'),
-  createData('Mersida Mersidić', 452, 25.0, 51, 4.9),
+  createData('Mersida Mersidić', 'Armije BIH 35', 'Sarajevo', '065 525 684', 'suada@hotmail.com'),
   createData('Dragana Mirković', 262, 16.0, 24, 6.0),
   createData('Dara Darić', 159, 6.0, 24, 4.0),
   createData('Stanija Stanišić', 356, 16.0, 49, 3.9),
@@ -68,7 +69,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Naziv kupca' },
-  { id: 'adress', numeric: false, disablePadding: false, label: 'Adresa' },
+  { id: 'adress',numeric:false, disablePadding:false, label: 'Adresa' },
   { id: 'city', numeric: false, disablePadding: false, label: 'Grad' },
   { id: 'phone', numeric:false, disablePadding: false, label: 'Telefon' },
   { id: 'email', numeric:false, disablePadding: false, label: 'Mejl' },
@@ -84,7 +85,12 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          
+          <Checkbox
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={rowCount > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+            inputProps={{ 'aria-label': 'select all desserts' }}
+          />
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -213,7 +219,7 @@ export default function EnhancedTable() {
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-
+  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -260,6 +266,9 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
+  };
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -273,7 +282,7 @@ export default function EnhancedTable() {
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size={'medium'}
+            size={ 'small'}
             aria-label="enhanced table"
           >
             <EnhancedTableHead
@@ -311,15 +320,15 @@ export default function EnhancedTable() {
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="left">{row.calories}</TableCell>
+                      <TableCell align="left">{row.fat}</TableCell>
+                      <TableCell align="left">{row.carbs}</TableCell>
+                      <TableCell align="left">{row.protein}</TableCell>
                     </TableRow>
                   );
                 })}
               {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
+                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -336,7 +345,6 @@ export default function EnhancedTable() {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
-      
     </div>
   );
 }
