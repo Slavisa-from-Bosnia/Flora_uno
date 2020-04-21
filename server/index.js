@@ -77,7 +77,21 @@ app.delete("/roses/:id", async (req,res) => {
     }
 })
 
+// create buyer
 
+app.post("/buyers", async (req, res)=>{
+    try{
+        const {input} = req.body;
+        console.log(input);
+        
+        const newBuyer = await pool.query("INSERT INTO buyers (name, address, city, phone, email ) VALUES ($1,$2, $3, $4, $5) RETURNING *",
+        [input.firstName, input.address, input.city, input.phone, input.meil]
+        );
+        res.json(newBuyer.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
 app.listen(5000, () => {
     console.log("server has started on port 5000");

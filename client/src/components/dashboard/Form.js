@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { Input } from '@material-ui/core';
 
 function Copyright() {
   return (
@@ -38,8 +39,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+export default function BuyerInput() {
+  const [input, setInput] = useState ({
+    firstName:"",
+    address:"",
+    city:"",
+    phone:"",
+    meil:""
+  });
   const classes = useStyles();
+
+  const onSubmitForm = async e => {
+    e.preventDefault();
+    try{
+      const body = {input};
+      const response = await fetch("http://localhost:5000/buyers", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body)
+    });
+
+      console.log(response);
+    } catch (err) {
+      console.error(err.message);
+
+    }
+  };
+
+  const updateField = e => {
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value
+    });
+  };
 
   return (
     <Container component="main" maxWidth="mdlg">
@@ -49,7 +81,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
             Kupci
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form}  onSubmit ={onSubmitForm}>
           <Grid container spacing={2}>
             <Grid item xs={6} sm={4} md={2}>
               <TextField
@@ -62,6 +94,7 @@ export default function SignUp() {
                 label="Ime i prezime"
                 autoFocus
                 size="small"
+                onChange={updateField}
               />
             </Grid>
             <Grid item xs={6} sm={4} md={4}>
@@ -74,6 +107,7 @@ export default function SignUp() {
                 name="address"
                 autoComplete="lname"
                 size="small"
+                onChange={updateField}
               />
             </Grid>
             <Grid item xs={6} sm={4} md={2}>
@@ -86,6 +120,7 @@ export default function SignUp() {
                 name="city"
                 autoComplete="city"
                 size="small"
+                onChange={updateField}
               />
             </Grid>
             <Grid item xs={6} sm={4} md={2}>
@@ -99,18 +134,20 @@ export default function SignUp() {
                 id="phone"
                 autoComplete="phone"
                 size="small"
+                onChange={updateField}
               />
             </Grid>
             <Grid item xs={6} sm={4} md={2}>
               <TextField
                 variant="outlined"
                 fullWidth
-                name="mejl"
+                name="meil"
                 label="E-mail"
                 type="e-mail"
                 id="email"
                 autoComplete="current-password"
                 size="small"
+                onChange={updateField}
               />
             </Grid>
             
