@@ -81,10 +81,10 @@ app.delete("/roses/:id", async (req,res) => {
 
 app.post("/buyers", async (req, res)=>{
     try{
+        console.log(req.body);
         const {input} = req.body;
-        console.log(input);
-        
-        const newBuyer = await pool.query("INSERT INTO buyers (name, address, city, phone, email ) VALUES ($1,$2, $3, $4, $5) RETURNING *",
+        const newBuyer = await pool.query(
+        "INSERT INTO buyers (name, address, city, phone, email) VALUES ($1,$2, $3, $4, $5) RETURNING *",
         [input.firstName, input.address, input.city, input.phone, input.meil]
         );
         res.json(newBuyer.rows[0]);
@@ -92,6 +92,19 @@ app.post("/buyers", async (req, res)=>{
         console.error(err.message);
     }
 });
+
+// get all buyers
+
+app.get("/buyers", async(req, res) => {
+    try {
+        const allBuyers = await pool.query("SELECT * FROM buyers ORDER BY buyer_id DESC");
+        res.json(allBuyers.rows);
+        console.log(allBuyers);
+ 
+    } catch (err) {
+        console.error(err.message);
+    }
+ });
 
 app.listen(5000, () => {
     console.log("server has started on port 5000");

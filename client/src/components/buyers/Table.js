@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -25,7 +25,7 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-const rows = [
+/*const rows = [
   createData('Suada Suadić', 'Armije BIH 35', 'Sarajevo', '065 525 684', 'suada@hotmail.com'),
   createData('Mersida Mersidić', 'Armije BIH 35', 'Sarajevo', '065 525 684', 'suada@hotmail.com'),
   createData('Dragana Mirković', 262, 16.0, 24, 6.0),
@@ -39,7 +39,7 @@ const rows = [
   createData('Marshmallow', 318, 0, 81, 2.0),
   createData('Nougat', 360, 19.0, 9, 37.0),
   createData('Oreo', 437, 18.0, 63, 4.0),
-];
+];*/
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -164,7 +164,7 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Nutrition
+          Baza registrovanih kupaca
         </Typography>
       )}
 
@@ -213,7 +213,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EnhancedTable() {
+export default function EnhancedTable(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
@@ -221,6 +221,24 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [data, setData] = React.useState([]);
+  const rows =data;
+  const getBuyers = async () => {
+    try{
+      const response = await fetch("http://localhost:5000/buyers");
+      const jsonData =await response.json();
+
+      setData(jsonData);
+      console.log(jsonData);
+
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(()=>{
+    getBuyers();
+  },[props]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -320,10 +338,10 @@ export default function EnhancedTable() {
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.name}
                       </TableCell>
-                      <TableCell align="left">{row.calories}</TableCell>
-                      <TableCell align="left">{row.fat}</TableCell>
-                      <TableCell align="left">{row.carbs}</TableCell>
-                      <TableCell align="left">{row.protein}</TableCell>
+                      <TableCell align="left">{row.address}</TableCell>
+                      <TableCell align="left">{row.city}</TableCell>
+                      <TableCell align="left">{row.phone}</TableCell>
+                      <TableCell align="left">{row.email}</TableCell>
                     </TableRow>
                   );
                 })}

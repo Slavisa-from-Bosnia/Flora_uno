@@ -1,31 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Input } from '@material-ui/core';
+import SelectInput from '@material-ui/core/Select/SelectInput';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(1),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -39,7 +25,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BuyerInput() {
+ const Form = (props)=> {
+  
   const [input, setInput] = useState ({
     firstName:"",
     address:"",
@@ -47,23 +34,25 @@ export default function BuyerInput() {
     phone:"",
     meil:""
   });
-  const classes = useStyles();
 
-  const onSubmitForm = async e => {
-    e.preventDefault();
-    try{
-      const body = {input};
-      const response = await fetch("http://localhost:5000/buyers", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(body)
-    });
+  const addressRef = useRef();
+  const cityRef = useRef();
+  const phoneRef = useRef();
+  const mailRef = useRef();
+  const buttonRef = useRef();
+  const firstNameRef =useRef();
 
-      console.log(response);
-    } catch (err) {
-      console.error(err.message);
-
-    }
+  const changeFocusToAdress = () => {
+    addressRef.current.focus();
+  };
+  const changeFocusToCity = () => {
+    cityRef.current.focus();
+  };
+  const changeFocusToPhone = () => {
+    phoneRef.current.focus();
+  };
+  const changeFocusToMail = () => {
+    mailRef.current.focus();
   };
 
   const updateField = e => {
@@ -73,13 +62,42 @@ export default function BuyerInput() {
     });
   };
 
+  const onSubmitForm =async e => {
+    e.preventDefault();
+    try{
+      const data = {input};
+      const response = await fetch("http://localhost:5000/buyers", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+      });
+      console.log(response);
+      props.setTrigger();
+      setInput({
+        firstName:"",
+        address:"",
+        city:"",
+        phone:"",
+        meil:""
+      });
+      firstNameRef.current.focus();
+
+    } catch (err) {
+      console.error(err.message);
+  
+    }
+    
+  };
+
+  const classes = useStyles();
+
   return (
-    <Container component="main" maxWidth="mdlg">
+    <Container component="main" maxWidth="lg">
       <CssBaseline />
       <div className={classes.paper}>
     
         <Typography component="h1" variant="h5">
-            Kupci
+          Unos kupaca
         </Typography>
         <form className={classes.form}  onSubmit ={onSubmitForm}>
           <Grid container spacing={2}>
@@ -95,6 +113,13 @@ export default function BuyerInput() {
                 autoFocus
                 size="small"
                 onChange={updateField}
+                value={input.firstName}
+                inputRef={firstNameRef}
+                onKeyPress={event => {
+                  if (event.key === "Enter") {
+                    changeFocusToAdress();
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={6} sm={4} md={4}>
@@ -108,6 +133,13 @@ export default function BuyerInput() {
                 autoComplete="lname"
                 size="small"
                 onChange={updateField}
+                value={input.address}
+                inputRef={addressRef}
+                onKeyPress={event => {
+                  if (event.key === "Enter") {
+                    changeFocusToCity();
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={6} sm={4} md={2}>
@@ -121,6 +153,13 @@ export default function BuyerInput() {
                 autoComplete="city"
                 size="small"
                 onChange={updateField}
+                value={input.city}
+                inputRef={cityRef}
+                onKeyPress={event => {
+                  if (event.key === "Enter") {
+                    changeFocusToPhone();
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={6} sm={4} md={2}>
@@ -135,6 +174,13 @@ export default function BuyerInput() {
                 autoComplete="phone"
                 size="small"
                 onChange={updateField}
+                value={input.phone}
+                inputRef={phoneRef}
+                onKeyPress={event => {
+                  if (event.key === "Enter") {
+                    changeFocusToMail();
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={6} sm={4} md={2}>
@@ -148,6 +194,8 @@ export default function BuyerInput() {
                 autoComplete="current-password"
                 size="small"
                 onChange={updateField}
+                value={input.meil}
+                inputRef={mailRef}
               />
             </Grid>
             
@@ -157,7 +205,8 @@ export default function BuyerInput() {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            className = {classes.submit}
+            inputRef={buttonRef}
           >
             Snimi
           </Button>
@@ -167,3 +216,4 @@ export default function BuyerInput() {
     </Container>
   );
 }
+export default Form;

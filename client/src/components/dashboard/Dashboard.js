@@ -19,9 +19,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './ListItems';
-import Form from './Form.js';
+import Buyers from '../buyers/Buyers';
 
-import Table from './Table';
+
 
 
 function Copyright() {
@@ -104,11 +104,11 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
   },
   container: {
-    paddingTop: theme.spacing(4),
+    paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(4),
   },
   paper: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(2),
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
@@ -174,15 +174,8 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Form */}
             <Grid item xs={12} md={12} lg={12}>
-              <Paper className={fixedHeightPaper}>
-                <Form/>
-              </Paper>
-            </Grid>
-       
-            <Grid item xs={12} md={12} lg={12}>
-              <Table/>  
+              <Buyers/>
             </Grid>  
           </Grid>
           <Box pt={4}>
