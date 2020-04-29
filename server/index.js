@@ -106,6 +106,19 @@ app.get("/buyers", async(req, res) => {
     }
  });
 
+//  delete buyer or buyers
+app.delete("/buyers/:selected", async (req,res) => {
+
+    console.log(req.params.selected);
+    try {
+        const{idsFromSelected} = req.params.selected
+        const deleteBuyers = await pool.query("DELETE FROM buyers WHERE buyer_id IN ($1)", [idsFromSelected]);
+        res.json("Buyer-s was/were deleted");
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
 app.listen(5000, () => {
     console.log("server has started on port 5000");
 
