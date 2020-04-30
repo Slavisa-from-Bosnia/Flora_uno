@@ -11,7 +11,7 @@ import Table from './Table';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      display: 'flex'
+      display: 'flex',
     },
     container: {
       paddingTop: theme.spacing(2),

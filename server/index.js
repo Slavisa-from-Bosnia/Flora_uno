@@ -81,7 +81,6 @@ app.delete("/roses/:id", async (req,res) => {
 
 app.post("/buyers", async (req, res)=>{
     try{
-        console.log(req.body);
         const {input} = req.body;
         const newBuyer = await pool.query(
         "INSERT INTO buyers (name, address, city, phone, email) VALUES ($1,$2, $3, $4, $5) RETURNING *",
@@ -99,21 +98,21 @@ app.get("/buyers", async(req, res) => {
     try {
         const allBuyers = await pool.query("SELECT * FROM buyers ORDER BY buyer_id DESC");
         res.json(allBuyers.rows);
-        console.log(allBuyers);
  
     } catch (err) {
         console.error(err.message);
     }
  });
 
-//  delete buyer or buyers
+//  delete buyer or buyers needed futher works
 app.delete("/buyers/:selected", async (req,res) => {
 
     console.log(req.params.selected);
     try {
-        const{idsFromSelected} = req.params.selected
+        const idsFromSelected = req.params.selected
         const deleteBuyers = await pool.query("DELETE FROM buyers WHERE buyer_id IN ($1)", [idsFromSelected]);
-        res.json("Buyer-s was/were deleted");
+        console.log(`Buyer-s ${idsFromSelected} was/were deleted`);
+        res.json(deleteBuyers);
     } catch (err) {
         console.error(err.message);
     }

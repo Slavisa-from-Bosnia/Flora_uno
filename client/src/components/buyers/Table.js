@@ -304,7 +304,8 @@ export default function EnhancedTable(props) {
       const deleteBuyers = await fetch (`http://localhost:5000/buyers/${selected}`, {
         method: "DELETE"
     });
-
+      setSelected([]);
+      getBuyers();
       console.log(deleteBuyers);
 
     } catch (err) {
