@@ -21,7 +21,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './ListItems';
 import Buyers from '../../components/buyers/Buyers';
 import {Link} from 'react-router-dom';
-import Views from '../../components/views';
 
 
 
@@ -178,7 +177,7 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
-              <Views/>
+              <Buyers/>
             </Grid>  
           </Grid>
           <Box pt={4}>

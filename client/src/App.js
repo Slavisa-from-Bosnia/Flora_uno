@@ -1,13 +1,13 @@
 import React, {Fragment} from 'react';
 import './App.css';
 
-import Dashboard from "./components/dashboard/Dashboard.js";
+import Page1 from './Pages/Page1';
 
 function App() {
   return (
     <Fragment>
        
-          <Dashboard/>
+          <Page1/>
 
     </Fragment>
     
