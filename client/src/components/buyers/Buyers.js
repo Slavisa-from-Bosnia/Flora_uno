@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Form from './Form.js';
 import Table from './Table';
+import TableB from  './TableB';
 
 
 
@@ -58,7 +59,7 @@ export default function Buyers() {
               </Paper>
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
-              <Table getTrigger={trigger}/>  
+              <TableB getTrigger={trigger}/>  
             </Grid>  
           </Grid>
         </Container>
