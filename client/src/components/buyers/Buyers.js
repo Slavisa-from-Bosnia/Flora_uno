@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -25,12 +25,13 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
     fixedHeight: {
-      height: 220,
+      height: 140,
     },
   }));
 
 export default function Buyers() {
   const [trigger, setTrigger] = useState (true);
+  const [editData, setEditData] = useState (false);
 
   const handleTrigger = ()=>{
     console.log("it's work.")
@@ -40,6 +41,14 @@ export default function Buyers() {
   
 
 
+const handleEditData = (rowData) => {
+  // console.log(rowData)
+  setEditData(rowData)
+};
+
+const editDataHendler = () => {
+  setEditData(true);
+};
 
   const classes = useStyles();
 
@@ -47,23 +56,23 @@ export default function Buyers() {
 
   return (
     <div className={classes.root}>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
+            <Grid item xs={12} md={12} lg={12}>
+              <TableB getTrigger={trigger} editData={handleEditData}/>  
+            </Grid>  
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
                 <Form
                   setTrigger = {handleTrigger}
+                  editData = {editData}
+                  editDataHendler = {editDataHendler}
                 />
               </Paper>
             </Grid>
-            <Grid item xs={12} md={12} lg={12}>
-              <TableB getTrigger={trigger}/>  
-            </Grid>  
           </Grid>
         </Container>
-      </main>
+
     </div>
   );
 }

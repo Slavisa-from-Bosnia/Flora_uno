@@ -107,12 +107,29 @@ app.get("/buyers", async(req, res) => {
 //  delete buyer or buyers needed futher works
 app.delete("/buyers/:selected", async (req,res) => {
 
-    console.log(req.params.selected);
+    console.log(req.params);
     try {
         const idsFromSelected = req.params.selected
         const deleteBuyers = await pool.query("DELETE FROM buyers WHERE buyer_id IN ($1)", [idsFromSelected]);
         console.log(`Buyer-s ${idsFromSelected} was/were deleted`);
         res.json(deleteBuyers);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+// update a buyer
+
+app.put("/buyers/:id", async (req, res) => {
+    try {
+        const {id} = req.params;
+        const {input} = req.body;
+        const updateRoses = await pool.query("UPDATE buyers SET name = $1 WHERE buyer_id = $2",
+        [input.firstName, input.buyer_id]
+        );
+        res.json("Buyer was updated!");
+        console.log("buyer was updated");
+
     } catch (err) {
         console.error(err.message);
     }

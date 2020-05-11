@@ -18,10 +18,10 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(2, 0, 1),
   },
 }));
 
@@ -32,9 +32,24 @@ const useStyles = makeStyles((theme) => ({
     address:"",
     city:"",
     phone:"",
-    meil:""
+    meil:"",
+    buyer_id:""
   });
 
+  React.useEffect(()=>{
+    setInput({
+      firstName:props.editData.name,
+      address:props.editData.address,
+      city:props.editData.city,
+      phone:props.editData.phone,
+      meil:props.editData.email,
+      buyer_id:props.editData.buyer_id
+    });
+    
+    changeFocusToName();
+  },[props]);
+ 
+  
   const addressRef = useRef();
   const cityRef = useRef();
   const phoneRef = useRef();
@@ -54,6 +69,9 @@ const useStyles = makeStyles((theme) => ({
   const changeFocusToMail = () => {
     mailRef.current.focus();
   };
+  const changeFocusToName = () => {
+    firstNameRef.current.focus();
+  };
 
   const updateField = e => {
     setInput({
@@ -63,28 +81,59 @@ const useStyles = makeStyles((theme) => ({
   };
 
   const onSubmitForm =async e => {
-    e.preventDefault();
-    try{
-      const data = {input};
-      const response = await fetch("http://localhost:5000/buyers", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
-      });
-      console.log(response);
-      props.setTrigger();
-      setInput({
-        firstName:"",
-        address:"",
-        city:"",
-        phone:"",
-        meil:""
-      });
-      firstNameRef.current.focus();
+    if(!props.editData){
+      e.preventDefault();
+      try{
+        const data = {input};
+        const response = await fetch("http://localhost:5000/buyers", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(data)
+        });
+        console.log(response);
+        props.setTrigger();
+        setInput({
+          firstName:"",
+          address:"",
+          city:"",
+          phone:"",
+          meil:"",
+          buyer_id:""
+          
+        });
+        firstNameRef.current.focus();
 
-    } catch (err) {
-      console.error(err.message);
-  
+      } catch (err) {
+        console.error(err.message);
+      
+      }
+     }   else{
+      e.preventDefault();
+      try{
+        const data = {input};
+        const response = await fetch(`http://localhost:5000/buyers/:${input.buyer_id}`, {
+          method: "PUT",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(data)
+        });
+        console.log(response);
+        props.setTrigger();
+        setInput({
+          firstName:"",
+          address:"",
+          city:"",
+          phone:"",
+          meil:""
+        });
+        firstNameRef.current.focus();
+        props.editDataHendler();
+        
+
+      } catch (err) {
+        console.error(err.message);
+      
+      }
+
     }
     
   };
@@ -96,9 +145,9 @@ const useStyles = makeStyles((theme) => ({
       <CssBaseline />
       <div className={classes.paper}>
     
-        <Typography component="h1" variant="h5">
-          Unos kupaca
-        </Typography>
+        {/* <Typography component="h1" variant="h5"> */}
+          {/* Unos kupaca */}
+        {/* </Typography> */}
         <form className={classes.form}  onSubmit ={onSubmitForm}>
           <Grid container spacing={2}>
             <Grid item xs={6} sm={4} md={2}>
@@ -200,6 +249,7 @@ const useStyles = makeStyles((theme) => ({
             </Grid>
             
           </Grid>
+          {props.editData &&
           <Button
             type="submit"
             fullWidth
@@ -208,8 +258,19 @@ const useStyles = makeStyles((theme) => ({
             className = {classes.submit}
             inputref={buttonRef}
           >
-            Snimi
-          </Button>
+            Koriguj kupca
+          </Button>}
+          {!props.editData &&
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className = {classes.submit}
+            inputref={buttonRef}
+          >
+            Snimi novog kupca
+          </Button>}
         </form>
       </div>
       

@@ -19,6 +19,8 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
+import Dialog from './Dialog.js'
+
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -65,7 +67,7 @@ export default function MaterialTableDemo(props) {
     ],
   });
   const [data, setData] = React.useState([]);
-  // const rows =data;
+
   const getBuyers = async () => {
     try{
       const response = await fetch("http://localhost:5000/buyers");
@@ -83,13 +85,13 @@ export default function MaterialTableDemo(props) {
     getBuyers();
   },[props]);
 
-  const onDeleteClick = async () => {
+  const onDeleteClick = async (dataForDelete) => {
     try {
-      console.log('');
-      const deleteBuyers = await fetch (`http://localhost:5000/buyers/${''}`, {
+      console.log('Brišemo podatke');
+      const deleteBuyers = await fetch (`http://localhost:5000/buyers/${dataForDelete}`, {
         method: "DELETE"
     });
-      //setSelected([]);
+    
       getBuyers();
       console.log(deleteBuyers);
 
@@ -98,49 +100,31 @@ export default function MaterialTableDemo(props) {
     }
     
   };
+
+  
+ 
   return (
-    <MaterialTable
-      title="Kupci registrovani u bazi"
-      columns={state.columns}
-      data={data}
-      icons={tableIcons}
-      editable={{
-        onRowAdd: (newData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              setState((prevState) => {
-                const data = [...prevState.data];
-                data.push(newData);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              if (oldData) {
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
-                  return { ...prevState, data };
-                });
-              }
-            }, 600);
-          }),
-        onRowDelete: (oldData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              setState((prevState) => {
-                const data = [...prevState.data];
-                data.splice(data.indexOf(oldData), 1);
-                return { ...prevState, data };
-              });
-            }, 600);
-          }),
-      }}
-    />
+    <div>
+      <MaterialTable
+        title="Kupci registrovani u bazi"
+        columns={state.columns}
+        data={data}
+        icons={tableIcons}
+        actions={[
+          {
+            icon: Edit,
+            tooltip: 'Koriguj Kupca',
+            onClick: (event, rowData) => {props.editData(rowData)}
+          },
+          {
+            icon: DeleteOutline,
+            tooltip: 'Izbriši kupca',
+            onClick: (event, rowData) => {onDeleteClick(rowData.buyer_id)}
+          }
+        ]}
+        
+      />
+    </div>
   );
+
 }
