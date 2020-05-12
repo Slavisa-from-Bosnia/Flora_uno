@@ -32,22 +32,22 @@ const useStyles = makeStyles((theme) => ({
 export default function Buyers() {
   const [trigger, setTrigger] = useState (true);
   const [editData, setEditData] = useState (false);
+  const [data, setData] = useState ("");
 
   const handleTrigger = ()=>{
-    console.log("it's work.")
     setTrigger(trigger => !trigger);
-    console.log(trigger);
   };
   
 
 
 const handleEditData = (rowData) => {
   // console.log(rowData)
-  setEditData(rowData)
+  setData(rowData)
+  setEditData(true)
 };
 
 const editDataHendler = () => {
-  setEditData(true);
+  setEditData(false);
 };
 
   const classes = useStyles();
@@ -59,13 +59,14 @@ const editDataHendler = () => {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
-              <TableB getTrigger={trigger} editData={handleEditData}/>  
+              <TableB /*getTrigger={trigger}*/ editData={handleEditData}/>  
             </Grid>  
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
                 <Form
                   setTrigger = {handleTrigger}
                   editData = {editData}
+                  data={data}
                   editDataHendler = {editDataHendler}
                 />
               </Paper>

@@ -74,7 +74,7 @@ export default function MaterialTableDemo(props) {
       const jsonData =await response.json();
 
       setData(jsonData);
-      console.log(jsonData);
+      // console.log(jsonData);
 
     } catch (err) {
       console.error(err.message);

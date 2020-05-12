@@ -81,7 +81,8 @@ app.delete("/roses/:id", async (req,res) => {
 
 app.post("/buyers", async (req, res)=>{
     try{
-        const {input} = req.body;
+        const input = req.body;
+        console.log("edituj");
         const newBuyer = await pool.query(
         "INSERT INTO buyers (name, address, city, phone, email) VALUES ($1,$2, $3, $4, $5) RETURNING *",
         [input.firstName, input.address, input.city, input.phone, input.meil]
@@ -124,8 +125,9 @@ app.put("/buyers/:id", async (req, res) => {
     try {
         const {id} = req.params;
         const {input} = req.body;
-        const updateRoses = await pool.query("UPDATE buyers SET name = $1 WHERE buyer_id = $2",
-        [input.firstName, input.buyer_id]
+        console.log(input);
+        const updateRoses = await pool.query("UPDATE buyers SET name = $1, address = $2, city = $3, phone = $4, email = $5 WHERE buyer_id = $6",
+        [input.firstName, input.address, input.city, input.phone, input.meil, input.buyer_id]
         );
         res.json("Buyer was updated!");
         console.log("buyer was updated");

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -36,18 +36,6 @@ const useStyles = makeStyles((theme) => ({
     buyer_id:""
   });
 
-  React.useEffect(()=>{
-    setInput({
-      firstName:props.editData.name,
-      address:props.editData.address,
-      city:props.editData.city,
-      phone:props.editData.phone,
-      meil:props.editData.email,
-      buyer_id:props.editData.buyer_id
-    });
-    
-    changeFocusToName();
-  },[props]);
  
   
   const addressRef = useRef();
@@ -56,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
   const mailRef = useRef();
   const buttonRef = useRef();
   const firstNameRef =useRef();
+
 
   const changeFocusToAdress = () => {
     addressRef.current.focus();
@@ -72,6 +61,24 @@ const useStyles = makeStyles((theme) => ({
   const changeFocusToName = () => {
     firstNameRef.current.focus();
   };
+  
+
+  useEffect(() => {
+   
+      setInput({
+        firstName:props.data.name,
+        address:props.data.address,
+        city:props.data.city,
+        phone:props.data.phone,
+        meil:props.data.email,
+        buyer_id:props.data.buyer_id
+      })
+      console.log(props.editData)
+    }, [props.data]
+  );
+  useEffect(() => {
+    console.log(props.data);
+  }, [props.data]);
 
   const updateField = e => {
     setInput({
@@ -84,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
     if(!props.editData){
       e.preventDefault();
       try{
-        const data = {input};
+        const data = input;
         const response = await fetch("http://localhost:5000/buyers", {
           method: "POST",
           headers: {"Content-Type": "application/json"},
@@ -116,14 +123,15 @@ const useStyles = makeStyles((theme) => ({
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(data)
         });
-        console.log(response);
         props.setTrigger();
         setInput({
           firstName:"",
           address:"",
           city:"",
           phone:"",
-          meil:""
+          meil:"",
+          buyer_id:""
+          
         });
         firstNameRef.current.focus();
         props.editDataHendler();
@@ -138,16 +146,14 @@ const useStyles = makeStyles((theme) => ({
     
   };
 
+  // changeFocusToName();
+
   const classes = useStyles();
 
   return (
     <Container component="main" maxWidth="lg">
       <CssBaseline />
       <div className={classes.paper}>
-    
-        {/* <Typography component="h1" variant="h5"> */}
-          {/* Unos kupaca */}
-        {/* </Typography> */}
         <form className={classes.form}  onSubmit ={onSubmitForm}>
           <Grid container spacing={2}>
             <Grid item xs={6} sm={4} md={2}>
@@ -218,7 +224,6 @@ const useStyles = makeStyles((theme) => ({
                 fullWidth
                 name="phone"
                 label="Telefon"
-                type="password"
                 id="phone"
                 autoComplete="phone"
                 size="small"
