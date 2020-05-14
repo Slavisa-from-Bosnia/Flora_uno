@@ -77,8 +77,25 @@ const handleOpenDialog = (data) => {
 // Delete from dialog
 const handleCloseDialog = () => {
   setOpen(false);
-  // onDeleteClick();
+  console.log(rowData);
+  onDeleteClick(rowData);
 };
+
+const onDeleteClick = async (rowData) => {
+  try {
+    console.log("podaci za brisanje")
+    const deleteBuyers = await fetch (`http://localhost:5000/buyers/${rowData.buyer_id}`, {
+      method: "DELETE"
+  });
+    getBuyers();
+    console.log(deleteBuyers);
+
+  } catch (err) {
+    console.error(err.message);
+  }
+
+};
+
 
 // Close dialog
 const closeOpen = () => {

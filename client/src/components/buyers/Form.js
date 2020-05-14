@@ -105,6 +105,7 @@ const useStyles = makeStyles((theme) => ({
         });
         console.log(response);
         props.setTrigger();
+        props.getBuyers();
         setInput({
           firstName:"",
           address:"",

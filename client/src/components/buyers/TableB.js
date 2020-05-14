@@ -50,22 +50,6 @@ export default function MaterialTableDemo(props) {
     
   ]);
 
-  const onDeleteClick = async (rowData) => {
-    try {
-      console.log(props.rowDataState);
-      const deleteBuyers = await fetch (`http://localhost:5000/buyers/${rowData.buyer_id}`, {
-        method: "DELETE"
-    });
-      //  getBuyers();
-      console.log(deleteBuyers);
-
-    } catch (err) {
-      console.error(err.message);
-    }
-
-  };
-
-
   return (
     <div>
       <MaterialTable
