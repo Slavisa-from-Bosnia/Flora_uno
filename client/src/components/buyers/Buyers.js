@@ -5,10 +5,8 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Form from './Form.js';
-import Table from './Table';
 import TableB from  './TableB';
-
-
+import Dialog from './Dialog';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,23 +30,60 @@ const useStyles = makeStyles((theme) => ({
 export default function Buyers() {
   const [trigger, setTrigger] = useState (true);
   const [editData, setEditData] = useState (false);
-  const [data, setData] = useState ("");
+  const [data, setData] = useState ([]);
+  const [open, setOpen] = React.useState(false);
+  const [rowData, setRowData] = React.useState("");
+  
+  useEffect(()=>{
+    getBuyers();
+  },[]);
 
   const handleTrigger = ()=>{
     setTrigger(trigger => !trigger);
   };
   
+  const getBuyers = async () => {
+    try{
+      const response = await fetch("http://localhost:5000/buyers");
+      const jsonData =await response.json();
 
+      setData(jsonData);
+      console.log(jsonData);
 
-const handleEditData = (rowData) => {
-  // console.log(rowData)
-  setData(rowData)
-  setEditData(true)
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  // Table edit data
+const handleEditData = (data) => {
+  console.log(data);
+  setRowData(data);
+  setEditData(true);
 };
 
+// From form
 const editDataHendler = () => {
   setEditData(false);
 };
+
+// Table open dialog
+const handleOpenDialog = (data) => {
+  console.log(data);
+  setOpen(true);
+  setRowData(data);
+};
+
+// Delete from dialog
+const handleCloseDialog = () => {
+  setOpen(false);
+  // onDeleteClick();
+};
+
+// Close dialog
+const closeOpen = () => {
+  setOpen(false);
+} ;
 
   const classes = useStyles();
 
@@ -59,19 +94,27 @@ const editDataHendler = () => {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
-              <TableB /*getTrigger={trigger}*/ editData={handleEditData}/>  
+              <TableB 
+                editData={handleEditData} 
+                openDialog={handleOpenDialog}
+                getBuyers={getBuyers}
+                data={data}
+                rowData={rowData}
+                />  
             </Grid>  
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
                 <Form
                   setTrigger = {handleTrigger}
                   editData = {editData}
-                  data={data}
+                  rowData={rowData}
                   editDataHendler = {editDataHendler}
+                  getBuyers = {getBuyers}
                 />
               </Paper>
             </Grid>
           </Grid>
+          <Dialog open = {open} closeOpen={closeOpen} rowData={rowData} handleCloseDialog={handleCloseDialog}/>
         </Container>
 
     </div>

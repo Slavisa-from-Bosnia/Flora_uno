@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import MaterialTable from 'material-table';
 
 import { forwardRef } from 'react';
@@ -18,8 +18,6 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-
-import Dialog from './Dialog.js'
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -42,73 +40,38 @@ const tableIcons = {
   };
 
 export default function MaterialTableDemo(props) {
-  const [state, setState] = React.useState({
-    columns: [
+  const [columns, setColumns] = React.useState([
+    
       { title: 'Naziv', field: 'name' },
       { title: 'Adresa', field: 'address' },
       { title: 'Grad', field: 'city'},
       { title: 'Telefon', field: 'phone', type: 'numeric' },
       { title: 'Mejl', field: 'email' },
-      // { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-      // {
-        // title: 'Birth Place',
-        // field: 'birthCity',
-        // lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-      // },
-    ],
-    data: [
-      { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-      {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
-      },
-    ],
-  });
-  const [data, setData] = React.useState([]);
+    
+  ]);
 
-  const getBuyers = async () => {
-    try{
-      const response = await fetch("http://localhost:5000/buyers");
-      const jsonData =await response.json();
-
-      setData(jsonData);
-      // console.log(jsonData);
-
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  useEffect(()=>{
-    getBuyers();
-  },[props]);
-
-  const onDeleteClick = async (dataForDelete) => {
+  const onDeleteClick = async (rowData) => {
     try {
-      console.log('Brišemo podatke');
-      const deleteBuyers = await fetch (`http://localhost:5000/buyers/${dataForDelete}`, {
+      console.log(props.rowDataState);
+      const deleteBuyers = await fetch (`http://localhost:5000/buyers/${rowData.buyer_id}`, {
         method: "DELETE"
     });
-    
-      getBuyers();
+      //  getBuyers();
       console.log(deleteBuyers);
 
     } catch (err) {
       console.error(err.message);
     }
-    
+
   };
 
-  
- 
+
   return (
     <div>
       <MaterialTable
         title="Kupci registrovani u bazi"
-        columns={state.columns}
-        data={data}
+        columns={columns}
+        data={props.data}
         icons={tableIcons}
         actions={[
           {
@@ -119,7 +82,7 @@ export default function MaterialTableDemo(props) {
           {
             icon: DeleteOutline,
             tooltip: 'Izbriši kupca',
-            onClick: (event, rowData) => {onDeleteClick(rowData.buyer_id)}
+            onClick: (event, rowData) => {props.openDialog(rowData)}
           }
         ]}
         

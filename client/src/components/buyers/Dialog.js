@@ -7,50 +7,27 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function AlertDialog(props) {
-  const [open, setOpen] = React.useState(false);
-  const {dialog}=props;
-  console.log(`brisanje iz dialoga, ${dialog}`);
-
-
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  
-
-  if(dialog){
-    handleClickOpen();
-  }
-  
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
     <div>
-        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-          Open alert dialog
-        </Button>
+       
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={props.open}
+        onClose={props.handleCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Jesi li siguran da želiš da izbrišeš kupca?"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
+  {`Kupac ${props.rowData.name} biće izbrisan iz baze podataka!`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Disagree
+          <Button onClick={props.closeOpen} color="primary">
+            Odustani
           </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Agree
+          <Button onClick={props.handleCloseDialog} color="primary" autoFocus>
+            Briši
           </Button>
         </DialogActions>
       </Dialog>

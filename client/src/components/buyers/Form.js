@@ -3,11 +3,8 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import SelectInput from '@material-ui/core/Select/SelectInput';
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,8 +33,6 @@ const useStyles = makeStyles((theme) => ({
     buyer_id:""
   });
 
- 
-  
   const addressRef = useRef();
   const cityRef = useRef();
   const phoneRef = useRef();
@@ -62,19 +57,30 @@ const useStyles = makeStyles((theme) => ({
     firstNameRef.current.focus();
   };
   
-
   useEffect(() => {
-   
+   if (props.editData){
       setInput({
-        firstName:props.data.name,
-        address:props.data.address,
-        city:props.data.city,
-        phone:props.data.phone,
-        meil:props.data.email,
-        buyer_id:props.data.buyer_id
-      })
-      console.log(props.editData)
-    }, [props.data]
+        firstName:props.rowData.name,
+        address:props.rowData.address,
+        city:props.rowData.city,
+        phone:props.rowData.phone,
+        meil:props.rowData.email,
+        buyer_id:props.rowData.buyer_id
+      })} else {
+        setInput ({
+        firstName:"",
+        address:"",
+        city:"",
+        phone:"",
+        meil:"",
+        buyer_id:""
+        });
+      };
+
+      console.log(props.editData);
+    
+      
+    }, [props.rowData]
   );
   useEffect(() => {
     console.log(props.data);
@@ -124,6 +130,7 @@ const useStyles = makeStyles((theme) => ({
           body: JSON.stringify(data)
         });
         props.setTrigger();
+        props.getBuyers();
         setInput({
           firstName:"",
           address:"",
