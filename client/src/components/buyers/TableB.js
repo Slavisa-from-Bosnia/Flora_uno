@@ -42,10 +42,10 @@ const tableIcons = {
 export default function MaterialTableDemo(props) {
   const [columns, setColumns] = React.useState([
     
-      { title: 'Naziv', field: 'name' },
+      { title: 'Naziv', field: 'name'},
       { title: 'Adresa', field: 'address' },
       { title: 'Grad', field: 'city'},
-      { title: 'Telefon', field: 'phone', type: 'numeric' },
+      { title: 'Telefon', field: 'phone' },
       { title: 'Mejl', field: 'email' },
     
   ]);
@@ -57,6 +57,11 @@ export default function MaterialTableDemo(props) {
         columns={columns}
         data={props.data}
         icons={tableIcons}
+        options={{
+          headerStyle: {
+            fontWeight: 800
+          },
+        }}
         actions={[
           {
             icon: Edit,
