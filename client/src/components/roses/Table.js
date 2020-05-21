@@ -44,9 +44,7 @@ export default function MaterialTableDemo(props) {
     
       { title: 'Naziv', field: 'name'},
       { title: 'Adresa', field: 'address' },
-      { title: 'Grad', field: 'city'},
-      { title: 'Telefon', field: 'phone' },
-      { title: 'Mejl', field: 'email' },
+      { title: 'Slika1', field: 'Slika1'},
     
   ]);
 

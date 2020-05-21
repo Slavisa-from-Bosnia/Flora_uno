@@ -18,9 +18,10 @@ import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './ListItems';
+import { mainListItems} from './ListItems';
 import Buyers from '../../components/buyers/Buyers';
-import {Link} from 'react-router-dom';
+import {Switch, Route, Link} from 'react-router-dom';
+import Roses from '../../components/roses/Roses';
 
 
 
@@ -169,15 +170,14 @@ export default function Dashboard() {
         </div>
         <Divider />
         <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
-              <Buyers />
+                  <Route path = {'/dashboard/buyers'} component = {Buyers}/>
+                  <Route path = {'/dashboard/roses'} component = {Roses}/>
             </Grid>  
           </Grid>
           <Box pt={4}>
