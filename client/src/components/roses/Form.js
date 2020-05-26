@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,12 +26,10 @@ const useStyles = makeStyles((theme) => ({
  const Form = (props)=> {
   
   const [input, setInput] = useState ({
-    firstName:"",
-    address:"",
-    city:"",
-    phone:"",
-    meil:"",
-    buyer_id:""
+    name:"",
+    stanje:"",
+    imageUrl:"",
+    
   });
 
   const addressRef = useRef();
@@ -60,20 +59,15 @@ const useStyles = makeStyles((theme) => ({
   useEffect(() => {
    if (props.editData){
       setInput({
-        firstName:props.rowData.name,
-        address:props.rowData.address,
-        city:props.rowData.city,
-        phone:props.rowData.phone,
-        meil:props.rowData.email,
-        buyer_id:props.rowData.buyer_id
+        name:props.rowData.name,
+        stanje:props.rowData.stanje,
+        imageUrl:props.rowData.imageUrl,
+  
       })} else {
         setInput ({
-        firstName:"",
-        address:"",
-        city:"",
-        phone:"",
-        meil:"",
-        buyer_id:""
+        name:"",
+        stanje:"",
+        imageUrl:"",
         });
       };
 
@@ -107,12 +101,9 @@ const useStyles = makeStyles((theme) => ({
         props.setTrigger();
         props.getBuyers();
         setInput({
-          firstName:"",
-          address:"",
-          city:"",
-          phone:"",
-          meil:"",
-          buyer_id:""
+          name:"",
+          stanje:"",
+          imageUrl:"",
           
         });
         firstNameRef.current.focus();
@@ -133,12 +124,9 @@ const useStyles = makeStyles((theme) => ({
         props.setTrigger();
         props.getBuyers();
         setInput({
-          firstName:"",
-          address:"",
-          city:"",
-          phone:"",
-          meil:"",
-          buyer_id:""
+        name:"",
+        stanje:"",
+        imageUrl:"",
           
         });
         firstNameRef.current.focus();
@@ -163,16 +151,16 @@ const useStyles = makeStyles((theme) => ({
       <CssBaseline />
       <div className={classes.paper}>
         <form className={classes.form}  onSubmit ={onSubmitForm}>
-          <Grid container spacing={2}>
-            <Grid item xs={6} sm={4} md={2}>
+          <Grid container spacing={4}>
+            <Grid item xs={6} sm={6} md={4}>
               <TextField
-                autoComplete="fname"
+                autoComplete="name"
                 name="firstName"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
-                label="Ime i prezime"
+                id="name"
+                label="Naziv"
                 autoFocus
                 size="small"
                 onChange={updateField}
@@ -188,15 +176,14 @@ const useStyles = makeStyles((theme) => ({
             <Grid item xs={6} sm={4} md={4}>
               <TextField
                 variant="outlined"
-                required
                 fullWidth
-                id="address"
-                label="Adresa"
-                name="address"
+                id="stanje"
+                label="Stanje na skladištu"
+                name="stanje"
                 autoComplete="lname"
                 size="small"
                 onChange={updateField}
-                value={input.address}
+                value={input.stanje}
                 inputRef={addressRef}
                 onKeyPress={event => {
                   if (event.key === "Enter") {
@@ -205,59 +192,16 @@ const useStyles = makeStyles((theme) => ({
                 }}
               />
             </Grid>
-            <Grid item xs={6} sm={4} md={2}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="city"
-                label="Grad"
-                name="city"
-                autoComplete="city"
-                size="small"
-                onChange={updateField}
-                value={input.city}
-                inputRef={cityRef}
-                onKeyPress={event => {
-                  if (event.key === "Enter") {
-                    changeFocusToPhone();
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={6} sm={4} md={2}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                name="phone"
-                label="Telefon"
-                id="phone"
-                autoComplete="phone"
-                size="small"
-                onChange={updateField}
-                value={input.phone}
-                inputRef={phoneRef}
-                onKeyPress={event => {
-                  if (event.key === "Enter") {
-                    changeFocusToMail();
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={6} sm={4} md={2}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                name="meil"
-                label="E-mail"
-                type="e-mail"
-                id="email"
-                autoComplete="current-password"
-                size="small"
-                onChange={updateField}
-                value={input.meil}
-                inputRef={mailRef}
-              />
+            <Grid item xs={4} sm={4} md={4}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                className={classes.button}
+                startIcon={<InsertPhotoIcon />}
+              >
+                Foto
+              </Button>
             </Grid>
             
           </Grid>
@@ -270,7 +214,7 @@ const useStyles = makeStyles((theme) => ({
             className = {classes.submit}
             inputref={buttonRef}
           >
-            Koriguj kupca
+            Koriguj 
           </Button>}
           {!props.editData &&
           <Button
@@ -281,7 +225,7 @@ const useStyles = makeStyles((theme) => ({
             className = {classes.submit}
             inputref={buttonRef}
           >
-            Snimi novog kupca
+            Snimi 
           </Button>}
         </form>
       </div>

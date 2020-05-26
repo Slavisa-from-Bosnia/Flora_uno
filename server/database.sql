@@ -1,8 +1,15 @@
 CREATE DATABASE flora_uno;
 
 CREATE TABLE roses (
-rose_id SERIAL PRIMARY KEY,
-description VARCHAR (255)
+    rose_id SERIAL PRIMARY KEY,
+    name VARCHAR (100),
+    description VARCHAR (1000),
+    image_url VARCHAR (100),
+    initial_quantity INT,
+    input_sum INT,
+    output_sum INT,
+    reserved_sum INT,
+    price INT
 );
 
 CREATE TABLE buyers (
@@ -14,15 +21,24 @@ CREATE TABLE buyers (
     email VARCHAR (100),
     data_of_signing DATE NOT NULL DEFAULT CURRENT_DATE,
     password VARCHAR (1000)
-
 );
 
 CREATE TABLE orders(
     order_id SERIAL PRIMARY KEY,
-    rose_id INT,
     buyer_id INT,
     date_of_order DATE NOT NULL DEFAULT CURRENT_DATE,
-    ship_to VARCHAR (100),
-    payment_method VARCHAR (100)
+    payment_method VARCHAR (100),
+    shipping_method VARCHAR (100),
+    shipping_date DATE,
+    delivering_date DATE,
+    adress_of_delivery VARCHAR (100)
 
+);
+
+CREATE TABLE turnover (
+    turnover_id SERIAL PRIMARY KEY,
+    orders_id INT,
+    roses_id INT,
+    unite_price INT,
+    quantity INT,
 );
