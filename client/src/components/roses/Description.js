@@ -5,6 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
 
 export default function AlertDialog(props) {
   return (
@@ -15,19 +16,27 @@ export default function AlertDialog(props) {
         onClose={props.handleCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        fullWidth={true}
+        maxWidth={'md'}
       >
-        <DialogTitle id="alert-dialog-title">{"Jesi li siguran da želiš da izbrišeš kupca?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Unesi opis!"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-  {`Ruža ${props.rowData.name} biće izbrisana iz baze podataka!`}
+          <TextField
+            placeholder="Maksimalno 1000 karaktera"
+            multiline
+            rows={10}
+            rowsMax={10}
+            fullWidth={true}
+            label="Opis proizvoda"
+            variant="outlined"
+/>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.closeOpen} color="primary">
-            Odustani
-          </Button>
-          <Button onClick={props.handleCloseDialog} color="primary" autoFocus>
-            Briši
+        
+          <Button onClick={props.handleCloseDescription} color="primary" autoFocus>
+            Zatvori
           </Button>
         </DialogActions>
       </Dialog>

@@ -43,8 +43,12 @@ export default function MaterialTableDemo(props) {
   const [columns, setColumns] = React.useState([
     
       { title: 'Naziv', field: 'name'},
-      { title: 'Stanje na skladištu', field: 'stanje' },
-       { title: 'Slika', field: 'imageUrl', render: rowData => <img src={null} style={{width: 40, borderRadius: '50%'}}/> }
+      { title: 'Početno stanje', field: 'initial_quantity' },
+      {title: 'Ulaz', field: 'input_sum'},
+      {title:'Izlaz', field: 'output_sum'},
+      {title: 'Stanje', field: 'current_sum'},
+      {title: 'Rezervisano', field: 'reserved_sum'},
+      { title: 'Slika', field: 'image_Url', render: rowData => <img src={null} style={{width: 40, borderRadius: '50%'}}/> }
     
   ]);
 
@@ -71,6 +75,8 @@ export default function MaterialTableDemo(props) {
             tooltip: 'Izbriši kupca',
             onClick: (event, rowData) => {props.openDialog(rowData)}
           }
+
+        
         ]}
         
       />

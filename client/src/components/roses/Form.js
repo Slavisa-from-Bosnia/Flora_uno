@@ -6,6 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
+import Description from '@material-ui/icons/Description';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -27,9 +29,9 @@ const useStyles = makeStyles((theme) => ({
   
   const [input, setInput] = useState ({
     name:"",
-    stanje:"",
+    initial_quantity:"",
     imageUrl:"",
-    
+    description:"",
   });
 
   const addressRef = useRef();
@@ -60,14 +62,16 @@ const useStyles = makeStyles((theme) => ({
    if (props.editData){
       setInput({
         name:props.rowData.name,
-        stanje:props.rowData.stanje,
+        initial_quantity:props.rowData.initial_quantity,
         imageUrl:props.rowData.imageUrl,
+        description: props.rowData.description
   
       })} else {
         setInput ({
-        name:"",
-        stanje:"",
-        imageUrl:"",
+          name:"",
+          initial_quantity:"",
+          imageUrl:"",
+          description:"",
         });
       };
 
@@ -92,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
       e.preventDefault();
       try{
         const data = input;
-        const response = await fetch("http://localhost:5000/buyers", {
+        const response = await fetch("http://localhost:5000/roses", {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(data)
@@ -102,9 +106,9 @@ const useStyles = makeStyles((theme) => ({
         props.getBuyers();
         setInput({
           name:"",
-          stanje:"",
+          initial_quantity:"",
           imageUrl:"",
-          
+          description:"",
         });
         firstNameRef.current.focus();
 
@@ -116,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
       e.preventDefault();
       try{
         const data = {input};
-        const response = await fetch(`http://localhost:5000/buyers/:${input.buyer_id}`, {
+        const response = await fetch(`http://localhost:5000/roses/:${input.rose_id}`, {
           method: "PUT",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(data)
@@ -124,10 +128,10 @@ const useStyles = makeStyles((theme) => ({
         props.setTrigger();
         props.getBuyers();
         setInput({
-        name:"",
-        stanje:"",
-        imageUrl:"",
-          
+          name:"",
+          initial_quantity:"",
+          imageUrl:"",
+          description:"",
         });
         firstNameRef.current.focus();
         props.editDataHendler();
@@ -152,7 +156,7 @@ const useStyles = makeStyles((theme) => ({
       <div className={classes.paper}>
         <form className={classes.form}  onSubmit ={onSubmitForm}>
           <Grid container spacing={4}>
-            <Grid item xs={6} sm={6} md={4}>
+            <Grid item xs={3} sm={3} md={3}>
               <TextField
                 autoComplete="name"
                 name="firstName"
@@ -173,12 +177,13 @@ const useStyles = makeStyles((theme) => ({
                 }}
               />
             </Grid>
-            <Grid item xs={6} sm={4} md={4}>
+            <Grid item xs={3} sm={3} md={3}>
               <TextField
                 variant="outlined"
+                required
                 fullWidth
                 id="stanje"
-                label="Stanje na skladištu"
+                label="Početno stanje komada"
                 name="stanje"
                 autoComplete="lname"
                 size="small"
@@ -192,7 +197,7 @@ const useStyles = makeStyles((theme) => ({
                 }}
               />
             </Grid>
-            <Grid item xs={4} sm={4} md={4}>
+            <Grid item xs={3} sm={3} md={3}>
               <Button
                 variant="contained"
                 color="primary"
@@ -200,7 +205,20 @@ const useStyles = makeStyles((theme) => ({
                 className={classes.button}
                 startIcon={<InsertPhotoIcon />}
               >
-                Foto
+                Unesi sliku
+              </Button>
+            </Grid>
+            <Grid item xs={3} sm={3} md={3}>
+               <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                className={classes.button}
+                startIcon={<Description />}
+                onClick = {props.handleOpenDescription}
+              >
+                Unesi opis
+                
               </Button>
             </Grid>
             

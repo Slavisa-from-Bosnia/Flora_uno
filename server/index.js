@@ -14,9 +14,10 @@ app.use(express.json());
 
 app.post("/roses", async (req, res)=>{
     try{
-        const {description} = req.body;
-        const newRose = await pool.query("Insert INTO roses (description) Values($1) RETURNING *",
-        [description]
+        const {data} = req.body;
+        console.log(data);
+        const newRose = await pool.query("Insert INTO roses (data) Values($1) RETURNING *",
+        [data]
         );
         res.json(newRose.rows[0]);
     } catch (err) {
@@ -53,9 +54,9 @@ app.get("/roses/:id", async (req,res) => {
 app.put("/roses/:id", async (req, res) => {
     try {
         const {id} = req.params;
-        const {description} = req.body;
-        const updateRoses = await pool.query("UPDATE roses SET description = $1 WHERE rose_id = $2",
-        [description, id]
+        const {data} = req.body;
+        const updateRoses = await pool.query("UPDATE roses SET data = $1 WHERE rose_id = $2",
+        [data, id]
         );
         res.json("Roses was updated!");
 
@@ -129,7 +130,7 @@ app.put("/buyers/:id", async (req, res) => {
         const updateRoses = await pool.query("UPDATE buyers SET name = $1, address = $2, city = $3, phone = $4, email = $5 WHERE buyer_id = $6",
         [input.firstName, input.address, input.city, input.phone, input.meil, input.buyer_id]
         );
-        res.json("Buyer was updated!");
+        res.json("Buyer was update");
         console.log("buyer was updated");
 
     } catch (err) {

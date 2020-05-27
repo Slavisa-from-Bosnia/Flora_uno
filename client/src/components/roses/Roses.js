@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Form from './Form.js';
 import Table from  './Table';
+import Description from './Description';
 import Dialog from './Dialog';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,9 +31,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Buyers() {
   const [trigger, setTrigger] = useState (true);
   const [editData, setEditData] = useState (false);
-  const [data, setData] = useState ([]);
-  const [open, setOpen] = React.useState(false);
+  const [tableData, setTableData] = useState ([]);
+  const [openDeleteDialog, setDeleteDialog] = React.useState(false);
   const [rowData, setRowData] = React.useState("");
+  const [openDescriptionDialog, setDescriptionDialog] = useState(false);
   
   useEffect(()=>{
     getBuyers();
@@ -47,7 +49,7 @@ export default function Buyers() {
       const response = await fetch("http://localhost:5000/buyers");
       const jsonData =await response.json();
 
-      setData(jsonData);
+      setTableData(jsonData);
       console.log(jsonData);
 
     } catch (err) {
@@ -67,18 +69,28 @@ const editDataHendler = () => {
   setEditData(false);
 };
 
-// Table open dialog
+// Table open delete dialog
 const handleOpenDialog = (data) => {
   console.log(data);
-  setOpen(true);
+  setDeleteDialog(true);
   setRowData(data);
+};
+
+// Form open description dialog
+const handleOpenDescription = () =>{
+  setDescriptionDialog(true);
 };
 
 // Delete from dialog
 const handleCloseDialog = () => {
-  setOpen(false);
+  setDeleteDialog(false);
   console.log(rowData);
   onDeleteClick(rowData);
+};
+
+const handleCloseDescription = (description) =>{
+  setDescriptionDialog(false);
+  console.log('jses');
 };
 
 const onDeleteClick = async (rowData) => {
@@ -99,7 +111,7 @@ const onDeleteClick = async (rowData) => {
 
 // Close dialog
 const closeOpen = () => {
-  setOpen(false);
+  setDeleteDialog(false);
 } ;
 
   const classes = useStyles();
@@ -115,9 +127,10 @@ const closeOpen = () => {
                 editData={handleEditData} 
                 openDialog={handleOpenDialog}
                 getBuyers={getBuyers}
-                data={data}
+                data={tableData}
                 rowData={rowData}
-                />  
+
+             />  
             </Grid>  
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
@@ -127,11 +140,14 @@ const closeOpen = () => {
                   rowData={rowData}
                   editDataHendler = {editDataHendler}
                   getBuyers = {getBuyers}
+                  handleOpenDescription={handleOpenDescription}
+                  handleCloseDescription={handleCloseDescription}
                 />
               </Paper>
             </Grid>
           </Grid>
-          <Dialog open = {open} closeOpen={closeOpen} rowData={rowData} handleCloseDialog={handleCloseDialog}/>
+          <Description open ={openDescriptionDialog} handleCloseDescription={handleCloseDescription}/>
+          <Dialog open = {openDeleteDialog} closeOpen={closeOpen} rowData={rowData} handleCloseDialog={handleCloseDialog}/>
         </Container>
 
     </div>

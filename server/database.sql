@@ -8,6 +8,7 @@ CREATE TABLE roses (
     initial_quantity INT,
     input_sum INT,
     output_sum INT,
+    current_sum INT,
     reserved_sum INT,
     price INT
 );
@@ -20,7 +21,8 @@ CREATE TABLE buyers (
     phone VARCHAR (100),
     email VARCHAR (100),
     data_of_signing DATE NOT NULL DEFAULT CURRENT_DATE,
-    password VARCHAR (1000)
+    password VARCHAR (1000),
+    card_payment VARCHAR (100)
 );
 
 CREATE TABLE orders(
@@ -32,13 +34,11 @@ CREATE TABLE orders(
     shipping_date DATE,
     delivering_date DATE,
     adress_of_delivery VARCHAR (100)
-
 );
 
 CREATE TABLE turnover (
     turnover_id SERIAL PRIMARY KEY,
     orders_id INT,
     roses_id INT,
-    unite_price INT,
-    quantity INT,
+    quantity INT
 );
