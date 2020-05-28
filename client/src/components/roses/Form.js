@@ -26,20 +26,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
  const Form = (props)=> {
-  
-  const [input, setInput] = useState ({
-    name:"",
-    initial_quantity:"",
-    imageUrl:"",
-    description:"",
-  });
 
   const addressRef = useRef();
   const cityRef = useRef();
   const phoneRef = useRef();
   const mailRef = useRef();
   const buttonRef = useRef();
-  const firstNameRef =useRef();
+  const nameRef =useRef();
 
 
   const changeFocusToAdress = () => {
@@ -55,47 +48,35 @@ const useStyles = makeStyles((theme) => ({
     mailRef.current.focus();
   };
   const changeFocusToName = () => {
-    firstNameRef.current.focus();
+    nameRef.current.focus();
   };
   
-  useEffect(() => {
-   if (props.editData){
-      setInput({
-        name:props.rowData.name,
-        initial_quantity:props.rowData.initial_quantity,
-        imageUrl:props.rowData.imageUrl,
-        description: props.rowData.description
+  // useEffect(() => {
+  //  if (props.editData){
+  //     props.handleNewData({
+  //       name:props.rowData.name,
+  //       initial_quantity:props.rowData.initial_quantity,
+  //       imageUrl:props.rowData.imageUrl,
+  //       description: props.rowData.description
   
-      })} else {
-        setInput ({
-          name:"",
-          initial_quantity:"",
-          imageUrl:"",
-          description:"",
-        });
-      };
+  //     })} else {
+  //       props.handleNewData ({
+  //         name:"",
+  //         initial_quantity:"",
+  //         image_url:"",
+  //         description:"",
+  //       });
+  //     };      
+  //   }, [props.rowData]
+  // );
 
-      console.log(props.editData);
-    
-      
-    }, [props.rowData]
-  );
-  useEffect(() => {
-    console.log(props.data);
-  }, [props.data]);
-
-  const updateField = e => {
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value
-    });
-  };
+ 
 
   const onSubmitForm =async e => {
     if(!props.editData){
       e.preventDefault();
       try{
-        const data = input;
+        const data = props.newData;
         const response = await fetch("http://localhost:5000/roses", {
           method: "POST",
           headers: {"Content-Type": "application/json"},
@@ -103,47 +84,42 @@ const useStyles = makeStyles((theme) => ({
         });
         console.log(response);
         props.setTrigger();
-        props.getBuyers();
-        setInput({
+        props.getRoses();
+        props.handleNewData({
           name:"",
           initial_quantity:"",
-          imageUrl:"",
+          image_url:"",
           description:"",
         });
-        firstNameRef.current.focus();
+        nameRef.current.focus();
 
       } catch (err) {
         console.error(err.message);
-      
       }
      }   else{
       e.preventDefault();
       try{
-        const data = {input};
-        const response = await fetch(`http://localhost:5000/roses/:${input.rose_id}`, {
+        const data = props.newData;
+        const response = await fetch(`http://localhost:5000/roses/:${data.rose_id}`, {
           method: "PUT",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(data)
         });
         props.setTrigger();
-        props.getBuyers();
-        setInput({
+        props.getRoses();
+        props.handleNewData({
           name:"",
           initial_quantity:"",
-          imageUrl:"",
+          image_url:"",
           description:"",
         });
-        firstNameRef.current.focus();
+        nameRef.current.focus();
         props.editDataHendler();
         
-
       } catch (err) {
         console.error(err.message);
-      
       }
-
     }
-    
   };
 
   // changeFocusToName();
@@ -159,7 +135,7 @@ const useStyles = makeStyles((theme) => ({
             <Grid item xs={3} sm={3} md={3}>
               <TextField
                 autoComplete="name"
-                name="firstName"
+                name="name"
                 variant="outlined"
                 required
                 fullWidth
@@ -167,9 +143,9 @@ const useStyles = makeStyles((theme) => ({
                 label="Naziv"
                 autoFocus
                 size="small"
-                onChange={updateField}
-                value={input.firstName}
-                inputRef={firstNameRef}
+                onChange={props.updateNewData}
+                value={props.newData.name}
+                inputRef={nameRef}
                 onKeyPress={event => {
                   if (event.key === "Enter") {
                     changeFocusToAdress();
@@ -182,13 +158,13 @@ const useStyles = makeStyles((theme) => ({
                 variant="outlined"
                 required
                 fullWidth
-                id="stanje"
-                label="Početno stanje komada"
-                name="stanje"
+                id="initial_quantity"
+                label="Početno initial_quantity komada"
+                name="initial_quantity"
                 autoComplete="lname"
                 size="small"
-                onChange={updateField}
-                value={input.stanje}
+                onChange={props.updateNewData}
+                value={props.newData.initial_quantity}
                 inputRef={addressRef}
                 onKeyPress={event => {
                   if (event.key === "Enter") {

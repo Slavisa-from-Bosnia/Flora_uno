@@ -14,11 +14,12 @@ app.use(express.json());
 
 app.post("/roses", async (req, res)=>{
     try{
-        const {data} = req.body;
-        console.log(data);
-        const newRose = await pool.query("Insert INTO roses (data) Values($1) RETURNING *",
-        [data]
+        const inputRoses = req.body;
+        console.log(req.body);
+        const newRose = await pool.query("Insert INTO roses (name, initial_quantity, image_url, description) Values($1, $2, $3, $4 ) RETURNING *",
+        [inputRoses.name, inputRoses.initial_quantity, inputRoses.image_url, inputRoses.description]
         );
+        console.log('Dodata ruža u bazi!')
         res.json(newRose.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -83,11 +84,11 @@ app.delete("/roses/:id", async (req,res) => {
 app.post("/buyers", async (req, res)=>{
     try{
         const input = req.body;
-        console.log("edituj");
         const newBuyer = await pool.query(
         "INSERT INTO buyers (name, address, city, phone, email) VALUES ($1,$2, $3, $4, $5) RETURNING *",
         [input.firstName, input.address, input.city, input.phone, input.meil]
         );
+        console.log("Dodat kupac u bazi");
         res.json(newBuyer.rows[0]);
     } catch (err) {
         console.error(err.message);

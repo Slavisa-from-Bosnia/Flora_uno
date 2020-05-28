@@ -35,18 +35,20 @@ export default function Buyers() {
   const [openDeleteDialog, setDeleteDialog] = React.useState(false);
   const [rowData, setRowData] = React.useState("");
   const [openDescriptionDialog, setDescriptionDialog] = useState(false);
+  const [newData, setNewData] = React.useState("");
+
   
   useEffect(()=>{
-    getBuyers();
+    getRoses();
   },[]);
 
   const handleTrigger = ()=>{
     setTrigger(trigger => !trigger);
   };
   
-  const getBuyers = async () => {
+  const getRoses = async () => {
     try{
-      const response = await fetch("http://localhost:5000/buyers");
+      const response = await fetch("http://localhost:5000/roses");
       const jsonData =await response.json();
 
       setTableData(jsonData);
@@ -58,9 +60,9 @@ export default function Buyers() {
   };
 
   // Table edit data
-const handleEditData = (data) => {
-  console.log(data);
-  setRowData(data);
+const handleEditData = (rowData) => {
+  console.log(rowData);
+  setRowData(rowData);
   setEditData(true);
 };
 
@@ -70,7 +72,7 @@ const editDataHendler = () => {
 };
 
 // Table open delete dialog
-const handleOpenDialog = (data) => {
+const handleOpenDeleteDialog = (data) => {
   console.log(data);
   setDeleteDialog(true);
   setRowData(data);
@@ -99,7 +101,7 @@ const onDeleteClick = async (rowData) => {
     const deleteBuyers = await fetch (`http://localhost:5000/buyers/${rowData.buyer_id}`, {
       method: "DELETE"
   });
-    getBuyers();
+    getRoses();
     console.log(deleteBuyers);
 
   } catch (err) {
@@ -108,11 +110,27 @@ const onDeleteClick = async (rowData) => {
 
 };
 
-
 // Close dialog
 const closeOpen = () => {
   setDeleteDialog(false);
 } ;
+
+const handleNewData = (data) =>{
+ setNewData({
+  name:data.name,
+  initial_quantity:data.initial_quantity,
+  image_url:data.image_url,
+  description:"",
+ });
+};
+
+const updateNewData = e => {
+  setNewData({
+    ...newData,
+    [e.target.name]: e.target.value
+  });
+  console.log(newData);
+};
 
   const classes = useStyles();
 
@@ -125,8 +143,8 @@ const closeOpen = () => {
             <Grid item xs={12} md={12} lg={12}>
               <Table 
                 editData={handleEditData} 
-                openDialog={handleOpenDialog}
-                getBuyers={getBuyers}
+                openDialog={handleOpenDeleteDialog}
+                getRoses={getRoses}
                 data={tableData}
                 rowData={rowData}
 
@@ -139,9 +157,12 @@ const closeOpen = () => {
                   editData = {editData}
                   rowData={rowData}
                   editDataHendler = {editDataHendler}
-                  getBuyers = {getBuyers}
+                  getRoses = {getRoses}
                   handleOpenDescription={handleOpenDescription}
                   handleCloseDescription={handleCloseDescription}
+                  newData={newData} 
+                  handleNewData={handleNewData}
+                  updateNewData={updateNewData}
                 />
               </Paper>
             </Grid>
