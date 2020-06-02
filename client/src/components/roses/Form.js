@@ -51,24 +51,24 @@ const useStyles = makeStyles((theme) => ({
     nameRef.current.focus();
   };
   
-  // useEffect(() => {
-  //  if (props.editData){
-  //     props.handleNewData({
-  //       name:props.rowData.name,
-  //       initial_quantity:props.rowData.initial_quantity,
-  //       imageUrl:props.rowData.imageUrl,
-  //       description: props.rowData.description
+  useEffect(() => {
+   if (props.editData){
+      props.handleNewData({
+        name:props.rowData.name,
+        initial_quantity:props.rowData.initial_quantity,
+        imageUrl:props.rowData.imageUrl,
+        description: props.rowData.description
   
-  //     })} else {
-  //       props.handleNewData ({
-  //         name:"",
-  //         initial_quantity:"",
-  //         image_url:"",
-  //         description:"",
-  //       });
-  //     };      
-  //   }, [props.rowData]
-  // );
+      })} else {
+        props.handleNewData ({
+          name:"",
+          initial_quantity:"",
+          image_url:"",
+          description:"",
+        });
+      };      
+    }, [props.rowData]
+  );
 
  
 
@@ -144,7 +144,7 @@ const useStyles = makeStyles((theme) => ({
                 autoFocus
                 size="small"
                 onChange={props.updateNewData}
-                value={props.newData.name}
+                value={props.newData.name ||""}
                 inputRef={nameRef}
                 onKeyPress={event => {
                   if (event.key === "Enter") {
@@ -159,12 +159,12 @@ const useStyles = makeStyles((theme) => ({
                 required
                 fullWidth
                 id="initial_quantity"
-                label="Početno initial_quantity komada"
+                label="Početno komada"
                 name="initial_quantity"
                 autoComplete="lname"
                 size="small"
                 onChange={props.updateNewData}
-                value={props.newData.initial_quantity}
+                value={props.newData.initial_quantity||""}
                 inputRef={addressRef}
                 onKeyPress={event => {
                   if (event.key === "Enter") {
@@ -185,6 +185,7 @@ const useStyles = makeStyles((theme) => ({
               </Button>
             </Grid>
             <Grid item xs={3} sm={3} md={3}>
+              { !props.editData &&
                <Button
                 variant="contained"
                 color="primary"
@@ -196,6 +197,21 @@ const useStyles = makeStyles((theme) => ({
                 Unesi opis
                 
               </Button>
+              }
+              {props.editData && 
+                 <Button
+                 variant="contained"
+                 color="primary"
+                 size="large"
+                 className={classes.button}
+                 startIcon={<Description />}
+                 onClick = {props.handleOpenDescription}
+               >
+                 Koriguj opis
+                 
+               </Button>
+
+              }
             </Grid>
             
           </Grid>

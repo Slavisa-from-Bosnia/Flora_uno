@@ -30,7 +30,7 @@ app.post("/roses", async (req, res)=>{
 
 app.get("/roses", async(req, res) => {
    try {
-       const allRosses = await pool.query("SELECT * FROM roses");
+       const allRosses = await pool.query("SELECT * FROM roses ORDER BY rose_id DESC");
        res.json(allRosses.rows);
 
    } catch (err) {
@@ -42,7 +42,7 @@ app.get("/roses", async(req, res) => {
 app.get("/roses/:id", async (req,res) => {
     try {
         const {id} = req.params;
-        const rose =await pool.query("SELECT *FROM roses WHERE rose_id =$1", [id]);
+        const rose =await pool.query("SELECT *FROM roses WHERE rose_id =$1 ", [id]);
         res.json(rose.rows[0]);
 
     } catch (err) {

@@ -81,6 +81,7 @@ const handleOpenDeleteDialog = (data) => {
 // Form open description dialog
 const handleOpenDescription = () =>{
   setDescriptionDialog(true);
+  console.log(newData);
 };
 
 // Delete from dialog
@@ -92,13 +93,11 @@ const handleCloseDialog = () => {
 
 const handleCloseDescription = (description) =>{
   setDescriptionDialog(false);
-  console.log('jses');
 };
 
 const onDeleteClick = async (rowData) => {
   try {
-    console.log("podaci za brisanje")
-    const deleteBuyers = await fetch (`http://localhost:5000/buyers/${rowData.buyer_id}`, {
+    const deleteBuyers = await fetch (`http://localhost:5000/roses/${rowData.rose_id}`, {
       method: "DELETE"
   });
     getRoses();
@@ -167,7 +166,12 @@ const updateNewData = e => {
               </Paper>
             </Grid>
           </Grid>
-          <Description open ={openDescriptionDialog} handleCloseDescription={handleCloseDescription}/>
+          <Description 
+            open ={openDescriptionDialog} 
+            handleCloseDescription={handleCloseDescription} 
+            updateNewData={updateNewData}
+            newData={newData}
+          />
           <Dialog open = {openDeleteDialog} closeOpen={closeOpen} rowData={rowData} handleCloseDialog={handleCloseDialog}/>
         </Container>
 

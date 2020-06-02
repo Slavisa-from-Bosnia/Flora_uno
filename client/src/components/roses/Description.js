@@ -7,6 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
+
 export default function AlertDialog(props) {
   return (
     <div>
@@ -30,12 +31,15 @@ export default function AlertDialog(props) {
             fullWidth={true}
             label="Opis proizvoda"
             variant="outlined"
+            onChange={props.updateNewData}
+            name = "description"
+            value= {props.newData.description}
 />
           </DialogContentText>
         </DialogContent>
         <DialogActions>
         
-          <Button onClick={props.handleCloseDescription} color="primary" autoFocus>
+          <Button onClick={props.handleCloseDescription}  color="primary" autoFocus>
             Zatvori
           </Button>
         </DialogActions>
