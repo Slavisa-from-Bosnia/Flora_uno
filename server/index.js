@@ -55,11 +55,12 @@ app.get("/roses/:id", async (req,res) => {
 app.put("/roses/:id", async (req, res) => {
     try {
         const {id} = req.params;
-        const {data} = req.body;
-        const updateRoses = await pool.query("UPDATE roses SET data = $1 WHERE rose_id = $2",
-        [data, id]
+        const data = req.body;
+        console.log(data);
+        const updateRoses = await pool.query("UPDATE roses SET name = $1, description = $2, initial_quantity = $3  WHERE rose_id = $4 ",
+        [data.name, data.description, data.initial_quantity,  data.rose_id]
         );
-        res.json("Roses was updated!");
+        console.log("Roses was updated!");
 
     } catch (err) {
         console.error(err.message);

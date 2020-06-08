@@ -48,6 +48,7 @@ export default function MaterialTableDemo(props) {
       {title:'Izlaz', field: 'output_sum'},
       {title: 'Stanje', field: 'current_sum'},
       {title: 'Rezervisano', field: 'reserved_sum'},
+      {title: 'Cijena', field: 'price'},
       { title: 'Slika', field: 'image_Url', render: rowData => <img src={null} style={{width: 40, borderRadius: '50%'}}/> }
     
   ]);

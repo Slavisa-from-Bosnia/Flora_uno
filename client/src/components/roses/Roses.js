@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
     fixedHeight: {
-      height: 140,
+      height: 144,
     },
   }));
 
@@ -119,7 +119,8 @@ const handleNewData = (data) =>{
   name:data.name,
   initial_quantity:data.initial_quantity,
   image_url:data.image_url,
-  description:"",
+  description: data.description ,
+  rose_id: data.rose_id
  });
 };
 
