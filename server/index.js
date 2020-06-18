@@ -9,76 +9,103 @@ app.use(express.json());
 
 //ROUTES//
 
+    // create order
 
-// create a rose
+    app.post("/orders", async (req, res)=>{
+        try{
+            const data = req.body;
+            console.log(req.body);
+            const newRose = await pool.query("Insert INTO orders (buyer_id, payment_method, shipping_method, adress_of_delivery, shipped, delivered, payed) Values($1, $2, $3, $4, $5, $6, $7 ) RETURNING *",
+            [data.buyer_id, data.payment_method, data.shipping_method, data.adress_of_delivery, data.shipped, data.delivered, data.payed ]
+            );
+            console.log('Dodata narudžba u bazi!')
+            res.json(newRose.rows[0]);
+        } catch (err) {
+            console.error(err.message);
+        }
+    });
+    
+    // get all orders
 
-app.post("/roses", async (req, res)=>{
-    try{
-        const inputRoses = req.body;
-        console.log(req.body);
-        const newRose = await pool.query("Insert INTO roses (name, initial_quantity, image_url, description) Values($1, $2, $3, $4 ) RETURNING *",
-        [inputRoses.name, inputRoses.initial_quantity, inputRoses.image_url, inputRoses.description]
-        );
-        console.log('Dodata ruža u bazi!')
-        res.json(newRose.rows[0]);
-    } catch (err) {
-        console.error(err.message);
-    }
-});
+    app.get("/orders", async(req, res) => {
+        try {
+            const allOrders = await pool.query ("SELECT * FROM orders ORDER BY date_of_order DESC");
+            res.json(allOrders.rows);
+        } catch (err) {
+            console.error(err.message);
+        }
+    });
 
-// get all roses
+    // create a rose
 
-app.get("/roses", async(req, res) => {
-   try {
-       const allRosses = await pool.query("SELECT * FROM roses ORDER BY rose_id DESC");
-       res.json(allRosses.rows);
+    app.post("/roses", async (req, res)=>{
+        try{
+            const inputRoses = req.body;
+            console.log(req.body);
+            const newRose = await pool.query("Insert INTO roses (name, initial_quantity, image_url, description) Values($1, $2, $3, $4 ) RETURNING *",
+            [inputRoses.name, inputRoses.initial_quantity, inputRoses.image_url, inputRoses.description]
+            );
+            console.log('Dodata ruža u bazi!')
+            res.json(newRose.rows[0]);
+        } catch (err) {
+            console.error(err.message);
+        }
+    });
 
-   } catch (err) {
-       console.error(err.message);
-   }
-});
+    // get all roses
 
-// get a rose
-app.get("/roses/:id", async (req,res) => {
-    try {
-        const {id} = req.params;
-        const rose =await pool.query("SELECT *FROM roses WHERE rose_id =$1 ", [id]);
-        res.json(rose.rows[0]);
+    app.get("/roses", async(req, res) => {
+        try {
+            const allRosses = await pool.query("SELECT * FROM roses ORDER BY rose_id DESC");
+            res.json(allRosses.rows);
 
-    } catch (err) {
-        console.error(err.message);
-    }
-});
+        } catch (err) {
+            console.error(err.message);
+        }
+    });
 
-// update a rose
+    // get a rose
+    app.get("/roses/:id", async (req,res) => {
+        try {
+            const {id} = req.params;
+            const rose =await pool.query("SELECT *FROM roses WHERE rose_id =$1 ", [id]);
+            res.json(rose.rows[0]);
 
-app.put("/roses/:id", async (req, res) => {
-    try {
-        const {id} = req.params;
-        const data = req.body;
-        console.log(data);
-        const updateRoses = await pool.query("UPDATE roses SET name = $1, description = $2, initial_quantity = $3  WHERE rose_id = $4 ",
-        [data.name, data.description, data.initial_quantity,  data.rose_id]
-        );
-        console.log("Roses was updated!");
+        } catch (err) {
+            console.error(err.message);
+        }
+    });
 
-    } catch (err) {
-        console.error(err.message);
-    }
-});
+    // update a rose
 
-// delete a rose
+    app.put("/roses/:id", async (req, res) => {
+        try {
+            const {id} = req.params;
+            const data = req.body;
+            console.log(data);
+            const updateRoses = await pool.query("UPDATE roses SET name = $1, description = $2, initial_quantity = $3  WHERE rose_id = $4 ",
+            [data.name, data.description, data.initial_quantity,  data.rose_id]
+            );
+            console.log("Roses was updated!");
+            res.json(updateRoses);
 
-app.delete("/roses/:id", async (req,res) => {
-    try {
-        const {id} =req.params;
-        const delateRoses = await pool.query("DELETE FROM roses WHERE rose_id = $1", [id]);
-        res.json("Rose was deleted!")
+        } catch (err) {
+            console.error(err.message);
+        }
+    });
 
-    } catch (err) {
-        console.error(err.message);
-    }
-})
+    // delete a rose
+
+    app.delete("/roses/:id", async (req,res) => {
+        try {
+            const {id} =req.params;
+            const delateRoses = await pool.query("DELETE FROM roses WHERE rose_id = $1", [id]);
+            res.json("Rose was deleted!")
+
+        } catch (err) {
+            console.error(err.message);
+        }
+    })
 
 // create buyer
 

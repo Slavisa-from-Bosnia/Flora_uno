@@ -22,6 +22,8 @@ import { mainListItems} from './ListItems';
 import Buyers from '../../components/buyers/Buyers';
 import {Switch, Route, Link} from 'react-router-dom';
 import Roses from '../../components/roses/Roses';
+import Orders from '../../components/orders/Orders';
+import CreateOrder from '../../components/orders/CreateOrder';
 
 
 
@@ -178,6 +180,8 @@ export default function Dashboard() {
             <Grid item xs={12} md={12} lg={12}>
                   <Route path = {'/dashboard/buyers'} component = {Buyers}/>
                   <Route path = {'/dashboard/roses'} component = {Roses}/>
+                  <Route path = {'/dashboard/orders'} component = {Orders}/>
+                  <Route path = {'/dashboard/createOrder'} component = {CreateOrder}/>
             </Grid>  
           </Grid>
           <Box pt={4}>

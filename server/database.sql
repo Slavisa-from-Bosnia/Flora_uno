@@ -31,14 +31,19 @@ CREATE TABLE orders(
     date_of_order DATE NOT NULL DEFAULT CURRENT_DATE,
     payment_method VARCHAR (100),
     shipping_method VARCHAR (100),
+    shipped BOOLEAN,
     shipping_date DATE,
+    delivered BOOLEAN,
     delivering_date DATE,
+    payed BOOLEAN,
     adress_of_delivery VARCHAR (100)
 );
 
 CREATE TABLE turnover (
     turnover_id SERIAL PRIMARY KEY,
-    orders_id INT,
+    input BOOLEAN DEFAULT FALSE,
+    descriptions VARCHAR (100),
+    descriptions_id INT,
     roses_id INT,
     quantity INT
 );

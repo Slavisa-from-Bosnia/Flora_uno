@@ -114,6 +114,7 @@ const closeOpen = () => {
   setDeleteDialog(false);
 } ;
 
+
 const handleNewData = (data) =>{
  setNewData({
   name:data.name,
@@ -129,7 +130,7 @@ const updateNewData = e => {
     ...newData,
     [e.target.name]: e.target.value
   });
-  console.log(newData);
+  // console.log(newData);
 };
 
   const classes = useStyles();

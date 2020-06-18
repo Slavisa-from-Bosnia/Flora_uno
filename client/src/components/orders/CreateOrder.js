@@ -9,7 +9,9 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/AddOutlined';
 import Table from  './Table';
 import Dialog from './Dialog';
-import {Link}from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import Form from './Form';
+import Paper from '@material-ui/core/Paper';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -115,6 +117,18 @@ const closeOpen = () => {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
+
+            <Paper className={fixedHeightPaper}>
+              <Form
+                // setTrigger = {handleTrigger}
+                // editData = {editData}
+                // rowData={rowData}
+                // editDataHendler = {editDataHendler}
+                // getBuyers = {getBuyers}
+              />
+            </Paper>
+            </Grid>
+            <Grid item xs={12} md={12} lg={12}>
               <Table 
                 editData={handleEditData} 
                 openDialog={handleOpenDialog}
@@ -130,22 +144,19 @@ const closeOpen = () => {
                   editData = {editData}
                   rowData={rowData}
                   editDataHendler = {editDataHendler}
-
                   getBuyers = {getBuyers}
                 />
               </Paper> */}
               <Box display="flex" justifyContent ='flex-end'>
-                <Button 
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  className={classes.button}
-                  startIcon={<AddIcon />}
-                  component ={Link}
-                  to = "/dashboard/createOrder"
-                >
-                  Nova narudžba
-                </Button>
+              <Button 
+                variant="contained"
+                color="primary"
+                size="large"
+                className={classes.button}
+                startIcon={<AddIcon />}
+              >
+                Kreiraj narudžbu
+              </Button>
               </Box>
             </Grid>
           </Grid>

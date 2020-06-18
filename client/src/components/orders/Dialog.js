@@ -16,10 +16,10 @@ export default function AlertDialog(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Jesi li siguran da želiš da izbrišeš kupca?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Jesi li siguran da želiš da izbrišeš podatke o narudžbi?"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-  {`Kupac ${props.rowData.name} biće izbrisan iz baze podataka!`}
+  {`Selektovana narudžba biće izbrisana iz baze narudžbi!`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
