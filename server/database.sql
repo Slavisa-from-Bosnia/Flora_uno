@@ -36,8 +36,10 @@ CREATE TABLE orders(
     delivered BOOLEAN,
     delivering_date DATE,
     payed BOOLEAN,
-    adress_of_delivery VARCHAR (100)
+    adress_of_delivery VARCHAR (100),
+    totalSum FLOAT
 );
+
 
 CREATE TABLE turnover (
     turnover_id SERIAL PRIMARY KEY,

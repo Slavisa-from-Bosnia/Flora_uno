@@ -7,7 +7,7 @@ import Box from '@material-ui/core/Box';
 
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/AddOutlined';
-import Table from  './Table';
+import TableCreateOrder from  './TableCreateOrder';
 import Dialog from './Dialog';
 import {Link} from 'react-router-dom';
 import Form from './Form';
@@ -25,88 +25,37 @@ const useStyles = makeStyles((theme) => ({
     paper: {
       padding: theme.spacing(1),
       display: 'flex',
-      overflow: 'auto',
+      overflow: 'hidden',
       flexDirection: 'column',
     },
     fixedHeight: {
-      height: 140,
+      height: 160,
     }
   }));
 
 export default function Buyers() {
-  const [trigger, setTrigger] = useState (true);
-  const [editData, setEditData] = useState (false);
-  const [data, setData] = useState ([]);
-  const [open, setOpen] = React.useState(false);
-  const [rowData, setRowData] = React.useState("");
+  const [specification, setSpecification] = React.useState([]);
+
   
   useEffect(()=>{
-    // getBuyers();
   },[]);
 
   const handleTrigger = ()=>{
     // setTrigger(trigger => !trigger);
   };
   
-  const getOrders = async () => {
-    try{
-      const response = await fetch("http://localhost:5000/orders");
-      const jsonData =await response.json();
-
-      setData(jsonData);
-      console.log(jsonData);
-
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
+ 
   // Table edit data
 const handleEditData = (data) => {
   console.log(data);
-  setRowData(data);
-  setEditData(true);
-};
-
-// From form
-const editDataHendler = () => {
-  setEditData(false);
+  // setRowData(data);
 };
 
 // Table open dialog
 const handleOpenDialog = (data) => {
   console.log(data);
-  setOpen(true);
-  setRowData(data);
+  // setRowData(data);
 };
-
-// Delete from dialog
-const handleCloseDialog = () => {
-  setOpen(false);
-  console.log(rowData);
-  onDeleteClick(rowData);
-};
-
-const onDeleteClick = async (rowData) => {
-  try {
-    console.log("podaci za brisanje")
-    const deleteBuyers = await fetch (`http://localhost:5000/buyers/${rowData.buyer_id}`, {
-      method: "DELETE"
-  });
-    getOrders();
-    console.log(deleteBuyers);
-
-  } catch (err) {
-    console.error(err.message);
-  }
-
-};
-
-
-// Close dialog
-const closeOpen = () => {
-  setOpen(false);
-} ;
 
   const classes = useStyles();
 
@@ -120,21 +69,13 @@ const closeOpen = () => {
 
             <Paper className={fixedHeightPaper}>
               <Form
-                // setTrigger = {handleTrigger}
-                // editData = {editData}
-                // rowData={rowData}
-                // editDataHendler = {editDataHendler}
-                // getBuyers = {getBuyers}
+                
               />
             </Paper>
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
-              <Table 
-                editData={handleEditData} 
-                openDialog={handleOpenDialog}
-                getOrders={getOrders}
-                data={data}
-                rowData={rowData}
+              <TableCreateOrder 
+                specification={specification}
                 />  
             </Grid>  
             <Grid item xs={12} md={12} lg={12} >
@@ -160,7 +101,6 @@ const closeOpen = () => {
               </Box>
             </Grid>
           </Grid>
-          <Dialog open = {open} closeOpen={closeOpen} rowData={rowData} handleCloseDialog={handleCloseDialog}/>
         </Container>
 
     </div>

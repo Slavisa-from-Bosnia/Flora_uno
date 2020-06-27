@@ -32,26 +32,26 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 export default function Buyers() {
-  const [trigger, setTrigger] = useState (true);
-  const [editData, setEditData] = useState (false);
-  const [data, setData] = useState ([]);
-  const [open, setOpen] = React.useState(false);
+  // const [trigger, setTrigger] = useState (true);
+  // const [editData, setEditData] = useState (false);
+  const [buyers, setBuyers] = useState ([]);
+  const [orders, setOrders] = React.useState(false);
   const [rowData, setRowData] = React.useState("");
   
   useEffect(()=>{
-    // getBuyers();
+    getOrders();
   },[]);
 
-  const handleTrigger = ()=>{
-    // setTrigger(trigger => !trigger);
-  };
+  // const handleTrigger = ()=>{
+  //   // setTrigger(trigger => !trigger);
+  // };
   
   const getOrders = async () => {
     try{
       const response = await fetch("http://localhost:5000/orders");
       const jsonData =await response.json();
 
-      setData(jsonData);
+      setOrders(jsonData);
       console.log(jsonData);
 
     } catch (err) {
@@ -59,28 +59,30 @@ export default function Buyers() {
     }
   };
 
+
+
   // Table edit data
-const handleEditData = (data) => {
-  console.log(data);
-  setRowData(data);
-  setEditData(true);
-};
+// const handleEditData = (data) => {
+//   console.log(data);
+//   setRowData(data);
+//   // setEditData(true);
+// };
 
 // From form
 const editDataHendler = () => {
-  setEditData(false);
+  // setEditData(false);
 };
 
 // Table open dialog
 const handleOpenDialog = (data) => {
   console.log(data);
-  setOpen(true);
+  // setOpen(true);
   setRowData(data);
 };
 
 // Delete from dialog
 const handleCloseDialog = () => {
-  setOpen(false);
+  // setOpen(false);
   console.log(rowData);
   onDeleteClick(rowData);
 };
@@ -103,7 +105,7 @@ const onDeleteClick = async (rowData) => {
 
 // Close dialog
 const closeOpen = () => {
-  setOpen(false);
+  // setOpen(false);
 } ;
 
   const classes = useStyles();
@@ -116,10 +118,10 @@ const closeOpen = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
               <Table 
-                editData={handleEditData} 
+                // editData={handleEditData} 
                 openDialog={handleOpenDialog}
                 getOrders={getOrders}
-                data={data}
+                // data={data}
                 rowData={rowData}
                 />  
             </Grid>  
@@ -149,7 +151,7 @@ const closeOpen = () => {
               </Box>
             </Grid>
           </Grid>
-          <Dialog open = {open} closeOpen={closeOpen} rowData={rowData} handleCloseDialog={handleCloseDialog}/>
+          {/* <Dialog open = {open} closeOpen={closeOpen} rowData={rowData} handleCloseDialog={handleCloseDialog}/> */}
         </Container>
 
     </div>

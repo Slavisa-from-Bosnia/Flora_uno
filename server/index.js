@@ -29,7 +29,7 @@ app.use(express.json());
 
     app.get("/orders", async(req, res) => {
         try {
-            const allOrders = await pool.query ("SELECT * FROM orders ORDER BY date_of_order DESC");
+            const allOrders = await pool.query ("SELECT order_id, buyer.name,  FROM orders ORDER BY date_of_order DESC");
             res.json(allOrders.rows);
         } catch (err) {
             console.error(err.message);
@@ -167,6 +167,17 @@ app.put("/buyers/:id", async (req, res) => {
     }
 });
 
+app.get("/buyers_for_orders", async(req, res) => {
+    try {
+        const allBuyers = await pool.query("SELECT buyer_id, name, address FROM buyers ORDER BY name ");
+        res.json(allBuyers.rows);
+ 
+    } catch (err) {
+        console.error(err.message);
+    }
+ });
+
+ 
 app.listen(5000, () => {
     console.log("server has started on port 5000");
 

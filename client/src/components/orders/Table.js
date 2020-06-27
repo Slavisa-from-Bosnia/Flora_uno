@@ -42,10 +42,10 @@ const tableIcons = {
 export default function MaterialTableDemo(props) {
   const [columns, setColumns] = React.useState([
     
-      { title: 'Artikal', field: 'buyer.name'},
-      { title: 'Količina komada', field: 'buyer.adress' },
-      { title: 'Jedinična cijena', field: 'order.date_of_order'},
-      { title: 'Ukupni iznos', field: 'order.shipped' },
+      { title: 'Kupac', field: 'buyer.name'},
+      { title: 'Iznos', field: 'buyer.adress' },
+      { title: 'Datum', field: 'order.date_of_order'},
+      { title: 'Isporučeno', field: 'order.shipped' },
     
   ]);
 
@@ -54,16 +54,18 @@ export default function MaterialTableDemo(props) {
       <MaterialTable
        
         columns={columns}
-        data={props.data}
+        data={props.orders}
         icons={tableIcons}
-        title="Specifikacija"
+        title="Narudžbe"
         options={{
           search:false,
           headerStyle: {
             fontWeight: 800,
-            maxHeight: 20
           },
-        }}
+        }
+      }
+        // components = {{}}
+      
         // actions={[
         //   {
         //     icon: Edit,

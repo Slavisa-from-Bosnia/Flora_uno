@@ -11,6 +11,10 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import Tooltip from '@material-ui/core/Tooltip';
+import Buyers from './CreateOrder';
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -36,147 +40,90 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
- const Form = (props)=> {
-  
-  const [input, setInput] = useState ({
-    firstName:"",
-    address:"",
-    city:"",
-    phone:"",
-    meil:"",
-    buyer_id:""
+
+ const Form = ()=> {
+
+  const [buyers, setBuyers]= useState([]);
+  const [roses, setRoses]= useState([]);
+  const [input, setInput]= useState({
+    rose_id:"",
+    rose_name:"",
+    quantity:"",
+    price:"",
+    sum:"",
+    current_sum:"",
+    reserved_sum:""
   });
 
-  const addressRef = useRef();
-  const cityRef = useRef();
-  const phoneRef = useRef();
-  const mailRef = useRef();
-  const buttonRef = useRef();
-  const firstNameRef =useRef();
+  useEffect(() => {
+    getBuyers();
+    getRoses();
+  }, []);
 
-
-  const changeFocusToAdress = () => {
-    addressRef.current.focus();
-  };
-  const changeFocusToCity = () => {
-    cityRef.current.focus();
-  };
-  const changeFocusToPhone = () => {
-    phoneRef.current.focus();
-  };
-  const changeFocusToMail = () => {
-    mailRef.current.focus();
-  };
-  const changeFocusToName = () => {
-    firstNameRef.current.focus();
+  const checkInput = () => {
+    console.log (input);
+    if (input.rose_id && input.quantity){
+      console.log("input validan");
+    }else{
+      console.log("input nije validan");
+    }
   };
   
-  useEffect(() => {
-   if (props.editData){
-      setInput({
-        firstName:props.rowData.name,
-        address:props.rowData.address,
-        city:props.rowData.city,
-        phone:props.rowData.phone,
-        meil:props.rowData.email,
-        buyer_id:props.rowData.buyer_id
-      })} else {
-        setInput ({
-        firstName:"",
-        address:"",
-        city:"",
-        phone:"",
-        meil:"",
-        buyer_id:""
-        });
-      };
+  const getBuyers = async () => {
+    try{
+      const response = await fetch("http://localhost:5000/buyers_for_orders");
+      const jsonData =await response.json();
+      console.log(jsonData);
+      setBuyers(jsonData);
 
-      console.log(props.editData);
-    
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  const getRoses = async () => {
+    try{
+      const response = await fetch("http://localhost:5000/roses");
+      const jsonData =await response.json();
+      setRoses(jsonData);
       
-    }, [props.rowData]
-  );
-  useEffect(() => {
-    console.log(props.data);
-  }, [props.data]);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
 
+  const roseInfo =(e)=> {
+
+    // console.log(e.target.value);
+    // const roseRow = roses.filter((item) => {
+    //   return item.rose_id == e.target.value;
+    // });
+    // console.log(roseRow);
+    // setInput ({name
+    //   ...input,
+    //   rose_name:roseRow.name,
+    //   quantity: roseRow.current_sum,
+    //   price: roseRow.price,
+    //   reserved_sum:roseRow.reserved_sum,
+
+    // })
+
+  };
   const updateField = e => {
     setInput({
       ...input,
       [e.target.name]: e.target.value
     });
+    roseInfo(e);
   };
-
-  const onSubmitForm =async e => {
-    if(!props.editData){
-      e.preventDefault();
-      try{
-        const data = input;
-        const response = await fetch("http://localhost:5000/buyers", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(data)
-        });
-        console.log(response);
-        props.setTrigger();
-        props.getBuyers();
-        setInput({
-          firstName:"",
-          address:"",
-          city:"",
-          phone:"",
-          meil:"",
-          buyer_id:""
-          
-        });
-        firstNameRef.current.focus();
-
-      } catch (err) {
-        console.error(err.message);
-      
-      }
-     }   else{
-      e.preventDefault();
-      try{
-        const data = {input};
-        const response = await fetch(`http://localhost:5000/buyers/:${input.buyer_id}`, {
-          method: "PUT",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(data)
-        });
-        props.setTrigger();
-        props.getBuyers();
-        setInput({
-          firstName:"",
-          address:"",
-          city:"",
-          phone:"",
-          meil:"",
-          buyer_id:""
-          
-        });
-        firstNameRef.current.focus();
-        props.editDataHendler();
-        
-
-      } catch (err) {
-        console.error(err.message);
-      
-      }
-
-    }
-    
-  };
-
-  // changeFocusToName();
 
   const classes = useStyles();
-
+  // const proba = [{name:"prvi", proba_id:1},{name:"drugi", proba_id:2},{name:"treći", proba_id:3} ]
   return (
     <Container component="main" maxWidth="lg">
       <CssBaseline />
       <div>
-        <form className={classes.form}  onSubmit ={onSubmitForm}>
+        <form className={classes.form}  >
           <Grid container spacing={2}>
             <Grid item xs={3} sm={3} md={3} className={classes.grid}>
               <FormControl variant="outlined" className={classes.formControl}>
@@ -184,47 +131,53 @@ const useStyles = makeStyles((theme) => ({
                 <Select className={classes.select}
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
-                  // value={age}
-                  // onChange={handleChange}
+                  value = {input.buyer_id}
                   label="Kupac"
+                  onChange={updateField}
+                  name = "buyer_id"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {buyers.map((buyer)=> (
+                    <MenuItem key={buyer.buyer_id} value ={buyer.buyer_id}>
+                      {buyer.name}
+                    </MenuItem>
+                  ))}
+
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={6} sm={4} md={4}>
-              <FormControl variant="outlined" className={classes.formControl} >
+            {/* <Grid item xs={6} sm={4} md={4}>
+               <FormControl variant="outlined" className={classes.formControl} >
                 <InputLabel id="demo-simple-select-outlined-label">Adresa</InputLabel>
                 <Select className ={classes.select}
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
                   // value={age}
-                  // onChange={handleChange}
+
                   label="Adresa"
+                  value={buyers.buyer_id}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  { buyers.map((buyer) => (
+                    <MenuItem value={buyer.buyer_id} key={buyer.buyer_id}>
+                     {buyer.address}
+                    </MenuItem>
+                  ))}
+                 
+               
+                  
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid> */}
             <Grid item xs={6} sm={4} md={2}>
             <FormControl variant="outlined" className={classes.formControl} >
                 <InputLabel id="demo-simple-select-outlined-label">Način plaćanja</InputLabel>
                 <Select className={classes.select}
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
-                  // value={age}
-                  // onChange={handleChange}
-                  label="Adresa"
+                  onChange={updateField}
+                  label="Način plaćanja"
+                  name = "payment_method"
+                  defaultValue={10}
+
                 >
                   <MenuItem value="">
                     <em>None</em>
@@ -244,46 +197,77 @@ const useStyles = makeStyles((theme) => ({
                 <Select className={classes.select}
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
-                  // value={age}
-                  // onChange={handleChange}
-                  label="Kupac"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  // value={input.rose_id}
+                  label="Artikal"
+                  onChange ={updateField}
+                  name ="rose_id"
+                > 
+
+                 { roses.map((rose) => (
+                    <MenuItem value={rose.rose_id} key={rose.rose_id}>
+                     {rose.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
+            </Grid>
+
+            <Grid item xs={2} sm={2} md={1}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                name="current_sum"
+                label="Zalihe"
+                type="text"
+                id="email"
+                autoComplete="current-password"
+                size="small"
+                value={input.current_sum}
+                InputProps={{
+                  readOnly:true
+                }}
+               
+              />
+            </Grid>
+            <Grid item xs={2} sm={2} md={1}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                name="reserved_sum"
+                label="Reze."
+                type="text"
+                id="email"
+                autoComplete="current-password"
+                size="small"
+                InputProps={{
+                  readOnly:true
+                }}
+                // onChange={updateField}
+                // value={input.meil}
+               
+              />
             </Grid>
            
             <Grid item xs={6} sm={4} md={2}>
               <TextField
                 variant="outlined"
                 fullWidth
-                name="meil"
+                name="quantity"
                 label="Količina"
-                type="e-mail"
+                type="number"
                 id="email"
                 autoComplete="current-password"
                 size="small"
-                onChange={updateField}
-                value={input.meil}
-                inputRef={mailRef}
+                onChange ={updateField}
+                value={input.reserved_sum}
               />
             </Grid>
             <Grid item xs={6} sm={4} md={2}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className = {classes.submit}
-                inputref={buttonRef}
-              >
-                Koriguj kupca
-              </Button>
+              <Tooltip title="Dodaj stavku" aria-label="add">
+                <Fab color="primary" className={classes.fab} size ="small" onClick={checkInput}>
+                  <AddIcon />
+                </Fab>
+              </Tooltip>
             </Grid>
           </Grid>
         </form>
