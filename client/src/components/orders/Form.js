@@ -16,6 +16,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import Buyers from './CreateOrder';
 
+
 const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
- const Form = ()=> {
+ const Form = (props)=> {
 
   const [buyers, setBuyers]= useState([]);
   const [roses, setRoses]= useState([]);
@@ -52,7 +53,8 @@ const useStyles = makeStyles((theme) => ({
     price:"",
     sum:"",
     current_sum:"",
-    reserved_sum:""
+    reserved_sum:"",
+    input_id:0
   });
 
   useEffect(() => {
@@ -61,11 +63,14 @@ const useStyles = makeStyles((theme) => ({
   }, []);
 
   const checkInput = () => {
-    console.log (input);
-    if (input.rose_id && input.quantity){
+    
+    if (input.rose_id && input.quantity && input.quantity>0){
       console.log("input validan");
+      console.log (input);
+      props.setSpecification(input);
     }else{
       console.log("input nije validan");
+      props.openDialog();
     }
   };
   
@@ -94,28 +99,36 @@ const useStyles = makeStyles((theme) => ({
 
   const roseInfo =(e)=> {
 
-    // console.log(e.target.value);
-    // const roseRow = roses.filter((item) => {
-    //   return item.rose_id == e.target.value;
-    // });
-    // console.log(roseRow);
-    // setInput ({name
-    //   ...input,
-    //   rose_name:roseRow.name,
-    //   quantity: roseRow.current_sum,
-    //   price: roseRow.price,
-    //   reserved_sum:roseRow.reserved_sum,
+    console.log(e.target);
+    const roseRow = roses.filter((item) => {
+      return item.rose_id == e.target.value;
+    });
+    console.log(roseRow);
+    console.log(roseRow[0].name)
+    setInput ({
+      ...input,
+      rose_id: roseRow[0].rose_id,
+      rose_name:roseRow[0].name,
+      current_sum: roseRow[0].current_sum,
+      price: roseRow[0].price,
+      reserved_sum:roseRow[0].reserved_sum,
 
-    // })
+    })
 
   };
+  const updateFieldS = e => {
+      roseInfo(e);
+  };
+
   const updateField = e => {
     setInput({
       ...input,
       [e.target.name]: e.target.value
     });
-    roseInfo(e);
+
   };
+
+  
 
   const classes = useStyles();
   // const proba = [{name:"prvi", proba_id:1},{name:"drugi", proba_id:2},{name:"treći", proba_id:3} ]
@@ -199,7 +212,7 @@ const useStyles = makeStyles((theme) => ({
                   id="demo-simple-select-outlined"
                   // value={input.rose_id}
                   label="Artikal"
-                  onChange ={updateField}
+                  onChange ={updateFieldS}
                   name ="rose_id"
                 > 
 
@@ -222,7 +235,7 @@ const useStyles = makeStyles((theme) => ({
                 id="email"
                 autoComplete="current-password"
                 size="small"
-                value={input.current_sum}
+                value={input.current_sum }
                 InputProps={{
                   readOnly:true
                 }}
@@ -238,12 +251,11 @@ const useStyles = makeStyles((theme) => ({
                 type="text"
                 id="email"
                 autoComplete="current-password"
+                value={input.reserved_sum}
                 size="small"
                 InputProps={{
                   readOnly:true
                 }}
-                // onChange={updateField}
-                // value={input.meil}
                
               />
             </Grid>
@@ -255,11 +267,11 @@ const useStyles = makeStyles((theme) => ({
                 name="quantity"
                 label="Količina"
                 type="number"
-                id="email"
+                id="quantity"
                 autoComplete="current-password"
                 size="small"
                 onChange ={updateField}
-                value={input.reserved_sum}
+                defaultValue={input.reserved_sum}
               />
             </Grid>
             <Grid item xs={6} sm={4} md={2}>

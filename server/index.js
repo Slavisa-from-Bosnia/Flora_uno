@@ -42,8 +42,8 @@ app.use(express.json());
         try{
             const inputRoses = req.body;
             console.log(req.body);
-            const newRose = await pool.query("Insert INTO roses (name, initial_quantity, image_url, description) Values($1, $2, $3, $4 ) RETURNING *",
-            [inputRoses.name, inputRoses.initial_quantity, inputRoses.image_url, inputRoses.description]
+            const newRose = await pool.query("Insert INTO roses (name, initial_quantity, image_url, description, price, input_sum, output_sum, reserved_sum, current_sum) Values($1, $2, $3, $4, $5, $6, $7, $8, $9 ) RETURNING *",
+            [inputRoses.name, inputRoses.initial_quantity, inputRoses.image_url, inputRoses.description, inputRoses.price, inputRoses.input_sum, inputRoses.output_sum, inputRoses.reserved_sum, inputRoses.current_sum]
             );
             console.log('Dodata ruža u bazi!')
             res.json(newRose.rows[0]);
@@ -83,8 +83,8 @@ app.use(express.json());
             const {id} = req.params;
             const data = req.body;
             console.log(data);
-            const updateRoses = await pool.query("UPDATE roses SET name = $1, description = $2, initial_quantity = $3  WHERE rose_id = $4 ",
-            [data.name, data.description, data.initial_quantity,  data.rose_id]
+            const updateRoses = await pool.query("UPDATE roses SET name = $1, description = $2, initial_quantity = $3, price = $5  WHERE rose_id = $4 ",
+            [data.name, data.description, data.initial_quantity,  data.rose_id, data.price]
             );
             console.log("Roses was updated!");
             res.json(updateRoses);

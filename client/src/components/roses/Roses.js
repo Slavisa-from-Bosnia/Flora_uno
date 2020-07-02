@@ -121,7 +121,12 @@ const handleNewData = (data) =>{
   initial_quantity:data.initial_quantity,
   image_url:data.image_url,
   description: data.description ,
-  rose_id: data.rose_id
+  rose_id: data.rose_id,
+  input_sum: data.input_sum,
+  output_sum:data.output_sum,
+  reserved_sum:data.reserved_sum,
+  price:data.price,
+  current_sum:data.current_sum
  });
 };
 

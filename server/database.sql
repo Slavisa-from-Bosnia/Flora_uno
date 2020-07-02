@@ -10,7 +10,7 @@ CREATE TABLE roses (
     output_sum INT,
     current_sum INT,
     reserved_sum INT,
-    price INT
+    price FLOAT
 );
 
 CREATE TABLE buyers (

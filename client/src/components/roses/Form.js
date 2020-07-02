@@ -34,7 +34,12 @@ const useStyles = makeStyles((theme) => ({
         initial_quantity:props.rowData.initial_quantity,
         imageUrl:props.rowData.imageUrl,
         description: props.rowData.description,
-        rose_id:props.rowData.rose_id
+        rose_id:props.rowData.rose_id,
+        input_sum: props.rowData.input_sum, 
+        output_sum: props.rowData.output_sum,
+        current_sum: props.rowData.current_sum,
+        reserved_sum: props.rowData.reserved_sum,
+        price: props.rowData.price
       });
     } else {
         props.handleNewData ({
@@ -42,7 +47,12 @@ const useStyles = makeStyles((theme) => ({
           initial_quantity:"",
           image_url:"",
           description:"",
-          rose_id:""
+          rose_id:"",
+          price:0,
+          input_sum: 0,
+          output_sum: 0,
+          current_sum: 0,
+          reserved_sum: 0,
         });
       };      
     }, [props.rowData]
@@ -66,7 +76,12 @@ const useStyles = makeStyles((theme) => ({
           initial_quantity:"",
           image_url:"",
           description:"",
-          rose_id:""
+          rose_id:"",
+          price:"",
+          input_sum: 0,
+          output_sum: 0,
+          current_sum: 0,
+          reserved_sum: 0,
         });
        
 
@@ -91,7 +106,12 @@ const useStyles = makeStyles((theme) => ({
           initial_quantity:"",
           image_url:"",
           description:"",
-          rose_id:""
+          rose_id:"",
+          price:0,
+          input_sum: 0,
+          output_sum: 0,
+          current_sum: 0,
+          reserved_sum: 0,
         });
         
         props.editDataHendler();
@@ -127,29 +147,45 @@ const useStyles = makeStyles((theme) => ({
                 value={props.newData.name ||""}
               />
             </Grid>
-            <Grid item xs={3} sm={3} md={3}>
+            <Grid item xs={1} sm={1} md={1}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
                 id="initial_quantity"
-                label="Početno komada"
+                label="Poč. kol."
                 name="initial_quantity"
                 autoComplete="lname"
                 size="small"
                 onChange={props.updateNewData}
                 value={props.newData.initial_quantity||""}
+                type="number"
+              />
+            </Grid>
+            <Grid item xs={1} sm={1} md={2}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="initial_quantity"
+                label="Jed.cjena."
+                name="price"
+                autoComplete="lname"
+                size="small"
+                onChange={props.updateNewData}
+                value={props.newData.price||""}
+                type="number"
               />
             </Grid>
 
             { !props.editData &&
               <Fragment>
 
-                <Grid item xs={3} sm={3} md={3}>
+                <Grid item xs={2} sm={2} md={2}>
                   <Button
                     variant="contained"
                     color="primary"
-                    size="large"
+                    size="medium"
                     className={classes.button}
                     startIcon={<InsertPhotoIcon />}
                   >
@@ -157,11 +193,11 @@ const useStyles = makeStyles((theme) => ({
                   </Button>
                 </Grid>
 
-                <Grid item xs={3} sm={3} md={3}>
+                <Grid item xs={2} sm={2} md={2}>
                   <Button
                     variant="contained"
                     color="primary"
-                    size="large"
+                    size="medium"
                     className={classes.button}
                     startIcon={<Description />}
                     onClick = {props.handleOpenDescription}

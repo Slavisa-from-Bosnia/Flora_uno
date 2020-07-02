@@ -8,10 +8,10 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/AddOutlined';
 import TableCreateOrder from  './TableCreateOrder';
-import Dialog from './Dialog';
 import {Link} from 'react-router-dom';
-import Form from './Form';
 import Paper from '@material-ui/core/Paper';
+import Form from './Form';
+import DialogSpecification from './DialogSpecification';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
     },
     container: {
-      paddingTop: theme.spacing(2),
+      paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(1),
     },
     paper: {
@@ -27,24 +27,34 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       overflow: 'hidden',
       flexDirection: 'column',
+      maxHeight:140
     },
     fixedHeight: {
-      height: 160,
+      height: 240,
+      margin: theme.spacing(1),
+      padding: theme.spacing(1)
     }
   }));
 
 export default function Buyers() {
   const [specification, setSpecification] = React.useState([]);
+  const [open, setOpen]=useState(false);
 
-  
   useEffect(()=>{
   },[]);
+
+  const openDialog = () => {
+    setOpen(true);
+  };
+  const closeOpen = () => {
+    setOpen(false);
+  };
 
   const handleTrigger = ()=>{
     // setTrigger(trigger => !trigger);
   };
   
- 
+
   // Table edit data
 const handleEditData = (data) => {
   console.log(data);
@@ -69,9 +79,11 @@ const handleOpenDialog = (data) => {
 
             <Paper className={fixedHeightPaper}>
               <Form
-                
+              openDialog={openDialog}
+              setSpecification={setSpecification}
               />
             </Paper>
+
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
               <TableCreateOrder 
@@ -101,6 +113,7 @@ const handleOpenDialog = (data) => {
               </Box>
             </Grid>
           </Grid>
+          <DialogSpecification open ={open} closeOpen= {closeOpen}/>
         </Container>
 
     </div>
