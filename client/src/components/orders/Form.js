@@ -51,10 +51,8 @@ const useStyles = makeStyles((theme) => ({
     rose_name:"",
     quantity:"",
     price:"",
-    sum:"",
     current_sum:"",
     reserved_sum:"",
-    input_id:0
   });
 
   useEffect(() => {
@@ -62,12 +60,29 @@ const useStyles = makeStyles((theme) => ({
     getRoses();
   }, []);
 
+  // const handleInput = (input) =>{
+  //   // const i_id =input.input_id +1 ;
+  // //   setInput({
+  // //     rose_id:"",
+  // //     rose_name:"",
+  // //     quantity:"",
+  // //     price:"",
+  // //     current_sum:"",
+  // //     reserved_sum:"",
+  // //     // input_id:i_id
+  // //   });
+  // // }
+
+
   const checkInput = () => {
+
+    const diff = input.current_sum-input.reserved_sum;
+    console.log(diff);
     
-    if (input.rose_id && input.quantity && input.quantity>0){
+    if (input.rose_id && input.quantity && input.quantity>0 && input.quantity <= diff ){
       console.log("input validan");
       console.log (input);
-      props.setSpecification(input);
+      props.handleSpecification(input);
     }else{
       console.log("input nije validan");
       props.openDialog();
@@ -116,6 +131,7 @@ const useStyles = makeStyles((theme) => ({
     })
 
   };
+
   const updateFieldS = e => {
       roseInfo(e);
   };
@@ -146,7 +162,7 @@ const useStyles = makeStyles((theme) => ({
                   id="demo-simple-select-outlined"
                   value = {input.buyer_id}
                   label="Kupac"
-                  onChange={updateField}
+                  onChange={props.updateFieldData}
                   name = "buyer_id"
                 >
                   {buyers.map((buyer)=> (
@@ -186,7 +202,7 @@ const useStyles = makeStyles((theme) => ({
                 <Select className={classes.select}
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
-                  onChange={updateField}
+                  onChange={props.updateFieldData}
                   label="Način plaćanja"
                   name = "payment_method"
                   defaultValue={10}

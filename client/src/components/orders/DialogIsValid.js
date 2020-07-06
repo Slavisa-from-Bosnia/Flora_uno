@@ -19,7 +19,7 @@ export default function AlertDialog(props) {
         <DialogTitle id="alert-dialog-title">{"Nepravilan unos!"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {`Jedna ili više pozicija stavke specifikacije koja se unosi, provjeri unose!`}
+            {`Artikal koja se pokušava unjeti već je sadržan u specifikaciji!`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

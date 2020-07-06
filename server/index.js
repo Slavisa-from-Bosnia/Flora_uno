@@ -15,11 +15,11 @@ app.use(express.json());
         try{
             const data = req.body;
             console.log(req.body);
-            const newRose = await pool.query("Insert INTO orders (buyer_id, payment_method, shipping_method, adress_of_delivery, shipped, delivered, payed) Values($1, $2, $3, $4, $5, $6, $7 ) RETURNING *",
-            [data.buyer_id, data.payment_method, data.shipping_method, data.adress_of_delivery, data.shipped, data.delivered, data.payed ]
+            const newRose = await pool.query("Insert INTO orders (buyer_id, payment_method, totalSum ) Values($1, $2, $3) RETURNING *",
+            [data.buyer_id, data.payment_method, data.totalSum ]
             );
-            console.log('Dodata narudžba u bazi!')
-            res.json(newRose.rows[0]);
+            console.log(`Dodata sledeća narudžba u bazi; ${newRose.rows[0]}`);
+            res.json(newRose);
         } catch (err) {
             console.error(err.message);
         }
@@ -29,7 +29,7 @@ app.use(express.json());
 
     app.get("/orders", async(req, res) => {
         try {
-            const allOrders = await pool.query ("SELECT order_id, buyer.name,  FROM orders ORDER BY date_of_order DESC");
+            const allOrders = await pool.query ("SELECT order_id, buyer_id, FROM orders ORDER BY date_of_order DESC");
             res.json(allOrders.rows);
         } catch (err) {
             console.error(err.message);
@@ -176,6 +176,7 @@ app.get("/buyers_for_orders", async(req, res) => {
         console.error(err.message);
     }
  });
+
 
  
 app.listen(5000, () => {

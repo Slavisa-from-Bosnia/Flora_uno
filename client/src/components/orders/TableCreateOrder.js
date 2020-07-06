@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -33,25 +33,32 @@ function createRow(desc, qty, unit) {
 }
 
 function subtotal(items) {
-  return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
+  return items.map(({ sum }) => sum).reduce((sumi, i) => sumi + i, 0);
 }
 
-const rows = [
-  createRow('Paperclips (Box)', 100, 1.15),
-  createRow('Paper (Case)', 10, 45.99),
-  createRow('Waste Basket', 2, 17.99),
-  createRow('Waste Basket', 2, 17.99),
-  createRow('Waste Basket', 2, 17.99),
-  createRow('Waste Basket', 2, 17.99),
-  createRow('Waste Basket', 2, 17.99),
-];
+// const rows = [
+//   createRow('Paperclips (Box)', 100, 1.15),
+//   createRow('Paper (Case)', 10, 45.99),
+//   createRow('Waste Basket', 2, 17.99),
+//   createRow('Waste Basket', 2, 17.99),
+//   createRow('Waste Basket', 2, 17.99),
+//   createRow('Waste Basket', 2, 17.99),
+//   createRow('Waste Basket', 2, 17.99),
+// ];
 
-const invoiceSubtotal = subtotal(rows);
-const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
-export default function SpanningTable() {
+
+
+export default function SpanningTable(props) {
   const classes = useStyles();
+  const invoiceSubtotal = subtotal(props.specification);
+  const invoiceTaxes = TAX_RATE * invoiceSubtotal;
+  const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+
+  useEffect(()=> {
+    props.handleSumFromSpecification(invoiceSubtotal);
+  }, [props.specification]);
+
 
   return (
     <TableContainer component={Paper} className={classes.container}>
@@ -66,12 +73,12 @@ export default function SpanningTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {props.specification.map((row) => (
             <TableRow key={row.desc}>
-              <TableCell>{row.desc}</TableCell>
-              <TableCell align="right">{row.qty}</TableCell>
-              <TableCell align="right">{row.unit}</TableCell>
-              <TableCell align="right">{ccyFormat(row.price)}</TableCell>
+              <TableCell>{row.name}</TableCell>
+              <TableCell align="right">{row.quantity}</TableCell>
+              <TableCell align="right">{row.price}</TableCell>
+              <TableCell align="right">{ccyFormat(row.sum)}</TableCell>
             </TableRow>
           ))}
 

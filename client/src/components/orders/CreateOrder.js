@@ -12,7 +12,7 @@ import {Link} from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Form from './Form';
 import DialogSpecification from './DialogSpecification';
-
+import DialogIsValid from './DialogIsValid';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,15 +39,82 @@ const useStyles = makeStyles((theme) => ({
 export default function Buyers() {
   const [specification, setSpecification] = React.useState([]);
   const [open, setOpen]=useState(false);
+  const [openIsValidate, setOpenIsValdiate] = useState(false);
+  const [data, setData] = React.useState({
+    buyer_id:"",
+    payment_method: "10",
+    totalSum: ""
+  });
+  
+  function constains (a, obj) {
+    for (var i = 0; i<a.length; i++) {
+      if (a[i].name === obj) {
+        return true;
+      }
+    } 
+    return false;
+  }
+  
+  const createOrder = async() =>{
+    console.log(data);
+    if (data.buyer_id && data.payment_method && data.totalSum>0){
+      try{
+        const response = await fetch("http://localhost:5000/orders", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(data)
+        });
+        console.log(response);
+        } catch (err) {
+          console.error(err.message);
+        } 
+    } else {
+      console.log("nedostaju svi podaci");
+    }
+  }
 
-  useEffect(()=>{
-  },[]);
+  const updateFieldData = (e)=> {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value
+    });
+    console.log(data);
+  }
+
+  const handleSpecification = (input) => {
+    console.log(input.rose_name);
+    console.log(specification);
+    const isValid = constains (specification, input.rose_name);
+    console.log(`isValid ${isValid}`);
+
+    if(!isValid)  {
+      console.log("unos je jedinstven");
+      const sum = input.price * input.quantity;
+      
+      setSpecification ((specification => [...specification, {  
+        
+        name: input.rose_name,
+        quantity: input.quantity,
+        price:input.price,
+        sum
+      }
+      
+      ]));
+      console.log(specification);
+    } else {
+      console.log(`isValid ${isValid}`);
+      setOpenIsValdiate(true);
+    }
+}
 
   const openDialog = () => {
     setOpen(true);
   };
   const closeOpen = () => {
     setOpen(false);
+  };
+  const closeOpenIsValidate = () => {
+    setOpenIsValdiate (false);
   };
 
   const handleTrigger = ()=>{
@@ -66,6 +133,13 @@ const handleOpenDialog = (data) => {
   console.log(data);
   // setRowData(data);
 };
+const handleSumFromSpecification = (sumFromSpecification) => {
+  setData({...data,
+    totalSum: sumFromSpecification
+  });
+  
+}
+
 
   const classes = useStyles();
 
@@ -80,7 +154,8 @@ const handleOpenDialog = (data) => {
             <Paper className={fixedHeightPaper}>
               <Form
               openDialog={openDialog}
-              setSpecification={setSpecification}
+              handleSpecification={handleSpecification}
+              updateFieldData={updateFieldData}
               />
             </Paper>
 
@@ -88,6 +163,7 @@ const handleOpenDialog = (data) => {
             <Grid item xs={12} md={12} lg={12}>
               <TableCreateOrder 
                 specification={specification}
+                handleSumFromSpecification= {handleSumFromSpecification}
                 />  
             </Grid>  
             <Grid item xs={12} md={12} lg={12} >
@@ -107,6 +183,7 @@ const handleOpenDialog = (data) => {
                 size="large"
                 className={classes.button}
                 startIcon={<AddIcon />}
+                onClick={createOrder}
               >
                 Kreiraj narudžbu
               </Button>
@@ -114,6 +191,7 @@ const handleOpenDialog = (data) => {
             </Grid>
           </Grid>
           <DialogSpecification open ={open} closeOpen= {closeOpen}/>
+          <DialogIsValid open={openIsValidate} closeOpen= {closeOpenIsValidate}/>
         </Container>
 
     </div>
