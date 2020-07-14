@@ -35,7 +35,7 @@ export default function Buyers() {
   // const [trigger, setTrigger] = useState (true);
   // const [editData, setEditData] = useState (false);
   const [buyers, setBuyers] = useState ([]);
-  const [orders, setOrders] = React.useState(false);
+  const [orders, setOrders] = React.useState([]);
   const [rowData, setRowData] = React.useState("");
   
   useEffect(()=>{
@@ -120,7 +120,7 @@ const closeOpen = () => {
               <Table 
                 // editData={handleEditData} 
                 openDialog={handleOpenDialog}
-                getOrders={getOrders}
+                orders={orders}
                 // data={data}
                 rowData={rowData}
                 />  

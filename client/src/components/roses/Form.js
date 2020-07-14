@@ -48,11 +48,7 @@ const useStyles = makeStyles((theme) => ({
           image_url:"",
           description:"",
           rose_id:"",
-          price:0,
-          input_sum: 0,
-          output_sum: 0,
-          current_sum: 0,
-          reserved_sum: 0,
+          price:"",
         });
       };      
     }, [props.rowData]

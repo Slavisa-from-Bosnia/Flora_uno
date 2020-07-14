@@ -106,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
       const response = await fetch("http://localhost:5000/roses");
       const jsonData =await response.json();
       setRoses(jsonData);
+      console.log(jsonData);
       
     } catch (err) {
       console.error(err.message);
@@ -124,9 +125,9 @@ const useStyles = makeStyles((theme) => ({
       ...input,
       rose_id: roseRow[0].rose_id,
       rose_name:roseRow[0].name,
-      current_sum: roseRow[0].current_sum,
+      current_sum: roseRow[0].sum,
       price: roseRow[0].price,
-      reserved_sum:roseRow[0].reserved_sum,
+      reserved_sum:roseRow[0].reserved,
 
     })
 
@@ -241,7 +242,7 @@ const useStyles = makeStyles((theme) => ({
               </FormControl>
             </Grid>
 
-            <Grid item xs={2} sm={2} md={1}>
+            <Grid item xs={2} sm={2} md={2}>
               <TextField
                 variant="outlined"
                 fullWidth
@@ -258,16 +259,16 @@ const useStyles = makeStyles((theme) => ({
                
               />
             </Grid>
-            <Grid item xs={2} sm={2} md={1}>
+            <Grid item xs={2} sm={2} md={2}>
               <TextField
                 variant="outlined"
                 fullWidth
                 name="reserved_sum"
-                label="Reze."
+                label="Rezervisano"
                 type="text"
                 id="email"
                 autoComplete="current-password"
-                value={input.reserved_sum}
+                value={input.reserved_sum || ""}
                 size="small"
                 InputProps={{
                   readOnly:true
@@ -287,7 +288,6 @@ const useStyles = makeStyles((theme) => ({
                 autoComplete="current-password"
                 size="small"
                 onChange ={updateField}
-                defaultValue={input.reserved_sum}
               />
             </Grid>
             <Grid item xs={6} sm={4} md={2}>

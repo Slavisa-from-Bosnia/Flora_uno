@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require ("cors");
 const pool =require("./db");
+const format = require('pg-format');
 
 //midleware
 app.use(cors());
@@ -15,11 +16,28 @@ app.use(express.json());
         try{
             const data = req.body;
             console.log(req.body);
-            const newRose = await pool.query("Insert INTO orders (buyer_id, payment_method, totalSum ) Values($1, $2, $3) RETURNING *",
-            [data.buyer_id, data.payment_method, data.totalSum ]
+            const newOrder = await pool.query("Insert INTO orders (buyer_id, payment_method, totalSum ) Values($1, $2, $3) RETURNING *",
+            [data.data.buyer_id, data.data.payment_method, data.data.totalSum ]
             );
-            console.log(`Dodata sledeća narudžba u bazi; ${newRose.rows[0]}`);
-            res.json(newRose);
+            var newOrderId= newOrder.rows[0].order_id
+            console.log(`Dodata sledeća narudžba u bazi; ${newOrder.rows[0].order_id}`);
+            res.json(newOrder.rows[0]);
+            var turnoverData = [];
+            var i = 0;
+            for (i=0; i<data.specification.length; i++){
+                var turnoverDataRow = [20, newOrderId, "", "",""];
+
+                turnoverDataRow[2]=data.specification[i].rose_id;
+                turnoverDataRow[3]=data.specification[i].quantity;
+                turnoverDataRow[4]=data.specification[i].price;
+                // turnoverDataRow[5]=data.specificiation[i].sum;
+
+                turnoverData.push(turnoverDataRow);
+            }
+            console.log(turnoverData);
+            var query1 = format('INSERT INTO turnover (descriptions, descriptions_id, roses_id, reserved, price) VALUES %L returning *', turnoverData );
+            const newTurnover = await pool.query(query1);
+            console.log(newTurnover.rows);
         } catch (err) {
             console.error(err.message);
         }
@@ -29,7 +47,7 @@ app.use(express.json());
 
     app.get("/orders", async(req, res) => {
         try {
-            const allOrders = await pool.query ("SELECT order_id, buyer_id, FROM orders ORDER BY date_of_order DESC");
+            const allOrders = await pool.query ("SELECT * FROM orders ORDER BY order_id DESC");
             res.json(allOrders.rows);
         } catch (err) {
             console.error(err.message);
@@ -42,11 +60,14 @@ app.use(express.json());
         try{
             const inputRoses = req.body;
             console.log(req.body);
-            const newRose = await pool.query("Insert INTO roses (name, initial_quantity, image_url, description, price, input_sum, output_sum, reserved_sum, current_sum) Values($1, $2, $3, $4, $5, $6, $7, $8, $9 ) RETURNING *",
-            [inputRoses.name, inputRoses.initial_quantity, inputRoses.image_url, inputRoses.description, inputRoses.price, inputRoses.input_sum, inputRoses.output_sum, inputRoses.reserved_sum, inputRoses.current_sum]
+            const newRose = await pool.query("Insert INTO roses (name, image_url, description, price) Values($1, $2, $3, $4) RETURNING *",
+            [inputRoses.name, inputRoses.image_url, inputRoses.description, inputRoses.price]
             );
-            console.log('Dodata ruža u bazi!')
+            console.log('Dodata ruža u bazi!');
             res.json(newRose.rows[0]);
+            var rose_id= parseInt(newRose.rows[0].rose_id);
+            const initialTurnover = await pool.query("INSERT INTO turnover (descriptions, roses_id, quantity, price) VALUES ($1, $2, $3, $4) RETURNING *",
+            [10, rose_id, inputRoses.initial_quantity, inputRoses.price]);
         } catch (err) {
             console.error(err.message);
         }
@@ -56,8 +77,28 @@ app.use(express.json());
 
     app.get("/roses", async(req, res) => {
         try {
-            const allRosses = await pool.query("SELECT * FROM roses ORDER BY rose_id DESC");
-            res.json(allRosses.rows);
+            const allRoses = await pool.query("SELECT name, price, image_url, rose_id FROM roses  ORDER BY rose_id DESC");
+            var i =0;
+            var rowRose = {};
+            var dataForSend = [];
+            for(var i =0; i<allRoses.rows.length; i++){
+                const sumFromTurnover1 = await pool.query ("SELECT SUM(quantity) FROM turnover WHERE turnover.roses_id=$1 ",[allRoses.rows[i].rose_id] );
+                const sumFromTurnover2 = await pool.query ("SELECT SUM(reserved) FROM turnover WHERE turnover.roses_id=$1 ",[allRoses.rows[i].rose_id] );
+
+                rowRose= {
+                    name: allRoses.rows[i].name,
+                    price: allRoses.rows[i].price,
+                    image_url: allRoses.rows[i].image_url,
+                    sum: parseInt( sumFromTurnover1.rows[0].sum),
+                    reserved: parseInt( sumFromTurnover2.rows[0].sum),
+                    rose_id: allRoses.rows[i].rose_id 
+                }
+                // console.log(rowRose);
+                dataForSend.push(rowRose);
+            }
+            res.json(dataForSend);
+            console.log(dataForSend);
+
 
         } catch (err) {
             console.error(err.message);

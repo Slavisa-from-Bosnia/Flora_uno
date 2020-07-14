@@ -42,10 +42,10 @@ const tableIcons = {
 export default function MaterialTableDemo(props) {
   const [columns, setColumns] = React.useState([
     
-      { title: 'Kupac', field: 'buyer.name'},
-      { title: 'Iznos', field: 'buyer.adress' },
-      { title: 'Datum', field: 'order.date_of_order'},
-      { title: 'Isporučeno', field: 'order.shipped' },
+      { title: 'Kupac', field: 'buyer_id'},
+      { title: 'Iznos', field: 'totalsum' },
+      { title: 'Datum', field: 'date_of_order'},
+      { title: 'Isporučeno', field: 'delivered' },
     
   ]);
 
@@ -64,20 +64,20 @@ export default function MaterialTableDemo(props) {
           },
         }
       }
-        // components = {{}}
+        components = {{}}
       
-        // actions={[
-        //   {
-        //     icon: Edit,
-        //     tooltip: 'Koriguj Kupca',
-        //     onClick: (event, rowData) => {props.editData(rowData)}
-        //   },
-        //   {
-        //     icon: DeleteOutline,
-        //     tooltip: 'Izbriši kupca',
-        //     onClick: (event, rowData) => {props.openDialog(rowData)}
-        //   }
-        // ]}
+        actions={[
+          {
+            icon: Edit,
+            tooltip: 'Koriguj Kupca',
+            onClick: (event, rowData) => {props.editData(rowData)}
+          },
+          {
+            icon: DeleteOutline,
+            tooltip: 'Izbriši kupca',
+            onClick: (event, rowData) => {props.openDialog(rowData)}
+          }
+        ]}
         
       />
     </div>

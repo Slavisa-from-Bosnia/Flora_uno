@@ -5,11 +5,6 @@ CREATE TABLE roses (
     name VARCHAR (100),
     description VARCHAR (1000),
     image_url VARCHAR (100),
-    initial_quantity INT,
-    input_sum INT,
-    output_sum INT,
-    current_sum INT,
-    reserved_sum INT,
     price FLOAT
 );
 
@@ -28,12 +23,12 @@ CREATE TABLE buyers (
 CREATE TABLE orders(
     order_id SERIAL PRIMARY KEY,
     buyer_id INT,
-    date_of_order DATE NOT NULL DEFAULT CURRENT_DATE,
+    date_of_order TIMESTAMP NOT NULL DEFAULT NOW(),
     payment_method VARCHAR (100),
     shipping_method VARCHAR (100),
-    shipped BOOLEAN,
+    shipped BOOLEAN DEFAULT FALSE,
     shipping_date DATE,
-    delivered BOOLEAN,
+    delivered BOOLEAN DEFAULT FALSE,
     delivering_date DATE,
     payed BOOLEAN,
     adress_of_delivery VARCHAR (100),
@@ -43,9 +38,12 @@ CREATE TABLE orders(
 
 CREATE TABLE turnover (
     turnover_id SERIAL PRIMARY KEY,
-    input BOOLEAN DEFAULT FALSE,
     descriptions VARCHAR (100),
     descriptions_id INT,
     roses_id INT,
-    quantity INT
+    quantity INT,
+    price FLOAT,
+    sumData FLOAT,
+    dateOfTurnover TIMESTAMP NOT NULL DEFAULT NOW(),
+    reserved INT DEFAULT 0
 );

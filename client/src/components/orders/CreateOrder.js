@@ -8,7 +8,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/AddOutlined';
 import TableCreateOrder from  './TableCreateOrder';
-import {Link} from 'react-router-dom';
+import {Link, Route, Router, Redirect} from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Form from './Form';
 import DialogSpecification from './DialogSpecification';
@@ -45,6 +45,7 @@ export default function Buyers() {
     payment_method: "10",
     totalSum: ""
   });
+  const [redirect, setRedirect] =useState(false);
   
   function constains (a, obj) {
     for (var i = 0; i<a.length; i++) {
@@ -56,18 +57,21 @@ export default function Buyers() {
   }
   
   const createOrder = async() =>{
-    console.log(data);
+    console.log(specification);
     if (data.buyer_id && data.payment_method && data.totalSum>0){
       try{
         const response = await fetch("http://localhost:5000/orders", {
           method: "POST",
           headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(data)
+          body: JSON.stringify({data, specification})
         });
-        console.log(response);
+        const jsonData = await response.json();
+        console.log(jsonData);
         } catch (err) {
           console.error(err.message);
         } 
+        setRedirect(true);
+
     } else {
       console.log("nedostaju svi podaci");
     }
@@ -90,16 +94,19 @@ export default function Buyers() {
     if(!isValid)  {
       console.log("unos je jedinstven");
       const sum = input.price * input.quantity;
+      var qb = parseInt(input.quantity);
       
       setSpecification ((specification => [...specification, {  
         
         name: input.rose_name,
-        quantity: input.quantity,
+        quantity: qb,
         price:input.price,
-        sum
+        sum,
+        rose_id:input.rose_id
       }
-      
+
       ]));
+
       console.log(specification);
     } else {
       console.log(`isValid ${isValid}`);
@@ -140,11 +147,19 @@ const handleSumFromSpecification = (sumFromSpecification) => {
   
 }
 
-
+  const deleteSpecification = (rowItem) => {
+    const dataForSpecification = specification.filter(specificationItem =>specificationItem.name!==rowItem);
+    console.log(dataForSpecification);
+    setSpecification(dataForSpecification);
+  }
   const classes = useStyles();
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  if(redirect){
 
+    return <Redirect push to = "/dashboard/orders"/>;
+
+  } else {
   return (
     <div className={classes.root}>
         <Container maxWidth="lg" className={classes.container}>
@@ -164,6 +179,7 @@ const handleSumFromSpecification = (sumFromSpecification) => {
               <TableCreateOrder 
                 specification={specification}
                 handleSumFromSpecification= {handleSumFromSpecification}
+                deleteSpecification = {deleteSpecification}
                 />  
             </Grid>  
             <Grid item xs={12} md={12} lg={12} >
@@ -195,5 +211,7 @@ const handleSumFromSpecification = (sumFromSpecification) => {
         </Container>
 
     </div>
+  
   );
+ }
 }

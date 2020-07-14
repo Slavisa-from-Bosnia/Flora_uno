@@ -7,6 +7,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Remove from '@material-ui/icons/Remove';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Button from '@material-ui/core/Button';
+
 
 const TAX_RATE = 0.17;
 
@@ -59,6 +63,10 @@ export default function SpanningTable(props) {
     props.handleSumFromSpecification(invoiceSubtotal);
   }, [props.specification]);
 
+  const isItemSelected = (rowItem) =>{
+    props.deleteSpecification(rowItem);
+  }
+
 
   return (
     <TableContainer component={Paper} className={classes.container}>
@@ -66,6 +74,7 @@ export default function SpanningTable(props) {
         <TableHead>
           
           <TableRow>
+            <TableCell>Briši stavku</TableCell>
             <TableCell>Artikal</TableCell>
             <TableCell align="right">Količina (komada)</TableCell>
             <TableCell align="right">Jedinična cijena (KM)</TableCell>
@@ -73,17 +82,24 @@ export default function SpanningTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.specification.map((row) => (
-            <TableRow key={row.desc}>
-              <TableCell>{row.name}</TableCell>
-              <TableCell align="right">{row.quantity}</TableCell>
-              <TableCell align="right">{row.price}</TableCell>
-              <TableCell align="right">{ccyFormat(row.sum)}</TableCell>
+          {props.specification.map((row) => 
+            <TableRow 
+              // hover 
+              // aria-checked={isItemSelected(row.name)}
+              key={row.desc}
+              // selected={isItemSelected(row.name)}
+
+              >
+                <TableCell><Button onClick = {()=>isItemSelected(row.name)}><DeleteOutline/></Button></TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell align="right">{row.quantity}</TableCell>
+                <TableCell align="right">{row.price}</TableCell>
+                <TableCell align="right">{ccyFormat(row.sum)}</TableCell>
             </TableRow>
-          ))}
+        )}
 
           <TableRow>
-            <TableCell rowSpan={3} />
+            <TableCell rowSpan={3} colSpan={2} />
             <TableCell colSpan={2}>Ukupni iznos</TableCell>
             <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
           </TableRow>
