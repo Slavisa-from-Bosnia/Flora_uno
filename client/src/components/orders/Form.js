@@ -252,7 +252,7 @@ const useStyles = makeStyles((theme) => ({
                 id="email"
                 autoComplete="current-password"
                 size="small"
-                value={input.current_sum }
+                value={input.current_sum || "" }
                 InputProps={{
                   readOnly:true
                 }}

@@ -63,6 +63,7 @@ export default function Buyers() {
 const handleEditData = (rowData) => {
   console.log(rowData);
   setRowData(rowData);
+  // findDescription(rowData.name);
   setEditData(true);
 };
 
@@ -83,6 +84,15 @@ const handleOpenDescription = () =>{
   setDescriptionDialog(true);
   console.log(newData);
 };
+
+// const findDescription = (rowItem) => {
+//   const dataForDescription = tableData.filter(tableD =>tableD.name==rowItem);
+//   console.log(dataForDescription);
+//   setRowData({
+//       ...rowData,
+//       description: dataForDescription.description
+//     });
+// };
 
 // Delete from dialog
 const handleCloseDialog = () => {
@@ -122,11 +132,8 @@ const handleNewData = (data) =>{
   image_url:data.image_url,
   description: data.description ,
   rose_id: data.rose_id,
-  input_sum: data.input_sum,
-  output_sum:data.output_sum,
-  reserved_sum:data.reserved_sum,
   price:data.price,
-  current_sum:data.current_sum
+  correction:data.correction
  });
 };
 
@@ -137,6 +144,22 @@ const updateNewData = e => {
   });
   // console.log(newData);
 };
+
+const updateNewData2 = e => {
+  if(newData.initial_quantity+e.target.value<=0){
+    console.log("korekcija_veća_od_inicijalne_vrijednosti");
+
+  } else {
+    console.log ("vrijsenost ok");
+  setNewData({
+    ...newData,
+    [e.target.name]: e.target.value
+  
+  });
+}
+  // console.log(newData);
+};
+
 
   const classes = useStyles();
 

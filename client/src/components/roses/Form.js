@@ -31,15 +31,12 @@ const useStyles = makeStyles((theme) => ({
    if (props.editData){
       props.handleNewData({
         name:props.rowData.name,
-        initial_quantity:props.rowData.initial_quantity,
+        sum:props.rowData.sum,
         imageUrl:props.rowData.imageUrl,
         description: props.rowData.description,
         rose_id:props.rowData.rose_id,
-        input_sum: props.rowData.input_sum, 
-        output_sum: props.rowData.output_sum,
-        current_sum: props.rowData.current_sum,
-        reserved_sum: props.rowData.reserved_sum,
-        price: props.rowData.price
+        price: props.rowData.price,
+        correction: "0"
       });
     } else {
         props.handleNewData ({
@@ -49,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
           description:"",
           rose_id:"",
           price:"",
+          correction: "0"
         });
       };      
     }, [props.rowData]
@@ -74,10 +72,7 @@ const useStyles = makeStyles((theme) => ({
           description:"",
           rose_id:"",
           price:"",
-          input_sum: 0,
-          output_sum: 0,
-          current_sum: 0,
-          reserved_sum: 0,
+          correction: "0"
         });
        
 
@@ -104,10 +99,7 @@ const useStyles = makeStyles((theme) => ({
           description:"",
           rose_id:"",
           price:0,
-          input_sum: 0,
-          output_sum: 0,
-          current_sum: 0,
-          reserved_sum: 0,
+          correction: "0"
         });
         
         props.editDataHendler();
@@ -128,55 +120,53 @@ const useStyles = makeStyles((theme) => ({
       <div className={classes.paper}>
         <form className={classes.form}  onSubmit ={onSubmitForm}>
           <Grid container spacing={1}>
-            <Grid item xs={3} sm={3} md={3}>
-              <TextField
-                autoComplete="name"
-                name="name"
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                label="Naziv"
-                autoFocus
-                size="small"
-                onChange={props.updateNewData}
-                value={props.newData.name ||""}
-              />
-            </Grid>
-            <Grid item xs={1} sm={1} md={1}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="initial_quantity"
-                label="Poč. kol."
-                name="initial_quantity"
-                autoComplete="lname"
-                size="small"
-                onChange={props.updateNewData}
-                value={props.newData.initial_quantity||""}
-                type="number"
-              />
-            </Grid>
-            <Grid item xs={1} sm={1} md={2}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="initial_quantity"
-                label="Jed.cjena."
-                name="price"
-                autoComplete="lname"
-                size="small"
-                onChange={props.updateNewData}
-                value={props.newData.price||""}
-                type="number"
-              />
-            </Grid>
-
             { !props.editData &&
               <Fragment>
-
+                <Grid item xs={3} sm={3} md={3}>
+                  <TextField
+                    autoComplete="name"
+                    name="name"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="name"
+                    label="Naziv"
+                    // autoFocus
+                    size="small"
+                    onChange={props.updateNewData}
+                    value={props.newData.name ||""}
+                  />
+                </Grid>
+                <Grid item xs={1} sm={1} md={1}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="initial_quantity"
+                    label="Poč. kol."
+                    name="initial_quantity"
+                    autoComplete="lname"
+                    size="small"
+                    onChange={props.updateNewData}
+                    value={props.newData.initial_quantity||""}
+                    type="number"
+                  />
+                </Grid>
+                <Grid item xs={1} sm={1} md={2}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="initial_quantity"
+                    label="Jed.cjena."
+                    name="price"
+                    autoComplete="lname"
+                    size="small"
+                    onChange={props.updateNewData}
+                    value={props.newData.price||""}
+                    type="number"
+                  />
+                </Grid>
                 <Grid item xs={2} sm={2} md={2}>
                   <Button
                     variant="contained"
@@ -188,7 +178,6 @@ const useStyles = makeStyles((theme) => ({
                     Unesi sliku
                   </Button>
                 </Grid>
-
                 <Grid item xs={2} sm={2} md={2}>
                   <Button
                     variant="contained"
@@ -201,7 +190,6 @@ const useStyles = makeStyles((theme) => ({
                     Unesi opis
                   </Button>
                 </Grid>
-
                 <Grid item xs={12} sm={12} md={12}>
                   <Button
                     type="submit"
@@ -213,12 +201,55 @@ const useStyles = makeStyles((theme) => ({
                     Snimi 
                   </Button>
                 </Grid>
-
               </Fragment>
             }
             {props.editData && 
               <Fragment>
-
+                <Grid item xs={3} sm={3} md={3}>
+                  <TextField
+                    autoComplete="name"
+                    name="name"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="name"
+                    label="Naziv"
+                    // autoFocus
+                    size="small"
+                    onChange={props.updateNewData}
+                    value={props.newData.name ||""}
+                  />
+                </Grid>
+                <Grid item xs={1} sm={1} md={1}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="correction"
+                    label="Kor. kol."
+                    name="correction"
+                    // autoComplete="lname"
+                    size="small"
+                    onChange={props.updateNewData2}
+                    value={props.newData.correction||""}
+                    type="number"
+                  />
+                </Grid>
+                <Grid item xs={1} sm={1} md={2}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="initial_quantity"
+                    label="Jed.cjena."
+                    name="price"
+                    autoComplete="lname"
+                    size="small"
+                    onChange={props.updateNewData}
+                    value={props.newData.price||""}
+                    type="number"
+                  />
+                </Grid>
                 <Grid item xs={3} sm={3} md={3}>
                   <Button
                     variant="contained"
@@ -232,7 +263,7 @@ const useStyles = makeStyles((theme) => ({
                 </Grid>
 
                 <Grid item xs={3} sm={3} md={3}>
-                 <Button
+                <Button
                     variant="contained"
                     color="primary"
                     size="large"
@@ -241,10 +272,8 @@ const useStyles = makeStyles((theme) => ({
                     onClick = {props.handleOpenDescription}
                   >
                     Koriguj opis
-                    
                   </Button>
                 </Grid>
-
                 <Grid item xs={12} sm={12} md={12}>
                   <Button
                     type="submit"
@@ -256,14 +285,11 @@ const useStyles = makeStyles((theme) => ({
                     Koriguj 
                   </Button>
                 </Grid>    
-
               </Fragment>
             }
-            
           </Grid>
         </form>
       </div>
-      
     </Container>
   );
 }

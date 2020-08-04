@@ -24,6 +24,7 @@ import {Switch, Route, Link} from 'react-router-dom';
 import Roses from '../../components/roses/Roses';
 import Orders from '../../components/orders/Orders';
 import CreateOrder from '../../components/orders/CreateOrder';
+import DetailView from '../../components/orders/DetailView';
 
 
 

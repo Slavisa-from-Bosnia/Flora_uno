@@ -42,13 +42,34 @@ app.use(express.json());
             console.error(err.message);
         }
     });
-    
-    // get all orders
-
+     // get all orders 
     app.get("/orders", async(req, res) => {
         try {
-            const allOrders = await pool.query ("SELECT * FROM orders ORDER BY order_id DESC");
+            const allOrders = await pool.query ("SELECT * FROM orders ORDER BY orders.order_id DESC");
             res.json(allOrders.rows);
+        } catch (err) {
+            console.error(err.message);
+        }
+    });
+    // get all orders join buyersist 
+
+    app.get("/orders_jb", async(req, res) => {
+        try {
+            const allOrders = await pool.query ("SELECT * FROM orders INNER JOIN buyers ON (orders.buyer_id = buyers.buyer_id) ORDER BY orders.order_id DESC");
+            res.json(allOrders.rows);
+        } catch (err) {
+            console.error(err.message);
+        }
+    });
+    // get a spacification
+    app.get("/specification/:id", async (req,res) => {
+        try {
+            const id = parseInt(req.params.id);
+            console.log(id);
+            const rose =await pool.query("SELECT *FROM turnover WHERE descriptions_id =$1  ORDER BY dateOfTurnover DESC", [id]);
+            res.json(rose.rows);
+            console.log(rose.rows);
+
         } catch (err) {
             console.error(err.message);
         }
@@ -77,7 +98,7 @@ app.use(express.json());
 
     app.get("/roses", async(req, res) => {
         try {
-            const allRoses = await pool.query("SELECT name, price, image_url, rose_id FROM roses  ORDER BY rose_id DESC");
+            const allRoses = await pool.query("SELECT name, price, image_url, rose_id, description FROM roses  ORDER BY rose_id DESC");
             var i =0;
             var rowRose = {};
             var dataForSend = [];
@@ -91,7 +112,8 @@ app.use(express.json());
                     image_url: allRoses.rows[i].image_url,
                     sum: parseInt( sumFromTurnover1.rows[0].sum),
                     reserved: parseInt( sumFromTurnover2.rows[0].sum),
-                    rose_id: allRoses.rows[i].rose_id 
+                    rose_id: allRoses.rows[i].rose_id,
+                    description: allRoses.rows[i].description 
                 }
                 // console.log(rowRose);
                 dataForSend.push(rowRose);
@@ -124,8 +146,8 @@ app.use(express.json());
             const {id} = req.params;
             const data = req.body;
             console.log(data);
-            const updateRoses = await pool.query("UPDATE roses SET name = $1, description = $2, initial_quantity = $3, price = $5  WHERE rose_id = $4 ",
-            [data.name, data.description, data.initial_quantity,  data.rose_id, data.price]
+            const updateRoses = await pool.query("UPDATE roses SET name = $1, description = $2, price = $4  WHERE rose_id = $3 ",
+            [data.name, data.description, data.rose_id, data.price]
             );
             console.log("Roses was updated!");
             res.json(updateRoses);

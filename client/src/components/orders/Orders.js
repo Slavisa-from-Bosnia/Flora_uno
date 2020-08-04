@@ -10,6 +10,7 @@ import AddIcon from '@material-ui/icons/AddOutlined';
 import Table from  './Table';
 import Dialog from './Dialog';
 import {Link}from 'react-router-dom';
+import DetailView from '../orders/DetailView';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,10 +38,19 @@ export default function Buyers() {
   const [buyers, setBuyers] = useState ([]);
   const [orders, setOrders] = React.useState([]);
   const [rowData, setRowData] = React.useState("");
+  const [dataForDetailView, setDataForDetailView] = useState("");
+  const [dataView, setDataView] = useState(false);
   
   useEffect(()=>{
     getOrders();
   },[]);
+
+  const handleClick = (event, data) => {
+    setDataForDetailView(data);
+    setDataView(true);
+    console.log (data);
+
+  }
 
   // const handleTrigger = ()=>{
   //   // setTrigger(trigger => !trigger);
@@ -113,7 +123,9 @@ const closeOpen = () => {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <div className={classes.root}>
+    <div>
+    {!dataView && 
+      <div className={classes.root}>
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
@@ -123,6 +135,7 @@ const closeOpen = () => {
                 orders={orders}
                 // data={data}
                 rowData={rowData}
+                handleClick={handleClick}
                 />  
             </Grid>  
             <Grid item xs={12} md={12} lg={12} >
@@ -153,7 +166,14 @@ const closeOpen = () => {
           </Grid>
           {/* <Dialog open = {open} closeOpen={closeOpen} rowData={rowData} handleCloseDialog={handleCloseDialog}/> */}
         </Container>
+      </div>
+   }
+   {dataView && 
+     <DetailView order_id ={dataForDetailView.order_id} />
+  
+  
+  }
+  </div>
 
-    </div>
   );
 }
