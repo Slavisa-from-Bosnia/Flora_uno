@@ -15,7 +15,7 @@ app.use(express.json());
     app.post("/orders", async (req, res)=>{
         try{
             const data = req.body;
-            console.log(req.body);
+            console.log("req.body 18" + ""+req.body);
             const newOrder = await pool.query("Insert INTO orders (buyer_id, payment_method, totalSum ) Values($1, $2, $3) RETURNING *",
             [data.data.buyer_id, data.data.payment_method, data.data.totalSum ]
             );
@@ -34,10 +34,10 @@ app.use(express.json());
 
                 turnoverData.push(turnoverDataRow);
             }
-            console.log(turnoverData);
+            console.log("turnoverdata 37" +turnoverData);
             var query1 = format('INSERT INTO turnover (descriptions, descriptions_id, roses_id, reserved, price) VALUES %L returning *', turnoverData );
             const newTurnover = await pool.query(query1);
-            console.log(newTurnover.rows);
+            console.log("newTurnover.rows 40"+newTurnover.rows);
         } catch (err) {
             console.error(err.message);
         }
@@ -65,10 +65,10 @@ app.use(express.json());
     app.get("/specification/:id", async (req,res) => {
         try {
             const id = parseInt(req.params.id);
-            console.log(id);
+            console.log("id 68"+id);
             const rose =await pool.query("SELECT *FROM turnover WHERE descriptions_id =$1  ORDER BY dateOfTurnover DESC", [id]);
             res.json(rose.rows);
-            console.log(rose.rows);
+            console.log("rose.rows 71"+rose.rows);
 
         } catch (err) {
             console.error(err.message);
@@ -80,7 +80,7 @@ app.use(express.json());
     app.post("/roses", async (req, res)=>{
         try{
             const inputRoses = req.body;
-            console.log(req.body);
+            console.log("req.body 83"+req.body);
             const newRose = await pool.query("Insert INTO roses (name, image_url, description, price) Values($1, $2, $3, $4) RETURNING *",
             [inputRoses.name, inputRoses.image_url, inputRoses.description, inputRoses.price]
             );
@@ -119,8 +119,6 @@ app.use(express.json());
                 dataForSend.push(rowRose);
             }
             res.json(dataForSend);
-            console.log(dataForSend);
-
 
         } catch (err) {
             console.error(err.message);
@@ -145,12 +143,17 @@ app.use(express.json());
         try {
             const {id} = req.params;
             const data = req.body;
-            console.log(data);
+            console.log("poslati podaci"+data);
             const updateRoses = await pool.query("UPDATE roses SET name = $1, description = $2, price = $4  WHERE rose_id = $3 ",
             [data.name, data.description, data.rose_id, data.price]
             );
             console.log("Roses was updated!");
             res.json(updateRoses);
+            var correction= parseInt(data.correction);
+            console.log("korekcija je" + correction);
+            const correctionTurnover = await pool.query("INSERT INTO turnover (descriptions, roses_id, quantity) VALUES ($1, $2, $3) RETURNING *",
+            [30, data.rose_id, data.correction ]);
+            console.log( "turnover za korekciju" + correctionTurnover.rows[0]);
 
         } catch (err) {
             console.error(err.message);
@@ -201,7 +204,7 @@ app.get("/buyers", async(req, res) => {
 //  delete buyer or buyers needed futher works
 app.delete("/buyers/:selected", async (req,res) => {
 
-    console.log(req.params);
+    console.log("linija 208" +req.params);
     try {
         const idsFromSelected = req.params.selected
         const deleteBuyers = await pool.query("DELETE FROM buyers WHERE buyer_id IN ($1)", [idsFromSelected]);
@@ -218,7 +221,7 @@ app.put("/buyers/:id", async (req, res) => {
     try {
         const {id} = req.params;
         const {input} = req.body;
-        console.log(input);
+        console.log("input 225"+input);
         const updateRoses = await pool.query("UPDATE buyers SET name = $1, address = $2, city = $3, phone = $4, email = $5 WHERE buyer_id = $6",
         [input.firstName, input.address, input.city, input.phone, input.meil, input.buyer_id]
         );

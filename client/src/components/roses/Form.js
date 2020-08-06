@@ -36,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
         description: props.rowData.description,
         rose_id:props.rowData.rose_id,
         price: props.rowData.price,
-        correction: "0"
+        reserved:props.rowData.reserved,
+        correction: "0",
       });
     } else {
         props.handleNewData ({
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
           description:"",
           rose_id:"",
           price:"",
+          reserved:"",
           correction: "0"
         });
       };      
@@ -72,7 +74,9 @@ const useStyles = makeStyles((theme) => ({
           description:"",
           rose_id:"",
           price:"",
-          correction: "0"
+          reserved:"",
+          correction: "0",
+          sum:""
         });
        
 
@@ -83,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
       e.preventDefault();
       try{
         const data = props.newData;
-        console.log(`podaci koji se šalju ${data}`);
+        console.log(data);
         const response = await fetch(`http://localhost:5000/roses/:${data.rose_id}`, {
           method: "PUT",
           headers: {"Content-Type": "application/json"},
@@ -99,7 +103,9 @@ const useStyles = makeStyles((theme) => ({
           description:"",
           rose_id:"",
           price:0,
-          correction: "0"
+          reserved:"",
+          correction: "0",
+          sum:"",
         });
         
         props.editDataHendler();

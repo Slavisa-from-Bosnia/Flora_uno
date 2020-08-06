@@ -8,6 +8,7 @@ import Form from './Form.js';
 import Table from  './Table';
 import Description from './Description';
 import Dialog from './Dialog';
+import DialogForm from './DialogForm';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,6 +37,7 @@ export default function Buyers() {
   const [rowData, setRowData] = React.useState("");
   const [openDescriptionDialog, setDescriptionDialog] = useState(false);
   const [newData, setNewData] = React.useState("");
+  const [formDialog, setFormDialog] = useState(false);
 
   
   useEffect(()=>{
@@ -124,6 +126,10 @@ const closeOpen = () => {
   setDeleteDialog(false);
 } ;
 
+const closeFormDialog = () => {
+  setFormDialog(false);
+} ;
+
 
 const handleNewData = (data) =>{
  setNewData({
@@ -133,6 +139,8 @@ const handleNewData = (data) =>{
   description: data.description ,
   rose_id: data.rose_id,
   price:data.price,
+  reserved: data.reserved,
+  sum:data.sum,
   correction:data.correction
  });
 };
@@ -146,8 +154,12 @@ const updateNewData = e => {
 };
 
 const updateNewData2 = e => {
-  if(newData.initial_quantity+e.target.value<=0){
+  console.log(newData);
+  console.log(parseInt(newData.sum)+parseInt(e.target.value));
+  if(parseInt(newData.sum)+parseInt(e.target.value)<0){
     console.log("korekcija_veća_od_inicijalne_vrijednosti");
+    setFormDialog(true);
+    
 
   } else {
     console.log ("vrijsenost ok");
@@ -192,6 +204,7 @@ const updateNewData2 = e => {
                   newData={newData} 
                   handleNewData={handleNewData}
                   updateNewData={updateNewData}
+                  updateNewData2={updateNewData2}
                 />
               </Paper>
             </Grid>
@@ -203,6 +216,8 @@ const updateNewData2 = e => {
             newData={newData}
           />
           <Dialog open = {openDeleteDialog} closeOpen={closeOpen} rowData={rowData} handleCloseDialog={handleCloseDialog}/>
+          <DialogForm open = {formDialog} closeOpen={closeFormDialog} />
+
         </Container>
 
     </div>
