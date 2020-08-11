@@ -113,15 +113,15 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(4),
   },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'hidden',
-    flexDirection: 'column',
-  },
-  fixedHeight: {
-    height: 220,
-  },
+  // paper: {
+  //   padding: theme.spacing(2),
+  //   display: 'flex',
+  //   overflow: 'hidden',
+  //   flexDirection: 'column',
+  // },
+  // fixedHeight: {
+  //   height: 220,
+  // },
 }));
 
 export default function Dashboard() {

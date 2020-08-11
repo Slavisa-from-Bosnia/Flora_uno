@@ -66,7 +66,7 @@ app.use(express.json());
         try {
             const id = parseInt(req.params.id);
             console.log("id 68"+id);
-            const rose =await pool.query("SELECT *FROM turnover WHERE descriptions_id =$1  ORDER BY dateOfTurnover DESC", [id]);
+            const rose =await pool.query("SELECT *FROM turnover INNER JOIN roses ON (turnover.roses_id = roses.rose_id) WHERE turnover.descriptions_id =$1  ORDER BY turnover.dateOfTurnover DESC", [id]);
             res.json(rose.rows);
             console.log("rose.rows 71"+rose.rows);
 
