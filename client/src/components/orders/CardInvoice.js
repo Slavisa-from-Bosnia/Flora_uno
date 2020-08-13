@@ -27,14 +27,14 @@ const useStyles = makeStyles({
     marginTop: 12
   },
   media: {
-    height: 300,
-    width: 'auto',
+    height: 160,
+    width: '80%',
     position: 'relative',
 
     // width: "40%",
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
+    // backgroundSize: 'cover',
+    // backgroundRepeat: 'no-repeat',
+    // backgroundPosition: 'center',
   },
 });
 
