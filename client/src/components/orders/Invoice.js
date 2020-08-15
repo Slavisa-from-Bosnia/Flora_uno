@@ -79,7 +79,7 @@ export default function SpanningTable(props) {
   const [specification, setSpecification] = useState([]);
   const [specificationWithSum, setSpecificationWithSum] = useState([]);
   const classes = useStyles();
-  const invoiceSubtotal = subtotal(specification);
+  const invoiceSubtotal = subtotal(specificationWithSum);
   const invoiceTaxes = TAX_RATE * invoiceSubtotal;
   const invoiceTotal = invoiceTaxes + invoiceSubtotal;
   
@@ -125,17 +125,21 @@ export default function SpanningTable(props) {
     <main className={classes.content}>
 
       <Container maxWidth="lg" className={classes.container}>
-      <Paper className={classes.paper}>
+      
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8} lg={9}>
-              <CardInvoice/>
+          <Grid item xs={8} md={8} lg={8}>
+              <CardInvoice order_id={props.order_id}/>
           </Grid>
-          <Grid item xs={12} md={4} lg={3} 
+          <Grid item xs={4} md={4} lg={4} 
           >
-              <CardAddress />
+              <CardAddress
+               address={props.address}
+               city={props.city}
+               buyerName={props.buyerName}
+              />
           </Grid>
           <Grid item xs={12} md ={12} lg={12}>
-              <TableContainer className={classes.container}>
+              <TableContainer component={Paper} className={classes.container}>
                 <Table className={classes.table} stickyHeader  aria-label="spanning table">
                   <TableHead>
                     <TableRow>
@@ -162,8 +166,8 @@ export default function SpanningTable(props) {
                   )}
 
                     <TableRow>
-                      <TableCell rowSpan={4}/>
-                      <TableCell rowSpan={4}/>
+                      <TableCell rowSpan={3} colSpan={2}/>
+                      {/* <TableCell rowSpan={4}/> */}
                       <TableCell align="right" >Ukupni iznos</TableCell>
                       <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
                     </TableRow>
@@ -176,7 +180,9 @@ export default function SpanningTable(props) {
                     
                       <TableCell align="right" >Ukupno sa PDV</TableCell>
                       <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
+                      
                     </TableRow>
+                    
                     
                   </TableBody>
                 </Table>
@@ -184,7 +190,7 @@ export default function SpanningTable(props) {
           </Grid>
           
         </Grid>
-        </Paper>
+      
        
       </Container>
   </main>

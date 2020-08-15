@@ -169,10 +169,13 @@ const closeOpen = () => {
       </div>
    }
    {dataView && 
-     <DetailView order_id ={dataForDetailView.order_id} />
-  
-  
-  }
+     <DetailView 
+     order_id ={dataForDetailView.order_id}
+     address = {dataForDetailView.address}
+     city = {dataForDetailView.city}
+     buyerName = {dataForDetailView.name} 
+     />
+    }
   </div>
 
   );

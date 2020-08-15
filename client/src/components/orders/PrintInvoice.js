@@ -20,7 +20,7 @@ import Link from '@material-ui/core/Link';
 import Print from '@material-ui/icons/Print';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ReactToPrint from 'react-to-print';
+// import ReactToPrint from 'react-to-print';
 
 const useStyles = makeStyles((theme) =>({
  
@@ -60,9 +60,7 @@ export default function SpanningTable(props) {
   const [payed, setPayed] = useState(false);
   const classes = useStyles();
 
-  // const handlePrint = useReactToPrint({
-  //   content: () => componentRef.current,
-  // });
+ 
 
   function handleDelivered(){
     setDelivered(delivered=>
@@ -91,7 +89,7 @@ export default function SpanningTable(props) {
                 size="medium"
                 className={classes.button}
                 startIcon={<Print />}
-                // onClick={handlePrint}
+                onClick={props.handlePrint}
               >
                 Štampaj fakturu
               </Button>

@@ -28,17 +28,21 @@ const useStyles = makeStyles({
   },
   media: {
     height: 160,
-    width: '80%',
-    position: 'relative',
+    width: '95%',
+    // position: 'relative',
 
     // width: "40%",
-    // backgroundSize: 'cover',
+    backgroundSize: 'cover',
     // backgroundRepeat: 'no-repeat',
     // backgroundPosition: 'center',
+    // height: 0,
+    // width:'auto',
+    // paddingTop: '56.25%', // 16:9,
+    // marginTop:'30'
   },
 });
 
-export default function SimpleCard() {
+export default function SimpleCard(props) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
@@ -54,7 +58,7 @@ export default function SimpleCard() {
           Novo Naselje bb, 76330 Ugljevik, PDV broj _______, tel: 065 -     /    
         </Typography>
         <Typography variant="h5" component="h2">
-          Faktura - otpremnica broj: ____________
+          {`Faktura - otpremnica broj: ${props.order_id}`}
         </Typography>
        
         {/* <Typography variant="body2" component="p">

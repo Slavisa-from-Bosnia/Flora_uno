@@ -9,6 +9,7 @@ import Link from '@material-ui/core/Link';
 import Print from '@material-ui/icons/Print';
 import Invoice from'./Invoice';
 import PrintInvoice from './PrintInvoice';
+import {useReactToPrint} from 'react-to-print';
 
 const useStyles = makeStyles((theme) =>({
 
@@ -49,12 +50,24 @@ export default function Detail (props) {
   function handlePayed (payed){
     setPayed(payed=>!payed);
   };
+  const componentRef = useRef();
 
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   return (
     <main className={classes.content}>
-      <Invoice/>
-      <PrintInvoice/>
+      <div ref={componentRef}>
+        <Invoice 
+          order_id ={props.order_id}
+          address = {props.address}
+          city = {props.city}
+          buyerName = {props.buyerName}
+          // ref={componentRef}
+        />
+      </div>
+      <PrintInvoice handlePrint={handlePrint}/>
   </main>
    
   );
