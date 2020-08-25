@@ -86,24 +86,24 @@ app.delete("/orders/:order_id", async (req,res) => {
         const deleteOrder = await pool.query("DELETE FROM orders WHERE order_id IN ($1) ", [order_id]);
         console.log("obrisan order");
         console.log(`Order ${order_id} was/were deleted`);
-        res.json(deleteOrder);
+        res.json("podaci obrisani");
     } catch (err) {
         console.error(err.message);
     }
 });
 
     //  update order
-app.put("/orders", async (req, res) => {
+app.put("/orders/:id", async (req, res) => {
     try {
         const {id} = req.params;
-        const data = req.body;
-        console.log("poslati podaci"+data);
-        const updateOrder = await pool.query("UPDATE orders SET shipped = $1, shipped_date = now(),  WHERE order_id = $2 ",
-        [delivered, data]
+        const {delivered} = req.body;
+        console.log("poslati podaci 100" + " " +id+ delivered);
+        const updateOrder = await pool.query("UPDATE orders SET shipped = $1  WHERE order_id = $2 ",
+        [delivered, id]
         );
-        console.log("Roses was updated!");
+        console.log("Order was updated!");
+        console.log(updateOrder);
         res.json(updateOrder);
-        
     } catch (err) {
         console.error(err.message);
     }

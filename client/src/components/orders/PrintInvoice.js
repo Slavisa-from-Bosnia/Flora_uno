@@ -66,11 +66,12 @@ export default function SpanningTable(props) {
   const handleDelivered =async e => {
     try{
       const data = props.data;
-      console.log(data);
-      const response = await fetch("http://localhost:5000/orders", {
-        method: "POST",
+      const deliveredData = {delivered}
+      console.log(data + deliveredData);
+      const response = await fetch(`http://localhost:5000/orders/${data}`, {
+        method: "PUT",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data, delivered)
+        body: JSON.stringify(deliveredData)
       });
       console.log(response);
       setDelivered(delivered=>
