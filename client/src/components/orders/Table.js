@@ -21,6 +21,11 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import {Link}from 'react-router-dom';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Button from '@material-ui/core/Button';
+import Dialog from './DialogDeleteOrders';
+
+
 
 // function createData(name, calories, fat, carbs, protein) {
 //   return { name, calories, fat, carbs, protein };
@@ -76,6 +81,7 @@ function stableSort(array, comparator) {
 //   { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
 // ];
 const headCells = [
+  { id: 'delete', numeric: false, disablePadding: true, label: 'Briši stavku' },
   { id: 'name', numeric: false, disablePadding: true, label: 'Kupac' },
   { id: 'totalSum', numeric: true, disablePadding: false, label: 'Iznos KM (bez PDV)' },
   { id: 'date_of_order', numeric: true, disablePadding: false, label: 'Datum narudžbe' },
@@ -96,7 +102,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={'right' }
+            align={'center' }
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -222,10 +228,13 @@ export default function EnhancedTable(props) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [rows, setRows]=React.useState([]);
+  
+  const [openIsValidate, setOpenIsValidate]=React.useState(false);
+  const [dataForDelete, setDataForDelete] =React.useState({});
+
 
   useEffect(() => {
-    getOrders_jb();
+    props.getOrders_jb();
   }, []);
 
   function formatDate(date) {
@@ -242,32 +251,21 @@ export default function EnhancedTable(props) {
     return [day,month,year].join('-');
 }
 
-const getOrders_jb = async () => {
-  try{
-    const response = await fetch("http://localhost:5000/orders_jb");
-    const jsonData = await response.json();
 
-    setRows(jsonData);
-    console.log(jsonData);
-
-  } catch (err) {
-    console.error(err.message);
-  }
-};
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
+  // const handleSelectAllClick = (event) => {
+  //   if (event.target.checked) {
+  //     const newSelecteds = rows.map((n) => n.name);
+  //     setSelected(newSelecteds);
+  //     return;
+  //   }
+  //   setSelected([]);
+  // };
 
 
   const handleChangePage = (event, newPage) => {
@@ -283,9 +281,45 @@ const getOrders_jb = async () => {
     setDense(event.target.checked);
   };
 
+  const isItemSelected2 = (event,rowItem) =>{
+    // deleteSpecification(rowItem);
+    event.stopPropagation();
+    console.log(rowItem);
+    setOpenIsValidate(true);
+    setDataForDelete(rowItem);
+    // props.getOrders();
+  };
+
+  const closeOpenIsValidate = () => {
+    setOpenIsValidate (false);
+  };
+
+  const handleCloseDialog = () => {
+    console.log(dataForDelete);
+    deleteOrder(dataForDelete);
+    closeOpenIsValidate();
+  }
+
+
+  const deleteOrder = async (order_id) => {
+    try {
+      const deleteOrder = await fetch (`http://localhost:5000/orders/${order_id}`, {
+        method: "DELETE"
+    });
+      console.log("izbrisani podaci 310" + "" + deleteOrder);
+      setOpenIsValidate(false);
+      props.getOrders_jb();
+  
+    } catch (err) {
+      console.error(err.message);
+    }
+  
+  };
+
+
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.rows.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -303,12 +337,12 @@ const getOrders_jb = async () => {
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
+              // onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={props.rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(props.rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -318,18 +352,18 @@ const getOrders_jb = async () => {
                     <TableRow
                       hover
                       onClick={(event) => props.handleClick(event, row)}
-                      component ={Link}
+                      // component ={Link}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.order_id}
                       selected={isItemSelected}
                     >
-                      
-                      <TableCell component="th" id={labelId} scope="row" padding="none" align="right">
+                      <TableCell align='center' ><Button onClick = {(event)=>isItemSelected2(event, row.order_id)}><DeleteOutline/></Button></TableCell>
+                      <TableCell component="th" id={labelId} scope="row" padding="none" align="left">
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.totalsum}</TableCell>
-                      <TableCell align="right">{formatDate(row.date_of_order)}</TableCell>
+                      <TableCell align="center">{row.totalsum}</TableCell>
+                      <TableCell align="center">{formatDate(row.date_of_order)}</TableCell>
                       <TableCell padding="checkbox" align="center">
                         <Checkbox
                           checked={isItemSelected}
@@ -356,7 +390,7 @@ const getOrders_jb = async () => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={props.rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
@@ -367,6 +401,8 @@ const getOrders_jb = async () => {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Gusti prikaz"
       />
+    <Dialog open={openIsValidate} closeOpen= {closeOpenIsValidate} handleCloseDialog={handleCloseDialog}/>
+
     </div>
   );
 }

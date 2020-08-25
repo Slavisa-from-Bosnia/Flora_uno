@@ -36,14 +36,15 @@ export default function Buyers() {
   // const [trigger, setTrigger] = useState (true);
   // const [editData, setEditData] = useState (false);
   const [buyers, setBuyers] = useState ([]);
-  const [orders, setOrders] = React.useState([]);
+  // const [orders, setOrders] = React.useState([]);
   const [rowData, setRowData] = React.useState("");
   const [dataForDetailView, setDataForDetailView] = useState("");
   const [dataView, setDataView] = useState(false);
+  const [rows, setRows]=React.useState([]);
   
-  useEffect(()=>{
-    getOrders();
-  },[]);
+  // useEffect(()=>{
+  //   getOrders_jb();
+  // },[]);
 
   const handleClick = (event, data) => {
     setDataForDetailView(data);
@@ -56,14 +57,26 @@ export default function Buyers() {
   //   // setTrigger(trigger => !trigger);
   // };
   
-  const getOrders = async () => {
+  // const getOrders = async () => {
+  //   try{
+  //     const response = await fetch("http://localhost:5000/orders");
+  //     const jsonData =await response.json();
+
+  //     setOrders(jsonData);
+  //     console.log(jsonData);
+
+  //   } catch (err) {
+  //     console.error(err.message);
+  //   }
+  // };
+  const getOrders_jb = async () => {
     try{
-      const response = await fetch("http://localhost:5000/orders");
-      const jsonData =await response.json();
-
-      setOrders(jsonData);
+      const response = await fetch("http://localhost:5000/orders_jb");
+      const jsonData = await response.json();
+  
+      setRows(jsonData);
       console.log(jsonData);
-
+  
     } catch (err) {
       console.error(err.message);
     }
@@ -91,26 +104,21 @@ const handleOpenDialog = (data) => {
 };
 
 // Delete from dialog
-const handleCloseDialog = () => {
-  // setOpen(false);
-  console.log(rowData);
-  onDeleteClick(rowData);
-};
+// const handleCloseDialog = () => {
+//   // setOpen(false);
+//   console.log(rowData);
+//   onDeleteClick(rowData);
+// };
 
-const onDeleteClick = async (rowData) => {
-  try {
-    console.log("podaci za brisanje")
-    const deleteBuyers = await fetch (`http://localhost:5000/buyers/${rowData.buyer_id}`, {
-      method: "DELETE"
-  });
-    getOrders();
-    console.log(deleteBuyers);
+// const onDeleteClick = async (rowData) => {
+//   try {getOrders();
+//     console.log(deleteBuyers);
 
-  } catch (err) {
-    console.error(err.message);
-  }
+//   } catch (err) {
+//     console.error(err.message);
+//   }
 
-};
+// };
 
 
 // Close dialog
@@ -132,10 +140,13 @@ const closeOpen = () => {
               <Table 
                 // editData={handleEditData} 
                 openDialog={handleOpenDialog}
-                orders={orders}
+                // orders={orders}
                 // data={data}
                 rowData={rowData}
                 handleClick={handleClick}
+                rows={rows}
+                setRows={setRows}
+                getOrders_jb={getOrders_jb}
                 />  
             </Grid>  
             <Grid item xs={12} md={12} lg={12} >
@@ -174,6 +185,7 @@ const closeOpen = () => {
      address = {dataForDetailView.address}
      city = {dataForDetailView.city}
      buyerName = {dataForDetailView.name} 
+     data = {dataForDetailView.order_id}
      />
     }
   </div>

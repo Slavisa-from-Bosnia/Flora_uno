@@ -43,14 +43,14 @@ app.use(express.json());
         }
     });
      // get all orders 
-    app.get("/orders", async(req, res) => {
-        try {
-            const allOrders = await pool.query ("SELECT * FROM orders ORDER BY orders.order_id DESC");
-            res.json(allOrders.rows);
-        } catch (err) {
-            console.error(err.message);
-        }
-    });
+    // app.get("/orders", async(req, res) => {
+    //     try {
+    //         const allOrders = await pool.query ("SELECT * FROM orders ORDER BY orders.order_id DESC");
+    //         res.json(allOrders.rows);
+    //     } catch (err) {
+    //         console.error(err.message);
+    //     }
+    // });
     // get all orders join buyersist 
 
     app.get("/orders_jb", async(req, res) => {
@@ -74,6 +74,40 @@ app.use(express.json());
             console.error(err.message);
         }
     });
+
+    //  delete order 
+app.delete("/orders/:order_id", async (req,res) => {
+
+    console.log("linija 81"+ "" +req.params.order_id);
+    try {
+        const {order_id} = req.params;
+        const deleteTurnovers = await pool.query("DELETE FROM turnover WHERE descriptions IN ($1) and descriptions_id IN ($2)", [20 ,order_id]);
+        console.log("obrisan turnover");
+        const deleteOrder = await pool.query("DELETE FROM orders WHERE order_id IN ($1) ", [order_id]);
+        console.log("obrisan order");
+        console.log(`Order ${order_id} was/were deleted`);
+        res.json(deleteOrder);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+    //  update order
+app.put("/orders", async (req, res) => {
+    try {
+        const {id} = req.params;
+        const data = req.body;
+        console.log("poslati podaci"+data);
+        const updateOrder = await pool.query("UPDATE orders SET shipped = $1, shipped_date = now(),  WHERE order_id = $2 ",
+        [delivered, data]
+        );
+        console.log("Roses was updated!");
+        res.json(updateOrder);
+        
+    } catch (err) {
+        console.error(err.message);
+    }
+});
 
     // create a rose
 

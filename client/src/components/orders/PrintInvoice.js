@@ -62,11 +62,31 @@ export default function SpanningTable(props) {
 
  
 
-  function handleDelivered(){
-    setDelivered(delivered=>
-      !delivered
-    );
+
+  const handleDelivered =async e => {
+    try{
+      const data = props.data;
+      console.log(data);
+      const response = await fetch("http://localhost:5000/orders", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data, delivered)
+      });
+      console.log(response);
+      setDelivered(delivered=>
+        !delivered
+      );
+      
+    } catch (err) {
+      console.error(err.message);
+    }
+      
+   
+    
   };
+ 
+  
+  
 
   function handlePayed (payed){
     setPayed(payed=>!payed);
