@@ -67,7 +67,7 @@ export default function Detail (props) {
           // ref={componentRef}
         />
       </div>
-      <PrintInvoice handlePrint={handlePrint} data = {props.data}/>
+      <PrintInvoice handlePrint={handlePrint} data = {props.data} />
   </main>
    
   );

@@ -366,13 +366,13 @@ export default function EnhancedTable(props) {
                       <TableCell align="center">{formatDate(row.date_of_order)}</TableCell>
                       <TableCell padding="checkbox" align="center">
                         <Checkbox
-                          checked={isItemSelected}
+                          checked={row.shipped}
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>
                       <TableCell padding="checkbox" align="center">
                         <Checkbox
-                          checked={isItemSelected}
+                          checked={row.payed}
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>

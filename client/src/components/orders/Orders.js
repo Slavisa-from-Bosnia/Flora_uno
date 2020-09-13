@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-export default function Buyers() {
+export default function Orders(props) {
   // const [trigger, setTrigger] = useState (true);
   // const [editData, setEditData] = useState (false);
   const [buyers, setBuyers] = useState ([]);
@@ -43,7 +43,7 @@ export default function Buyers() {
   const [rows, setRows]=React.useState([]);
   
   // useEffect(()=>{
-  //   getOrders_jb();
+  //   getOrders_jb();    
   // },[]);
 
   const handleClick = (event, data) => {
@@ -52,6 +52,7 @@ export default function Buyers() {
     console.log (data);
 
   }
+ 
 
   // const handleTrigger = ()=>{
   //   // setTrigger(trigger => !trigger);
@@ -119,12 +120,15 @@ const handleOpenDialog = (data) => {
 //   }
 
 // };
-
+const changeDelivered =()=> {
+  getOrders_jb();
+};
 
 // Close dialog
 const closeOpen = () => {
   // setOpen(false);
 } ;
+
 
   const classes = useStyles();
 
@@ -185,7 +189,7 @@ const closeOpen = () => {
      address = {dataForDetailView.address}
      city = {dataForDetailView.city}
      buyerName = {dataForDetailView.name} 
-     data = {dataForDetailView.order_id}
+     data = {dataForDetailView}
      />
     }
   </div>

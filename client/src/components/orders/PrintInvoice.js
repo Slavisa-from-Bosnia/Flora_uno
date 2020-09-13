@@ -56,42 +56,55 @@ const useStyles = makeStyles((theme) =>({
 
 export default function SpanningTable(props) {
  
-  const [delivered, setDelivered] = useState(false);
+  // const [delivered, setDelivered] = useState(false);
   const [payed, setPayed] = useState(false);
+  const [shipped, setShipped] = useState(false);
   const classes = useStyles();
 
- 
+  useEffect(()=>{
+    setShipped(props.data.shipped);  
+    setPayed(props.data.payed);
+  },[props.data.shipped]);
 
 
   const handleDelivered =async e => {
     try{
-      const data = props.data;
-      const deliveredData = {delivered}
-      console.log(data + deliveredData);
-      const response = await fetch(`http://localhost:5000/orders/${data}`, {
+      const data = props.data.order_id;
+      console.log(shipped);
+      const nShipped = !shipped;
+      console.log(nShipped);
+      const response = await fetch(`http://localhost:5000/orders/shipped/${data}`, {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(deliveredData)
+        body: JSON.stringify({nShipped})
       });
       console.log(response);
-      setDelivered(delivered=>
-        !delivered
-      );
+      setShipped(nShipped);
       
     } catch (err) {
       console.error(err.message);
     }
+  };
+  
+  const handlePayed =async e => {
+    try{
+      const data = props.data.order_id;
+      console.log(payed);
+      const nPayed = !payed;
+      console.log(nPayed);
+      const response = await fetch(`http://localhost:5000/orders/payed/${data}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({nPayed})
+      });
+      console.log(response);
+      setPayed(nPayed);
       
-   
-    
+    } catch (err) {
+      console.error(err.message);
+    }
   };
- 
-  
-  
 
-  function handlePayed (payed){
-    setPayed(payed=>!payed);
-  };
 
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -119,7 +132,7 @@ export default function SpanningTable(props) {
              <FormControlLabel
               control={
                 <Checkbox
-                checked={delivered}
+                checked={shipped}
                 onChange={handleDelivered}
                 name="checkedB"
                 color="primary"
