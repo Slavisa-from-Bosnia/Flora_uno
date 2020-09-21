@@ -45,6 +45,20 @@ const useStyles = makeStyles({
 export default function SimpleCard(props) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [day,month,year].join('-');
+}
+
 
   return (
     <Card className={classes.root}>
@@ -57,8 +71,8 @@ export default function SimpleCard(props) {
          <Typography className={classes.pos} variant="body2" component="p" color="textSecondary">
           Novo Naselje bb, 76330 Ugljevik, PDV broj _______, tel: 065 -     /    
         </Typography>
-        <Typography variant="h5" component="h2">
-          {`Faktura - otpremnica broj: ${props.order_id}`}
+        <Typography variant="h6" component="h2">
+        {`Faktura - otpremnica broj: ${props.order_id}, datum isporuke: ${formatDate(props.shipping_date)}`}
         </Typography>
        
         {/* <Typography variant="body2" component="p">

@@ -1,5 +1,7 @@
 CREATE DATABASE flora_uno;
 
+-- SET timezone = "Europe/Belgrade";
+
 CREATE TABLE roses (
     rose_id SERIAL PRIMARY KEY,
     name VARCHAR (100),
@@ -23,11 +25,11 @@ CREATE TABLE buyers (
 CREATE TABLE orders(
     order_id SERIAL PRIMARY KEY,
     buyer_id INT,
-    date_of_order TIMESTAMP NOT NULL DEFAULT NOW(),
+    date_of_order TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     payment_method VARCHAR (100),
     shipping_method VARCHAR (100),
     shipped BOOLEAN DEFAULT FALSE,
-    shipping_date DATE,
+    shipping_date TIMESTAMPTZ,
     delivered BOOLEAN DEFAULT FALSE,
     delivering_date DATE,
     payed BOOLEAN,
@@ -44,6 +46,6 @@ CREATE TABLE turnover (
     quantity INT,
     price FLOAT,
     sumData FLOAT,
-    dateOfTurnover TIMESTAMP NOT NULL DEFAULT NOW(),
+    dateOfTurnover TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     reserved INT DEFAULT 0
 );

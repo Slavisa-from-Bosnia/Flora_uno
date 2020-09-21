@@ -190,6 +190,7 @@ const closeOpen = () => {
      city = {dataForDetailView.city}
      buyerName = {dataForDetailView.name} 
      data = {dataForDetailView}
+     shipping_date = {dataForDetailView.shipping_date}
      />
     }
   </div>

@@ -99,12 +99,29 @@ app.put("/orders/shipped/:id", async (req, res) => {
         const shipped = req.body.nShipped;
         console.log(req.body);
         console.log("poslati podaci 101" + " " +id+ shipped);
-        const updateOrder = await pool.query("UPDATE orders SET shipped = $1  WHERE order_id = $2 returning * ",
-        [shipped, id]
-        );
-        console.log("Order was updated!");
-        // console.log(updateOrder);
-        res.json(updateOrder.rows[0]);
+        if(shipped){
+            const updateOrder = await pool.query("UPDATE orders SET shipped = $1, shipping_date = CURRENT_TIMESTAMP(2)  WHERE order_id = $2 returning * ",
+            [shipped, id]
+            );
+            const updateTurnover = await pool.query("UPDATE turnover SET quantity = -reserved, reserved = 0 WHERE descriptions =$1 AND descriptions_id = $2 returning * ",
+            [20, id]
+            );
+
+            console.log("Order was updated true!");
+            // console.log(updateOrder);
+            res.json(updateOrder.rows[0]);
+        } else {
+            const updateOrder = await pool.query("UPDATE orders SET shipped = $1, shipping_date = null  WHERE order_id = $2 returning * ",
+            [shipped, id]
+            );
+            const updateTurnover = await pool.query("UPDATE turnover SET quantity = 0, reserved = -quantity WHERE descriptions =$1 AND descriptions_id = $2 returning * ",
+            [20, id]
+            );
+
+            console.log("Order was updated false !");
+            // console.log(updateOrder);
+            res.json(updateOrder.rows[0]);
+        }
     } catch (err) {
         console.error(err.message);
     }
@@ -112,7 +129,8 @@ app.put("/orders/shipped/:id", async (req, res) => {
 
 app.put("/orders/payed/:id", async (req, res) => {
     try {
-        const {id} = req.params;
+        const {id} = req.params;6
+
         const payed = req.body.nPayed;
         console.log(req.body);
         console.log("poslati podaci 118" + " " +id+ payed);

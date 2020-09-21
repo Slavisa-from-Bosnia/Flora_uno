@@ -61,6 +61,7 @@ export default function Detail (props) {
       <div ref={componentRef}>
         <Invoice 
           order_id ={props.order_id}
+          shipping_date={props.shipping_date}
           address = {props.address}
           city = {props.city}
           buyerName = {props.buyerName}

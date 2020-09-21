@@ -95,7 +95,7 @@ export default function SpanningTable(props) {
     var sum =[];
    for(i=0; i<data.length; i++){
      var rowSum = data[i].reserved * data[i].price;
-     var rowData = {"name":data[i].name, "price":data[i].price, "reserved":data[i].reserved, "sum": rowSum};
+     var rowData = {"name":data[i].name, "price":data[i].price, "reserved":data[i].reserved, "sum": rowSum, "quantity": data[i].quantity};
      sum.push(rowData);
      console.log(rowData);
    }
@@ -128,7 +128,7 @@ export default function SpanningTable(props) {
       
         <Grid container spacing={3}>
           <Grid item xs={8} md={8} lg={8}>
-              <CardInvoice order_id={props.order_id}/>
+              <CardInvoice order_id={props.order_id} shipping_date={props.shipping_date}/>
           </Grid>
           <Grid item xs={4} md={4} lg={4} 
           >
@@ -159,7 +159,7 @@ export default function SpanningTable(props) {
 
                         >
                           <TableCell>{row.name}</TableCell>
-                          <TableCell align="right">{row.reserved}</TableCell>
+                          <TableCell align="right">{row.reserved-row.quantity}</TableCell>
                           <TableCell align="right">{row.price}</TableCell>
                           <TableCell align="right">{ccyFormat(row.sum)}</TableCell>
                       </TableRow>

@@ -19,7 +19,8 @@ const useStyles = makeStyles({
     transform: 'scale(0.8)',
   },
   title: {
-    fontSize: 14,
+    fontSize: 12,
+    marginBottom:35
   },
   pos: {
     marginTop: 12,
@@ -34,15 +35,15 @@ export default function SimpleCard(props) {
     <Card className={classes.root}>
       <CardContent>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
-          Adresa kupca:
+          Naziv i adresa kupca:
         </Typography>
-        <Typography variant="h5" component="h2">
+        <Typography variant="h5" component="h2" align="center">
           {props.buyerName}
         </Typography>
-        <Typography className={classes.pos} color="textSecondary">
+        <Typography className={classes.pos} color="textSecondary" align="center">
           {props.address}
         </Typography>
-        <Typography variant="body2" component="p">
+        <Typography variant="body2" component="p" align="center">
           {props.city}
           {/* <br />
           {'"a benevolent smile"'} */}
