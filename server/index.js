@@ -3,6 +3,7 @@ const app = express();
 const cors = require ("cors");
 const pool =require("./db");
 const format = require('pg-format');
+const bcrypt = require("bcrypt");
 
 //midleware
 app.use(cors());
@@ -312,6 +313,23 @@ app.get("/buyers_for_orders", async(req, res) => {
         console.error(err.message);
     }
  });
+
+ // create UserFirst
+
+app.post("/userfirst", async (req, res)=>{
+    try{
+        const passwordUserFirst = bcrypt.hash(req.body.password, 10, (err,hash) );
+        const newBuyer = await pool.query(
+        "INSERT INTO userFirst (email, passwordFirstUser) VALUES ($1,$2) RETURNING *",
+        [input.firstName, input.address, input.city, input.phone, input.meil]
+        );
+        console.log("Dodat kupac u bazi");
+        res.json(newBuyer.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
 
 
  

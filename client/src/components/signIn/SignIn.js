@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,11 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import rosesImages from '../../static/images/roses.jpg';
+import {Redirect, useHistory} from 'react-router-dom';
+import Orders from '../orders/Orders';
+
+
 
 function Copyright() {
   return (
@@ -31,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: `url(${rosesImages})`,
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -58,7 +63,49 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignInSide() {
+
+const [signInData, setSignInData] = useState({
+  email: "",
+  password: ""
+});
+
+  // const [imgs, setImgs]= useState();
+
+// useEffect (()=>{
+//   fetchImage();
+// }, []);
   const classes = useStyles();
+//   const fetchImage = () =>{
+//     fetch(`https://api.unsplash.com/photos?query=roses&client_id=F-juXhRNetnMUiF-yY-lZP7oXuKhdT0ngxx5krIS8aI`)
+//       .then(res => res.json())
+//       .then(data => {
+//         this.setImgs({data});
+//         console.log( "getting images"+imgs);
+//       })
+//       .catch(err =>{
+//         console.log('Error happened during fetching!',err);
+//       });
+//   }
+let history = useHistory();
+  const clickSignIn = () => {
+    console.log(signInData.email);
+    console.log(signInData.password);
+    
+    if(signInData.email === "pirossi" && signInData.password === "pirossi"){
+      history.push('/dashboard/orders/Orders');
+      
+    } else {
+      console.log("false");
+    }
+  }
+
+  const changeData = e => { 
+    setSignInData({
+      ...signInData,
+      [e.target.name]:e.target.value
+    });
+    console.log(e.target.value);
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -83,6 +130,8 @@ export default function SignInSide() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={changeData}
+              value={signInData.email||""}
             />
             <TextField
               variant="outlined"
@@ -94,17 +143,20 @@ export default function SignInSide() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={changeData}
+              value={signInData.password||""}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
             <Button
-              type="submit"
+              // type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={clickSignIn}
             >
               Sign In
             </Button>

@@ -49,3 +49,9 @@ CREATE TABLE turnover (
     dateOfTurnover TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     reserved INT DEFAULT 0
 );
+
+CREATE TABLE userFirst(
+    userFirst_id SERIAL PRIMARY KEY,
+    email VARCHAR (100),
+    passwordFirst VARCHAR (400) 
+);

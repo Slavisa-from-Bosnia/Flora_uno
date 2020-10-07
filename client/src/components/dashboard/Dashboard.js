@@ -179,10 +179,12 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
+              <Switch>
                   <Route path = {'/dashboard/buyers'} component = {Buyers}/>
                   <Route path = {'/dashboard/roses'} component = {Roses}/>
                   <Route path = {'/dashboard/orders'} component = {Orders}/>
                   <Route path = {'/dashboard/createOrder'} component = {CreateOrder}/>
+              </Switch>
             </Grid>  
           </Grid>
           <Box pt={4}>
