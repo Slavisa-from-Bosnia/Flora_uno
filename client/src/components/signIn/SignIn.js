@@ -64,40 +64,72 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
 
-const [signInData, setSignInData] = useState({
-  email: "",
-  password: ""
-});
+  const [signInData, setSignInData] = useState({
+    email: "",
+    password: ""
+  });
 
-  // const [imgs, setImgs]= useState();
+    // const [imgs, setImgs]= useState();
 
-// useEffect (()=>{
-//   fetchImage();
-// }, []);
-  const classes = useStyles();
-//   const fetchImage = () =>{
-//     fetch(`https://api.unsplash.com/photos?query=roses&client_id=F-juXhRNetnMUiF-yY-lZP7oXuKhdT0ngxx5krIS8aI`)
-//       .then(res => res.json())
-//       .then(data => {
-//         this.setImgs({data});
-//         console.log( "getting images"+imgs);
-//       })
-//       .catch(err =>{
-//         console.log('Error happened during fetching!',err);
-//       });
-//   }
-let history = useHistory();
+  // useEffect (()=>{
+  //   fetchImage();
+  // }, []);
+    const classes = useStyles();
+  //   const fetchImage = () =>{
+  //     fetch(`https://api.unsplash.com/photos?query=roses&client_id=F-juXhRNetnMUiF-yY-lZP7oXuKhdT0ngxx5krIS8aI`)
+  //       .then(res => res.json())
+  //       .then(data => {
+  //         this.setImgs({data});
+  //         console.log( "getting images"+imgs);
+  //       })
+  //       .catch(err =>{
+  //         console.log('Error happened during fetching!',err);
+  //       });
+  //   }
+  let history = useHistory();
   const clickSignIn = () => {
-    console.log(signInData.email);
-    console.log(signInData.password);
+    isThereUser(signInData);
     
-    if(signInData.email === "pirossi" && signInData.password === "pirossi"){
-      history.push('/dashboard/orders/Orders');
+    // if(signInData.email === "pirossi" && signInData.password === "pirossi"){
+    //   history.push('/dashboard/orders/Orders');
       
-    } else {
-      console.log("false");
+    // } else {
+    //   console.log("false");
+    // }
+  };
+
+  // const postUser =async (data) => {
+  //     try{
+  //       const response = await fetch("http://localhost:5000/insertUser", {
+  //         method: "POST",
+  //         headers: {"Content-Type": "application/json"},
+  //         body: JSON.stringify(data)
+  //       });
+  //       const jsonData = await response.json();
+  //       console.log(jsonData);
+  //     } catch (err) {
+  //       console.error(err.message);
+  //     }  
+  // };
+
+  const isThereUser = async (data) => {
+    try{
+      const response = await fetch(`http://localhost:5000/users`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+      });
+      const jsonData =await response.json();
+      if(jsonData){
+        console.log(jsonData);
+        history.push('/dashboard/orders/Orders');
+      }
+      console.log(`ne postoje podaci ${jsonData}`);
+
+    } catch (err) {
+      console.error(err.message);
     }
-  }
+  };
 
   const changeData = e => { 
     setSignInData({

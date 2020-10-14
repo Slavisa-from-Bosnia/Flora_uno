@@ -4,6 +4,7 @@ const cors = require ("cors");
 const pool =require("./db");
 const format = require('pg-format');
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 //midleware
 app.use(cors());
@@ -314,22 +315,70 @@ app.get("/buyers_for_orders", async(req, res) => {
     }
  });
 
- // create UserFirst
+ // create user
 
-app.post("/userfirst", async (req, res)=>{
+// app.post("/insertUser", async (req, res)=>{
+//     try{
+//         // console.log(req.body);
+//         const findUser =await pool.query(
+//             "SELECT email, userPassword FROM users WHERE email =$1", [req.body.email]
+//         );
+//         console.log("korisnik u bazi"+findUser.rows[0]);
+//         const userPassword = await new Promise ((resolve, reject) =>{
+//             bcrypt.hash(req.body.password, 10, function (err,hash) {
+//                 if (err) {
+//                     return res.status(500).json({
+//                         error:err
+//                     });
+//                 } 
+//                 resolve(hash)
+//             });
+//             // return userPassword;
+//         });
+//         const newUser = await pool.query(
+//             "INSERT INTO users (email, userPassword) VALUES ($1,$2) RETURNING *",
+//             [req.body.email, userPassword ]
+//         );
+//         console.log("Dodat korisnik u bazi");
+//         console.log(newUser.rows);
+//         res.json(newUser.rows[0]);
+    
+//     }
+//     catch (err) {
+//         console.error(err.message);
+//     }
+// });
+
+// get a user
+app.post("/users", async (req, res)=>{
     try{
-        const passwordUserFirst = bcrypt.hash(req.body.password, 10, (err,hash) );
-        const newBuyer = await pool.query(
-        "INSERT INTO userFirst (email, passwordFirstUser) VALUES ($1,$2) RETURNING *",
-        [input.firstName, input.address, input.city, input.phone, input.meil]
+        const {email, password} = req.body;
+        console.log(email, password);
+
+        const findUser =await pool.query(
+            "SELECT * FROM users WHERE email =$1 AND userPassword =$2", [email, password]
         );
-        console.log("Dodat kupac u bazi");
-        res.json(newBuyer.rows[0]);
-    } catch (err) {
+        if (findUser.rows[0]){
+             const token = jwt.sign({
+                email:findUser.rows[0].email,
+                user_id:findUser.rows[0].user_id,
+            }, 'JWSsecret', {
+                expiresIn: "1h"
+            });
+            console.log("token kreiran");
+            return res.status(200).json({
+                message:"Auth successful",
+                token: token
+            });
+        } else {
+            console.log(`korisnik ${email} ${password} nije registrovan u bazi`);
+            res.status(200).json('');
+        }
+    }
+    catch (err) {
         console.error(err.message);
     }
 });
-
 
 
  

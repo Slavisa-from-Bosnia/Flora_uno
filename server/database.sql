@@ -50,8 +50,8 @@ CREATE TABLE turnover (
     reserved INT DEFAULT 0
 );
 
-CREATE TABLE userFirst(
-    userFirst_id SERIAL PRIMARY KEY,
+CREATE TABLE users(
+    user_id SERIAL PRIMARY KEY,
     email VARCHAR (100),
-    passwordFirst VARCHAR (400) 
+    userPassword VARCHAR (400) 
 );
