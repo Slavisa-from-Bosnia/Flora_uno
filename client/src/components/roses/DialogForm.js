@@ -15,6 +15,7 @@ export default function AlertDialog(props) {
         onClose={props.handleCloseDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        disableBackdropClick
       >
         <DialogTitle id="alert-dialog-title">{"Neispravan unos korekcije!"}</DialogTitle>
         <DialogContent>

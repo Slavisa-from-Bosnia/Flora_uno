@@ -5,6 +5,8 @@ const pool =require("./db");
 const format = require('pg-format');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const checkValid = require("./middleware/check-auth");
+// const { default: authContext } = require("../client/src/context/auth-context");
 
 //midleware
 app.use(cors());
@@ -14,7 +16,7 @@ app.use(express.json());
 
     // create order
 
-    app.post("/orders", async (req, res)=>{
+    app.post("/orders", checkValid, async (req, res)=>{
         try{
             const data = req.body;
             console.log("req.body 18" + ""+req.body);
@@ -350,10 +352,13 @@ app.get("/buyers_for_orders", async(req, res) => {
 // });
 
 // get a user
-app.post("/users", async (req, res)=>{
+app.post("/users", async(req, res)=>{
     try{
+        
+        
         const {email, password} = req.body;
         console.log(email, password);
+    
 
         const findUser =await pool.query(
             "SELECT * FROM users WHERE email =$1 AND userPassword =$2", [email, password]
@@ -362,7 +367,7 @@ app.post("/users", async (req, res)=>{
              const token = jwt.sign({
                 email:findUser.rows[0].email,
                 user_id:findUser.rows[0].user_id,
-            }, 'JWSsecret', {
+            }, process.env.JWT_KEY, {
                 expiresIn: "1h"
             });
             console.log("token kreiran");

@@ -15,6 +15,7 @@ export default function AlertDialog(props) {
         onClose={props.closeOpen}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        disableBackdropClick
       >
         <DialogTitle id="alert-dialog-title">{"Nepravilan unos!"}</DialogTitle>
         <DialogContent>

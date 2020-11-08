@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,6 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import rosesImages from '../../static/images/roses.jpg';
 import {Redirect, useHistory} from 'react-router-dom';
 import Orders from '../orders/Orders';
+import {SignInContext} from '../../context/auth-context';
 
 
 
@@ -111,7 +112,7 @@ export default function SignInSide() {
   //       console.error(err.message);
   //     }  
   // };
-
+  const {addData} = useContext(SignInContext);
   const isThereUser = async (data) => {
     try{
       const response = await fetch(`http://localhost:5000/users`, {
@@ -121,10 +122,12 @@ export default function SignInSide() {
       });
       const jsonData =await response.json();
       if(jsonData){
-        console.log(jsonData);
+        console.log(jsonData.token);
+        addData(jsonData.token);
         history.push('/dashboard/orders/Orders');
-      }
+      } else {
       console.log(`ne postoje podaci ${jsonData}`);
+      }
 
     } catch (err) {
       console.error(err.message);
