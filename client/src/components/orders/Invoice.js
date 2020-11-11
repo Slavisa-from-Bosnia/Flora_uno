@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,6 +16,8 @@ import Grid from '@material-ui/core/Grid';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import {SignInContext} from '../../context/auth-context';
+
 
 
 const TAX_RATE = 0.17;
@@ -82,6 +84,8 @@ export default function SpanningTable(props) {
   const invoiceSubtotal = subtotal(specificationWithSum);
   const invoiceTaxes = TAX_RATE * invoiceSubtotal;
   const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+  const {signInData} = useContext(SignInContext);
+
   
 
   useEffect(()=> {
@@ -107,7 +111,13 @@ export default function SpanningTable(props) {
   const getSpecification = async (order_id) => {
     try{
       console.log(order_id);
-      const response = await fetch(`http://localhost:5000/specification/${order_id}`);
+      const response = await fetch(`http://localhost:5000/specification/${order_id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization:"Bearer" +" "+ signInData.token
+        }
+      });
       const jsonData =await response.json();
 
       setSpecification(jsonData);

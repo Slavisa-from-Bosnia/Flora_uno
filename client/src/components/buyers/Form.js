@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {SignInContext} from '../../context/auth-context';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
     meil:"",
     buyer_id:""
   });
+  const {signInData} = useContext(SignInContext);
+
 
   const addressRef = useRef();
   const cityRef = useRef();
@@ -100,7 +104,10 @@ const useStyles = makeStyles((theme) => ({
         const data = input;
         const response = await fetch("http://localhost:5000/buyers", {
           method: "POST",
-          headers: {"Content-Type": "application/json"},
+          headers: {
+            "Content-Type": "application/json",
+            authorization:"Bearer" +" "+ signInData.token
+          },
           body: JSON.stringify(data)
         });
         console.log(response);
@@ -127,7 +134,10 @@ const useStyles = makeStyles((theme) => ({
         const data = {input};
         const response = await fetch(`http://localhost:5000/buyers/:${input.buyer_id}`, {
           method: "PUT",
-          headers: {"Content-Type": "application/json"},
+          headers: {
+            "Content-Type": "application/json",
+            authorization:"Bearer" +" "+ signInData.token
+          },
           body: JSON.stringify(data)
         });
         props.setTrigger();

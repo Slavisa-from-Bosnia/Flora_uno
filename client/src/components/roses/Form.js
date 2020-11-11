@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, Fragment } from 'react';
+import React, { useEffect, Fragment, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import Description from '@material-ui/icons/Description';
+import {SignInContext} from '../../context/auth-context';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
  const Form = (props)=> {
+
+  const {signInData} = useContext(SignInContext);
+
 
   useEffect(() => {
    if (props.editData){
@@ -61,7 +66,10 @@ const useStyles = makeStyles((theme) => ({
         const data = props.newData;
         const response = await fetch("http://localhost:5000/roses", {
           method: "POST",
-          headers: {"Content-Type": "application/json"},
+          headers: {
+            "Content-Type": "application/json",
+            authorization:"Bearer" +" "+ signInData.token
+          },
           body: JSON.stringify(data)
         });
         console.log(response);
@@ -90,7 +98,10 @@ const useStyles = makeStyles((theme) => ({
         console.log(data);
         const response = await fetch(`http://localhost:5000/roses/:${data.rose_id}`, {
           method: "PUT",
-          headers: {"Content-Type": "application/json"},
+          headers: {
+            "Content-Type": "application/json",
+            authorization:"Bearer" +" "+ signInData.token
+          },
           body: JSON.stringify(data)
 
         });

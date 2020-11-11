@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -11,6 +11,8 @@ import Table from  './Table';
 import Dialog from './Dialog';
 import {Link}from 'react-router-dom';
 import DetailView from '../orders/DetailView';
+import {SignInContext} from '../../context/auth-context';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +43,8 @@ export default function Orders(props) {
   const [dataForDetailView, setDataForDetailView] = useState("");
   const [dataView, setDataView] = useState(false);
   const [rows, setRows]=React.useState([]);
+  const {signInData} = useContext(SignInContext);
+
   
   // useEffect(()=>{
   //   getOrders_jb();    
@@ -72,7 +76,13 @@ export default function Orders(props) {
   // };
   const getOrders_jb = async () => {
     try{
-      const response = await fetch("http://localhost:5000/orders_jb");
+      const response = await fetch("http://localhost:5000/orders_jb", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization:"Bearer" +" "+ signInData.token
+        }
+      });
       const jsonData = await response.json();
   
       setRows(jsonData);

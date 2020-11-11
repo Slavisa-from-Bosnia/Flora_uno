@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -24,6 +24,8 @@ import {Link}from 'react-router-dom';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import Button from '@material-ui/core/Button';
 import Dialog from './DialogDeleteOrders';
+import {SignInContext} from '../../context/auth-context';
+
 
 
 
@@ -231,6 +233,8 @@ export default function EnhancedTable(props) {
   
   const [openIsValidate, setOpenIsValidate]=React.useState(false);
   const [dataForDelete, setDataForDelete] =React.useState({});
+  const {signInData} = useContext(SignInContext);
+
 
 
   useEffect(() => {
@@ -304,7 +308,11 @@ export default function EnhancedTable(props) {
   const deleteOrder = async (order_id) => {
     try {
       const deleteOrder = await fetch (`http://localhost:5000/orders/${order_id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          authorization:"Bearer" +" "+ signInData.token
+        }
     });
       console.log("izbrisani podaci 310" + "" + deleteOrder);
       setOpenIsValidate(false);

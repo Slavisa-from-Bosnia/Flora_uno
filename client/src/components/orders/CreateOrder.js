@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import Form from './Form';
 import DialogSpecification from './DialogSpecification';
 import DialogIsValid from './DialogIsValid';
+import {SignInContext} from '../../context/auth-context';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,6 +47,7 @@ export default function Buyers() {
     totalSum: ""
   });
   const [redirect, setRedirect] =useState(false);
+  const {signInData} = useContext(SignInContext);
   
   function constains (a, obj) {
     for (var i = 0; i<a.length; i++) {
@@ -60,9 +62,13 @@ export default function Buyers() {
     console.log(specification);
     if (data.buyer_id && data.payment_method && data.totalSum>0){
       try{
-        const response = await fetch("http://localhost:5000/orders", {
+        
+          const response = await fetch("http://localhost:5000/orders", {
           method: "POST",
-          headers: {"Content-Type": "application/json"},
+          headers: {
+            "Content-Type": "application/json",
+            authorization:"Bearer" +" "+ signInData.token
+          },
           body: JSON.stringify({data, specification})
         });
         const jsonData = await response.json();

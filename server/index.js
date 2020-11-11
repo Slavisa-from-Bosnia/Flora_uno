@@ -57,7 +57,7 @@ app.use(express.json());
     // });
     // get all orders join buyersist 
 
-    app.get("/orders_jb", async(req, res) => {
+    app.get("/orders_jb", checkValid, async(req, res) => {
         try {
             const allOrders = await pool.query ("SELECT * FROM orders INNER JOIN buyers ON (orders.buyer_id = buyers.buyer_id) ORDER BY orders.order_id DESC");
             res.json(allOrders.rows);
@@ -80,7 +80,7 @@ app.use(express.json());
     });
 
     //  delete order 
-app.delete("/orders/:order_id", async (req,res) => {
+app.delete("/orders/:order_id", checkValid, async (req,res) => {
 
     console.log("linija 81"+ "" +req.params.order_id);
     try {
@@ -97,7 +97,7 @@ app.delete("/orders/:order_id", async (req,res) => {
 });
 
     //  update order
-app.put("/orders/shipped/:id", async (req, res) => {
+app.put("/orders/shipped/:id", checkValid, async (req, res) => {
     try {
         const {id} = req.params;
         const shipped = req.body.nShipped;
@@ -131,7 +131,7 @@ app.put("/orders/shipped/:id", async (req, res) => {
     }
 });
 
-app.put("/orders/payed/:id", async (req, res) => {
+app.put("/orders/payed/:id", checkValid, async (req, res) => {
     try {
         const {id} = req.params;6
 
@@ -151,7 +151,7 @@ app.put("/orders/payed/:id", async (req, res) => {
 
     // create a rose
 
-    app.post("/roses", async (req, res)=>{
+    app.post("/roses", checkValid, async (req, res)=>{
         try{
             const inputRoses = req.body;
             console.log("req.body 83"+req.body);
@@ -213,7 +213,7 @@ app.put("/orders/payed/:id", async (req, res) => {
 
     // update a rose
 
-    app.put("/roses/:id", async (req, res) => {
+    app.put("/roses/:id", checkValid, async (req, res) => {
         try {
             const {id} = req.params;
             const data = req.body;
@@ -236,7 +236,7 @@ app.put("/orders/payed/:id", async (req, res) => {
 
     // delete a rose
 
-    app.delete("/roses/:id", async (req,res) => {
+    app.delete("/roses/:id", checkValid, async (req,res) => {
         try {
             const {id} =req.params;
             const delateRoses = await pool.query("DELETE FROM roses WHERE rose_id = $1", [id]);
@@ -249,7 +249,7 @@ app.put("/orders/payed/:id", async (req, res) => {
 
 // create buyer
 
-app.post("/buyers", async (req, res)=>{
+app.post("/buyers", checkValid, async (req, res)=>{
     try{
         const input = req.body;
         const newBuyer = await pool.query(
@@ -265,7 +265,7 @@ app.post("/buyers", async (req, res)=>{
 
 // get all buyers
 
-app.get("/buyers", async(req, res) => {
+app.get("/buyers", checkValid, async(req, res) => {
     try {
         const allBuyers = await pool.query("SELECT * FROM buyers ORDER BY buyer_id DESC");
         res.json(allBuyers.rows);
@@ -276,7 +276,7 @@ app.get("/buyers", async(req, res) => {
  });
 
 //  delete buyer or buyers needed futher works
-app.delete("/buyers/:selected", async (req,res) => {
+app.delete("/buyers/:selected", checkValid, async (req,res) => {
 
     console.log("linija 208" +req.params);
     try {
@@ -291,7 +291,7 @@ app.delete("/buyers/:selected", async (req,res) => {
 
 // update a buyer
 
-app.put("/buyers/:id", async (req, res) => {
+app.put("/buyers/:id", checkValid, async (req, res) => {
     try {
         const {id} = req.params;
         const {input} = req.body;
@@ -307,7 +307,7 @@ app.put("/buyers/:id", async (req, res) => {
     }
 });
 
-app.get("/buyers_for_orders", async(req, res) => {
+app.get("/buyers_for_orders", checkValid, async(req, res) => {
     try {
         const allBuyers = await pool.query("SELECT buyer_id, name, address FROM buyers ORDER BY name ");
         res.json(allBuyers.rows);

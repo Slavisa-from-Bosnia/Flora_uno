@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -15,6 +15,8 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import Buyers from './CreateOrder';
+import {SignInContext} from '../../context/auth-context';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -54,6 +56,8 @@ const useStyles = makeStyles((theme) => ({
     current_sum:"",
     reserved_sum:"",
   });
+  const {signInData} = useContext(SignInContext);
+
 
   useEffect(() => {
     getBuyers();
@@ -91,7 +95,13 @@ const useStyles = makeStyles((theme) => ({
   
   const getBuyers = async () => {
     try{
-      const response = await fetch("http://localhost:5000/buyers_for_orders");
+      const response = await fetch("http://localhost:5000/buyers_for_orders", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization:"Bearer" +" "+ signInData.token
+        }
+      });
       const jsonData =await response.json();
       console.log(jsonData);
       setBuyers(jsonData);

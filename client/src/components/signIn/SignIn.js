@@ -24,7 +24,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        Flora-Uno
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -126,7 +126,11 @@ export default function SignInSide() {
         addData(jsonData.token);
         history.push('/dashboard/orders/Orders');
       } else {
-      console.log(`ne postoje podaci ${jsonData}`);
+        setSignInData ({
+          email:"",
+          password: ""
+        });
+
       }
 
     } catch (err) {
@@ -152,7 +156,7 @@ export default function SignInSide() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Uloguj se
           </Typography>
           <form className={classes.form} noValidate>
             <TextField
@@ -181,10 +185,10 @@ export default function SignInSide() {
               onChange={changeData}
               value={signInData.password||""}
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button
               // type="submit"
               fullWidth
@@ -193,17 +197,17 @@ export default function SignInSide() {
               className={classes.submit}
               onClick={clickSignIn}
             >
-              Sign In
+              Uloguj se
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                {/* <Link href="#" variant="body2">
                   Forgot password?
-                </Link>
+                </Link> */}
               </Grid>
               <Grid item>
                 <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  {"Nemaš račun? Registruj se"}
                 </Link>
               </Grid>
             </Grid>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -9,6 +9,8 @@ import Table from  './Table';
 import Description from './Description';
 import Dialog from './Dialog';
 import DialogForm from './DialogForm';
+import {SignInContext} from '../../context/auth-context';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,6 +40,8 @@ export default function Buyers() {
   const [openDescriptionDialog, setDescriptionDialog] = useState(false);
   const [newData, setNewData] = React.useState("");
   const [formDialog, setFormDialog] = useState(false);
+  const {signInData} = useContext(SignInContext);
+
 
   
   useEffect(()=>{
@@ -110,7 +114,11 @@ const handleCloseDescription = (description) =>{
 const onDeleteClick = async (rowData) => {
   try {
     const deleteBuyers = await fetch (`http://localhost:5000/roses/${rowData.rose_id}`, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        authorization:"Bearer" +" "+ signInData.token
+      }
   });
     getRoses();
     console.log(deleteBuyers);

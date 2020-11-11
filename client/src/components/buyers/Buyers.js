@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -7,6 +7,8 @@ import Paper from '@material-ui/core/Paper';
 import Form from './Form.js';
 import TableB from  './TableB';
 import Dialog from './Dialog';
+import {SignInContext} from '../../context/auth-context';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,11 +34,15 @@ export default function Buyers() {
   const [editData, setEditData] = useState (false);
   const [data, setData] = useState ([]);
   const [open, setOpen] = React.useState(false);
-  const [rowData, setRowData] = React.useState("");
+  const [rowData, setRowData] = React.useState(""); 
+
+  const {signInData} = useContext(SignInContext);
+
   
   useEffect(()=>{
     getBuyers();
   },[]);
+  
 
   const handleTrigger = ()=>{
     setTrigger(trigger => !trigger);
@@ -44,7 +50,13 @@ export default function Buyers() {
   
   const getBuyers = async () => {
     try{
-      const response = await fetch("http://localhost:5000/buyers");
+      const response = await fetch("http://localhost:5000/buyers", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            authorization:"Bearer" +" "+ signInData.token
+          }
+        });
       const jsonData =await response.json();
 
       setData(jsonData);
@@ -85,7 +97,11 @@ const onDeleteClick = async (rowData) => {
   try {
     console.log("podaci za brisanje")
     const deleteBuyers = await fetch (`http://localhost:5000/buyers/${rowData.buyer_id}`, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        authorization:"Bearer" +" "+ signInData.token
+      },
   });
     getBuyers();
     console.log(deleteBuyers);

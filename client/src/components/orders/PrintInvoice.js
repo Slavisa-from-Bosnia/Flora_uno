@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -20,6 +20,8 @@ import Link from '@material-ui/core/Link';
 import Print from '@material-ui/icons/Print';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import {SignInContext} from '../../context/auth-context';
+
 // import ReactToPrint from 'react-to-print';
 
 const useStyles = makeStyles((theme) =>({
@@ -60,6 +62,8 @@ export default function SpanningTable(props) {
   const [payed, setPayed] = useState(false);
   const [shipped, setShipped] = useState(false);
   const classes = useStyles();
+  const {signInData} = useContext(SignInContext);
+
 
   useEffect(()=>{
     setShipped(props.data.shipped);  
@@ -75,7 +79,10 @@ export default function SpanningTable(props) {
       console.log(nShipped);
       const response = await fetch(`http://localhost:5000/orders/shipped/${data}`, {
         method: "PUT",
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          authorization:"Bearer" +" "+ signInData.token
+        },
         body: JSON.stringify({nShipped})
       });
       console.log(response);
@@ -94,7 +101,10 @@ export default function SpanningTable(props) {
       console.log(nPayed);
       const response = await fetch(`http://localhost:5000/orders/payed/${data}`, {
         method: "PUT",
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          authorization:"Bearer" +" "+ signInData.token
+        },
         body: JSON.stringify({nPayed})
       });
       console.log(response);
