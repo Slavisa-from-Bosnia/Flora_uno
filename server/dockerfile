@@ -1,0 +1,16 @@
+# ubaciti alpine
+FROM node: 15.2
+
+WORKDIR /user/src/app
+
+COPY package*.json ./
+
+# promjeniti u RUN ci --only=production
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+

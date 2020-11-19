@@ -1,4 +1,12 @@
+-- docker
+CREATE USER postgres
+-- 
+
 CREATE DATABASE flora_uno;
+
+-- docker
+GRANT ALL PRIVILEGES ON DATABASE flora_uno TO postgres
+-- 
 
 -- SET timezone = "Europe/Belgrade";
 

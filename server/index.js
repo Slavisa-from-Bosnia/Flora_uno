@@ -376,8 +376,9 @@ app.post("/users", async(req, res)=>{
                 token: token
             });
         } else {
-            console.log(`korisnik ${email} ${password} nije registrovan u bazi`);
-            res.status(200).json('');
+            res.status(409).json({
+                messasge: "user is not registrated!"
+            });
         }
     }
     catch (err) {
