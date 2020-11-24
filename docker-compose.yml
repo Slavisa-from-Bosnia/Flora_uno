@@ -1,0 +1,49 @@
+version: "3"
+services:
+    frontend:
+      container_name: docker-flora-uno-fronted
+      restart: always
+      build: 
+        context: ./client
+        dockerfile: Dockerfile
+      # image: 
+      ports:
+        # - "80:3000"
+        - "3000:3000"
+      volumes: 
+        - ./client:/user/src/app
+
+    backend:
+      container_name: docker-flora-uno-backend
+      restart: always
+      build:
+        context: ./server
+        dockerfile: Dockerfile
+      # image:
+      ports:
+        - "5000:5000"
+      volumes: 
+        - "./server:/usr/src/app"
+      depends_on:
+        - psdb
+      links:
+        - psdb 
+      
+    psdb:
+      container_name: psdb
+      image: postgres: 12.5
+      ports:
+        -"5432:5432"
+      restart: always
+      volumes:
+      - postgres:/var/lib/postgresql/data 
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+      environment: 
+        POSTGRES_USER=postgres
+        POSTGRES_PASSWORD=postgres
+volumes:
+  postgres:
+        
+
+
+

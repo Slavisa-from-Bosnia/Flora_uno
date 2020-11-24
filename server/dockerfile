@@ -1,16 +1,20 @@
 # ubaciti alpine
-FROM node: 15.2
+FROM node:15.2-slim
+
+# vjerovatno može i bez komande ispod
+RUN mkdir -p /user/src/app
 
 WORKDIR /user/src/app
 
-COPY package*.json ./
+# COPY package*.json ./
 
 # promjeniti u RUN ci --only=production
-RUN npm install
+# RUN npm install
 
-COPY . .
+# COPY . .
 
-EXPOSE 3000
+EXPOSE 5000
 
+#  "npm", "run", "dev"
 CMD ["npm", "start"]
 
