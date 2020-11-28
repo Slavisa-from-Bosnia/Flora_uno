@@ -57,6 +57,8 @@ const useStyles = makeStyles((theme) => ({
     reserved_sum:"",
   });
   const {signInData} = useContext(SignInContext);
+  const {docker} = useContext(SignInContext);
+
 
 
   useEffect(() => {
@@ -95,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
   
   const getBuyers = async () => {
     try{
-      const response = await fetch("http://localhost:5000/buyers_for_orders", {
+      const response = await fetch(`http://${docker.connection}:5000/buyers_for_orders`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -113,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
 
   const getRoses = async () => {
     try{
-      const response = await fetch("http://localhost:5000/roses");
+      const response = await fetch(`http://${docker.connection}:5000/roses`);
       const jsonData =await response.json();
       setRoses(jsonData);
       console.log(jsonData);

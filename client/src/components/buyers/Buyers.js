@@ -37,6 +37,7 @@ export default function Buyers() {
   const [rowData, setRowData] = React.useState(""); 
 
   const {signInData} = useContext(SignInContext);
+  const {docker} = useContext(SignInContext);
 
   
   useEffect(()=>{
@@ -50,7 +51,7 @@ export default function Buyers() {
   
   const getBuyers = async () => {
     try{
-      const response = await fetch("http://localhost:5000/buyers", {
+      const response = await fetch(`http://${docker.connection}:5000/buyers`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

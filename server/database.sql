@@ -1,12 +1,9 @@
--- docker
-CREATE USER postgres
--- 
+
 
 CREATE DATABASE flora_uno;
 
--- docker
-GRANT ALL PRIVILEGES ON DATABASE flora_uno TO postgres
--- 
+-- -- docker
+CREATE USER postgres WITH PASSWORD = 'postgresslavisa8';
 
 -- SET timezone = "Europe/Belgrade";
 

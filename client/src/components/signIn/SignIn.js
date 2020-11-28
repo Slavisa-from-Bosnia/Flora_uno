@@ -69,6 +69,8 @@ export default function SignInSide() {
     email: "",
     password: ""
   });
+  const {docker} = useContext(SignInContext);
+
 
     // const [imgs, setImgs]= useState();
 
@@ -115,7 +117,7 @@ export default function SignInSide() {
   const {addData} = useContext(SignInContext);
   const isThereUser = async (data) => {
     try{
-      const response = await fetch(`http://localhost:5000/users`, {
+      const response = await fetch(`http://${docker.connection}:5000/users`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)

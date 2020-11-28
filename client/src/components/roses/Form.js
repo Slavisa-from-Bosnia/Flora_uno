@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
  const Form = (props)=> {
 
   const {signInData} = useContext(SignInContext);
+  const {docker} = useContext(SignInContext);
+
 
 
   useEffect(() => {
@@ -64,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
       e.preventDefault();
       try{
         const data = props.newData;
-        const response = await fetch("http://localhost:5000/roses", {
+        const response = await fetch(`http://${docker.connection}:5000/roses`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -96,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
       try{
         const data = props.newData;
         console.log(data);
-        const response = await fetch(`http://localhost:5000/roses/:${data.rose_id}`, {
+        const response = await fetch(`http://${docker.connection}:5000/roses/:${data.rose_id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

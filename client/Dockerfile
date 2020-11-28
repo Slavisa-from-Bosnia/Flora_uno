@@ -1,9 +1,13 @@
-#ubaciti apline
-FROM node:15.2-slim 
 
-RUN mkdir -p /user/src/app 
+FROM node:10
 
 WORKDIR /user/src/app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
 
 EXPOSE 3000
 

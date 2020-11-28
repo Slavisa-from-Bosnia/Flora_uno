@@ -1,48 +1,62 @@
 version: "3"
 services:
-    frontend:
-      container_name: docker-flora-uno-fronted
+
+    front:
+      container_name: react_app
       restart: always
       build: 
         context: ./client
         dockerfile: Dockerfile
-      # image: 
       ports:
-        # - "80:3000"
         - "3000:3000"
-      volumes: 
-        - ./client:/user/src/app
+      depends_on: 
+        - web 
+      links:
+        - web
+      stdin_open: true
+      # volumes: 
+      #   - ./client:/user/src/app
 
-    backend:
-      container_name: docker-flora-uno-backend
+
+    web:
+      container_name: node_app
       restart: always
       build:
         context: ./server
         dockerfile: Dockerfile
-      # image:
       ports:
         - "5000:5000"
-      volumes: 
-        - "./server:/usr/src/app"
       depends_on:
         - psdb
       links:
-        - psdb 
-      
+        - psdb
+      # volumes: 
+      #   - ./server:/usr/src/app 
+
     psdb:
-      container_name: psdb
-      image: postgres: 12.5
+      container_name: db_postgres 
+      image: postgres
       ports:
-        -"5432:5432"
+        - "5432:5432"
       restart: always
       volumes:
-      - postgres:/var/lib/postgresql/data 
-      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+        - postgres:/var/lib/postgresql/data 
+        - ./server/database.sql:/docker-entrypoint-initdb.d/init.sql
       environment: 
-        POSTGRES_USER=postgres
-        POSTGRES_PASSWORD=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        # - POSTGRES_HOST_AUTH_METHOD=trust
+        # - POSTGRES_DB:flora_uno
+      # networks:
+      #   - first 
+
 volumes:
   postgres:
+
+# networks:
+#   first:
+#     driver: bridge
+
         
 
 

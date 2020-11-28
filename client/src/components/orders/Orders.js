@@ -44,6 +44,8 @@ export default function Orders(props) {
   const [dataView, setDataView] = useState(false);
   const [rows, setRows]=React.useState([]);
   const {signInData} = useContext(SignInContext);
+  const {docker} = useContext(SignInContext);
+
 
   
   // useEffect(()=>{
@@ -76,7 +78,7 @@ export default function Orders(props) {
   // };
   const getOrders_jb = async () => {
     try{
-      const response = await fetch("http://localhost:5000/orders_jb", {
+      const response = await fetch(`http://${docker.connection}:5000/orders_jb`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

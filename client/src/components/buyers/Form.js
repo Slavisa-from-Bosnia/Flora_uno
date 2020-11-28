@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
     buyer_id:""
   });
   const {signInData} = useContext(SignInContext);
+  const {docker} = useContext(SignInContext);
+
 
 
   const addressRef = useRef();
@@ -102,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
       e.preventDefault();
       try{
         const data = input;
-        const response = await fetch("http://localhost:5000/buyers", {
+        const response = await fetch(`http://${docker.connection}:5000/buyers`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

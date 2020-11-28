@@ -63,6 +63,8 @@ export default function SpanningTable(props) {
   const [shipped, setShipped] = useState(false);
   const classes = useStyles();
   const {signInData} = useContext(SignInContext);
+  const {docker} = useContext(SignInContext);
+
 
 
   useEffect(()=>{
@@ -77,7 +79,7 @@ export default function SpanningTable(props) {
       console.log(shipped);
       const nShipped = !shipped;
       console.log(nShipped);
-      const response = await fetch(`http://localhost:5000/orders/shipped/${data}`, {
+      const response = await fetch(`http://${docker.connection}:5000/orders/shipped/${data}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +101,7 @@ export default function SpanningTable(props) {
       console.log(payed);
       const nPayed = !payed;
       console.log(nPayed);
-      const response = await fetch(`http://localhost:5000/orders/payed/${data}`, {
+      const response = await fetch(`http://${docker.connection}:5000/orders/payed/${data}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

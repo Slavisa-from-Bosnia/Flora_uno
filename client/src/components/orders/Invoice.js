@@ -85,6 +85,8 @@ export default function SpanningTable(props) {
   const invoiceTaxes = TAX_RATE * invoiceSubtotal;
   const invoiceTotal = invoiceTaxes + invoiceSubtotal;
   const {signInData} = useContext(SignInContext);
+  const {docker} = useContext(SignInContext);
+
 
   
 
@@ -111,7 +113,7 @@ export default function SpanningTable(props) {
   const getSpecification = async (order_id) => {
     try{
       console.log(order_id);
-      const response = await fetch(`http://localhost:5000/specification/${order_id}`, {
+      const response = await fetch(`http://${docker.connection}:5000/specification/${order_id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

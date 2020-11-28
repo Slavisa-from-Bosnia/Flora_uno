@@ -48,6 +48,8 @@ export default function Buyers() {
   });
   const [redirect, setRedirect] =useState(false);
   const {signInData} = useContext(SignInContext);
+  const {docker} = useContext(SignInContext);
+
   
   function constains (a, obj) {
     for (var i = 0; i<a.length; i++) {
@@ -63,7 +65,7 @@ export default function Buyers() {
     if (data.buyer_id && data.payment_method && data.totalSum>0){
       try{
         
-          const response = await fetch("http://localhost:5000/orders", {
+          const response = await fetch(`http://${docker.connecton}:5000/orders`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

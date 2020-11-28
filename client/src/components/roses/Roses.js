@@ -41,6 +41,8 @@ export default function Buyers() {
   const [newData, setNewData] = React.useState("");
   const [formDialog, setFormDialog] = useState(false);
   const {signInData} = useContext(SignInContext);
+  const {docker} = useContext(SignInContext);
+
 
 
   
@@ -54,7 +56,7 @@ export default function Buyers() {
   
   const getRoses = async () => {
     try{
-      const response = await fetch("http://localhost:5000/roses");
+      const response = await fetch(`http://${docker.connection}:5000/roses`);
       const jsonData =await response.json();
 
       setTableData(jsonData);
@@ -113,7 +115,7 @@ const handleCloseDescription = (description) =>{
 
 const onDeleteClick = async (rowData) => {
   try {
-    const deleteBuyers = await fetch (`http://localhost:5000/roses/${rowData.rose_id}`, {
+    const deleteBuyers = await fetch (`http://${docker.connection}:5000/roses/${rowData.rose_id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

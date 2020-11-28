@@ -8,12 +8,17 @@ const SignInContextProvider = (props) => {
 
     });
 
+    const [docker, setDocker] = useState({
+        connection: "localhost"
+
+    });
+
     const addData = (newtoken) => {
         setSignInData ({token: newtoken}); 
     };
 
     return (
-        <SignInContext.Provider value={{signInData, addData}}>
+        <SignInContext.Provider value={{signInData, addData, docker}}>
             {props.children}
         </SignInContext.Provider>
     );
