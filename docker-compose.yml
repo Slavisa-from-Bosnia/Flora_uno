@@ -11,8 +11,8 @@ services:
         - "3000:3000"
       depends_on: 
         - web 
-      links:
-        - web
+      networks:
+        - first
       stdin_open: true
       # volumes: 
       #   - ./client:/user/src/app
@@ -28,8 +28,9 @@ services:
         - "5000:5000"
       depends_on:
         - psdb
-      links:
-        - psdb
+      networks:
+        - first
+      
       # volumes: 
       #   - ./server:/usr/src/app 
 
@@ -47,15 +48,15 @@ services:
         - POSTGRES_PASSWORD=postgres
         # - POSTGRES_HOST_AUTH_METHOD=trust
         # - POSTGRES_DB:flora_uno
-      # networks:
-      #   - first 
+      networks:
+        - first 
 
 volumes:
   postgres:
 
-# networks:
-#   first:
-#     driver: bridge
+networks:
+  first:
+    driver: bridge
 
         
 

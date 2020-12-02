@@ -235,6 +235,8 @@ export default function EnhancedTable(props) {
   const [dataForDelete, setDataForDelete] =React.useState({});
   const {signInData} = useContext(SignInContext);
 
+  const{docker} = useContext(SignInContext);
+
 
 
   useEffect(() => {
@@ -307,7 +309,7 @@ export default function EnhancedTable(props) {
 
   const deleteOrder = async (order_id) => {
     try {
-      const deleteOrder = await fetch (`http://localhost:5000/orders/${order_id}`, {
+      const deleteOrder = await fetch (`http://${docker.connection}:5000/orders/${order_id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

@@ -43,13 +43,10 @@ export default function MaterialTableDemo(props) {
   const [columns, setColumns] = React.useState([
     
       { title: 'Naziv', field: 'name'},
-      // { title: 'Početno stanje', field: 'initial_quantity' },
-      // {title: 'Ulaz', field: 'input_sum'},
-      // {title:'Izlaz', field: 'output_sum'},
       {title: 'Stanje', field: 'sum'},
       {title: 'Rezervisano', field: 'reserved'},
       {title: 'Cijena', field: 'price'},
-      { title: 'Slika', field: 'image_Url', render: rowData => <img src={null} style={{width: 40, borderRadius: '50%'}}/> }
+      // { title: 'Slika', field: 'image_Url', render: rowData => <img src={null} style={{width: 40, borderRadius: '50%'}}/> }
     
   ]);
 

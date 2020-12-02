@@ -16,6 +16,8 @@ import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import Buyers from './CreateOrder';
 import {SignInContext} from '../../context/auth-context';
+import Box from '@material-ui/core/Box';
+
 
 
 
@@ -167,7 +169,7 @@ const useStyles = makeStyles((theme) => ({
       <div>
         <form className={classes.form}  >
           <Grid container spacing={2}>
-            <Grid item xs={3} sm={3} md={3} className={classes.grid}>
+            <Grid item xs={12} sm={6} md={2} className={classes.grid}>
               <FormControl variant="outlined" className={classes.formControl}>
                 <InputLabel id="demo-simple-select-outlined-label">Kupac</InputLabel>
                 <Select className={classes.select}
@@ -187,7 +189,7 @@ const useStyles = makeStyles((theme) => ({
                 </Select>
               </FormControl>
             </Grid>
-            {/* <Grid item xs={6} sm={4} md={4}>
+            {/* <Grid item xs={12} sm={6} md={2}>
                <FormControl variant="outlined" className={classes.formControl} >
                 <InputLabel id="demo-simple-select-outlined-label">Adresa</InputLabel>
                 <Select className ={classes.select}
@@ -209,7 +211,7 @@ const useStyles = makeStyles((theme) => ({
                 </Select>
               </FormControl>
             </Grid> */}
-            <Grid item xs={6} sm={4} md={2}>
+            <Grid item xs={12} sm={6} md={2}>
             <FormControl variant="outlined" className={classes.formControl} >
                 <InputLabel id="demo-simple-select-outlined-label">Način plaćanja</InputLabel>
                 <Select className={classes.select}
@@ -233,7 +235,7 @@ const useStyles = makeStyles((theme) => ({
           </Grid>
           <Divider variant = 'middle' className={classes.divider}/>
           <Grid container spacing={2}>
-            <Grid item xs={3} sm={3} md={3} className={classes.grid}>
+            <Grid item xs={12} sm={6} md={2} className={classes.grid}>
               <FormControl variant="outlined" className={classes.formControl}>
                 <InputLabel id="demo-simple-select-outlined-label">Artikal</InputLabel>
                 <Select className={classes.select}
@@ -254,7 +256,7 @@ const useStyles = makeStyles((theme) => ({
               </FormControl>
             </Grid>
 
-            <Grid item xs={2} sm={2} md={2}>
+            <Grid item xs={12} sm={6} md={2}>
               <TextField
                 variant="outlined"
                 fullWidth
@@ -271,7 +273,7 @@ const useStyles = makeStyles((theme) => ({
                
               />
             </Grid>
-            <Grid item xs={2} sm={2} md={2}>
+            <Grid item xs={12} sm={6} md={2}>
               <TextField
                 variant="outlined"
                 fullWidth
@@ -289,7 +291,7 @@ const useStyles = makeStyles((theme) => ({
               />
             </Grid>
            
-            <Grid item xs={6} sm={4} md={2}>
+            <Grid item xs={12} sm={6} md={2}>
               <TextField
                 variant="outlined"
                 fullWidth
@@ -302,12 +304,14 @@ const useStyles = makeStyles((theme) => ({
                 onChange ={updateField}
               />
             </Grid>
-            <Grid item xs={6} sm={4} md={2}>
+            <Grid item xs={12} sm={12} md={12}>
+            <Box display="flex" justifyContent ='flex-end'>
               <Tooltip title="Dodaj stavku" aria-label="add">
                 <Fab color="primary" className={classes.fab} size ="small" onClick={checkInput}>
                   <AddIcon />
                 </Fab>
               </Tooltip>
+            </Box>
             </Grid>
           </Grid>
         </form>

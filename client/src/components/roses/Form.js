@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useContext } from 'react';
+import React, { useEffect, Fragment, useContext, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -8,6 +8,7 @@ import Container from '@material-ui/core/Container';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import Description from '@material-ui/icons/Description';
 import {SignInContext} from '../../context/auth-context';
+import DialogIsValid from './DialogIsValid';
 
 
 
@@ -28,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
  const Form = (props)=> {
+
+  const [isNew, setNew] = useState (false);
 
   const {signInData} = useContext(SignInContext);
   const {docker} = useContext(SignInContext);
@@ -66,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
       e.preventDefault();
       try{
         const data = props.newData;
+        console.log(data);
         const response = await fetch(`http://${docker.connection}:5000/roses`, {
           method: "POST",
           headers: {
@@ -74,7 +78,9 @@ const useStyles = makeStyles((theme) => ({
           },
           body: JSON.stringify(data)
         });
-        console.log(response);
+        const dataFromS = await response.json();
+        setNew (dataFromS.isExist);
+        console.log(dataFromS);
         props.setTrigger();
         props.getRoses();
         props.handleNewData({
@@ -88,8 +94,6 @@ const useStyles = makeStyles((theme) => ({
           correction: "0",
           sum:""
         });
-       
-
       } catch (err) {
         console.error(err.message);
       }
@@ -107,6 +111,8 @@ const useStyles = makeStyles((theme) => ({
           body: JSON.stringify(data)
 
         });
+        const dataFromS = await response.json();
+        setNew (dataFromS.isExist);
         props.setTrigger();
         props.getRoses();
         props.handleNewData({
@@ -122,11 +128,16 @@ const useStyles = makeStyles((theme) => ({
         });
         
         props.editDataHendler();
+        console.log(response);
         
       } catch (err) {
         console.error(err.message);
       }
     }
+  };
+  
+  const closeDialogIsValid = ()=> {
+    setNew(false);
   };
   
   // changeFocusToName();
@@ -141,7 +152,7 @@ const useStyles = makeStyles((theme) => ({
           <Grid container spacing={1}>
             { !props.editData &&
               <Fragment>
-                <Grid item xs={3} sm={3} md={3}>
+                <Grid item xs={12} sm={6} md={2}>
                   <TextField
                     autoComplete="name"
                     name="name"
@@ -156,7 +167,7 @@ const useStyles = makeStyles((theme) => ({
                     value={props.newData.name ||""}
                   />
                 </Grid>
-                <Grid item xs={1} sm={1} md={1}>
+                <Grid item xs={12} sm={6} md={2}>
                   <TextField
                     variant="outlined"
                     required
@@ -171,7 +182,7 @@ const useStyles = makeStyles((theme) => ({
                     type="number"
                   />
                 </Grid>
-                <Grid item xs={1} sm={1} md={2}>
+                <Grid item xs={12} sm={6} md={2}>
                   <TextField
                     variant="outlined"
                     required
@@ -186,7 +197,7 @@ const useStyles = makeStyles((theme) => ({
                     type="number"
                   />
                 </Grid>
-                <Grid item xs={2} sm={2} md={2}>
+                {/* <Grid item xs={12} sm={6} md={2}>
                   <Button
                     variant="contained"
                     color="primary"
@@ -196,8 +207,8 @@ const useStyles = makeStyles((theme) => ({
                   >
                     Unesi sliku
                   </Button>
-                </Grid>
-                <Grid item xs={2} sm={2} md={2}>
+                </Grid> */}
+                <Grid item xs={12} sm={6} md={2}>
                   <Button
                     variant="contained"
                     color="primary"
@@ -224,7 +235,7 @@ const useStyles = makeStyles((theme) => ({
             }
             {props.editData && 
               <Fragment>
-                <Grid item xs={3} sm={3} md={3}>
+                <Grid item xs={12} sm={6} md={2}>
                   <TextField
                     autoComplete="name"
                     name="name"
@@ -239,7 +250,7 @@ const useStyles = makeStyles((theme) => ({
                     value={props.newData.name ||""}
                   />
                 </Grid>
-                <Grid item xs={1} sm={1} md={1}>
+                <Grid item xs={12} sm={6} md={2}>
                   <TextField
                     variant="outlined"
                     required
@@ -254,7 +265,7 @@ const useStyles = makeStyles((theme) => ({
                     type="number"
                   />
                 </Grid>
-                <Grid item xs={1} sm={1} md={2}>
+                <Grid item xs={12} sm={6} md={2}>
                   <TextField
                     variant="outlined"
                     required
@@ -269,7 +280,7 @@ const useStyles = makeStyles((theme) => ({
                     type="number"
                   />
                 </Grid>
-                <Grid item xs={3} sm={3} md={3}>
+                {/* <Grid item xs={3} sm={3} md={3}>
                   <Button
                     variant="contained"
                     color="primary"
@@ -279,9 +290,9 @@ const useStyles = makeStyles((theme) => ({
                   >
                     Koriguj sliku
                   </Button>
-                </Grid>
+                </Grid> */}
 
-                <Grid item xs={3} sm={3} md={3}>
+                <Grid item xs={12} sm={6} md={2}>
                 <Button
                     variant="contained"
                     color="primary"
@@ -309,6 +320,9 @@ const useStyles = makeStyles((theme) => ({
           </Grid>
         </form>
       </div>
+
+      <DialogIsValid open = {isNew} closeOpen = {closeDialogIsValid}/>
+
     </Container>
   );
 }

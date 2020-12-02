@@ -28,7 +28,8 @@ const useStyles = makeStyles({
   },
   media: {
     height: 160,
-    width: '95%',
+    width: '100%',
+  
     // position: 'relative',
 
     // width: "40%",
@@ -39,7 +40,9 @@ const useStyles = makeStyles({
     // width:'auto',
     // paddingTop: '56.25%', // 16:9,
     // marginTop:'30'
-  },
+    objectFit: 'cover'
+
+  }
 });
 
 export default function SimpleCard(props) {

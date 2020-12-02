@@ -17,9 +17,11 @@ app.use(express.json());
     // create order
 
     app.post("/orders", checkValid, async (req, res)=>{
+       
         try{
             const data = req.body;
-            console.log("req.body 18" + ""+req.body);
+            console.log("req.body 21 " + ""+req.body);
+           
             const newOrder = await pool.query("Insert INTO orders (buyer_id, payment_method, totalSum ) Values($1, $2, $3) RETURNING *",
             [data.data.buyer_id, data.data.payment_method, data.data.totalSum ]
             );
@@ -46,16 +48,9 @@ app.use(express.json());
             console.error(err.message);
         }
     });
-     // get all orders 
-    // app.get("/orders", async(req, res) => {
-    //     try {
-    //         const allOrders = await pool.query ("SELECT * FROM orders ORDER BY orders.order_id DESC");
-    //         res.json(allOrders.rows);
-    //     } catch (err) {
-    //         console.error(err.message);
-    //     }
-    // });
-    // get all orders join buyersist 
+
+
+
 
     app.get("/orders_jb", checkValid, async(req, res) => {
         try {
@@ -152,17 +147,37 @@ app.put("/orders/payed/:id", checkValid, async (req, res) => {
     // create a rose
 
     app.post("/roses", checkValid, async (req, res)=>{
-        try{
-            const inputRoses = req.body;
-            console.log("req.body 83"+req.body);
+        const inputRoses = req.body;
+        console.log(inputRoses);
+        try{ 
+            const isUserExist =await pool.query(
+                "SELECT * FROM roses WHERE name ILIKE $1 ", [inputRoses.name]
+            );
+            console.log (isUserExist);
+            if (isUserExist.rows[0]){
+                console.log("Roses exist");
+                return res.status(200).json({
+                    message:"Roses exist",
+                    isExist: true
+                    
+            });
+        } else {
             const newRose = await pool.query("Insert INTO roses (name, image_url, description, price) Values($1, $2, $3, $4) RETURNING *",
             [inputRoses.name, inputRoses.image_url, inputRoses.description, inputRoses.price]
             );
-            console.log('Dodata ruža u bazi!');
-            res.json(newRose.rows[0]);
-            var rose_id= parseInt(newRose.rows[0].rose_id);
+            console.log(newRose);
+            const rose_id= parseInt(newRose.rows[0].rose_id);
             const initialTurnover = await pool.query("INSERT INTO turnover (descriptions, roses_id, quantity, price) VALUES ($1, $2, $3, $4) RETURNING *",
             [10, rose_id, inputRoses.initial_quantity, inputRoses.price]);
+            
+            res.status(200).json({
+                newRose: newRose.rows[0],
+                message: "Roses added",
+                isExist: false
+            });
+            console.log('Dodata ruža u bazi!');
+        }
+            
         } catch (err) {
             console.error(err.message);
         }
@@ -215,20 +230,41 @@ app.put("/orders/payed/:id", checkValid, async (req, res) => {
 
     app.put("/roses/:id", checkValid, async (req, res) => {
         try {
-            const {id} = req.params;
-            const data = req.body;
-            console.log("poslati podaci"+data);
-            const updateRoses = await pool.query("UPDATE roses SET name = $1, description = $2, price = $4  WHERE rose_id = $3 ",
-            [data.name, data.description, data.rose_id, data.price]
-            );
-            console.log("Roses was updated!");
-            res.json(updateRoses);
-            var correction= parseInt(data.correction);
-            console.log("korekcija je" + correction);
-            const correctionTurnover = await pool.query("INSERT INTO turnover (descriptions, roses_id, quantity) VALUES ($1, $2, $3) RETURNING *",
-            [30, data.rose_id, data.correction ]);
-            console.log( "turnover za korekciju" + correctionTurnover.rows[0]);
+            const inputRoses = req.body;
+            console.log(inputRoses);
+            console.log("inputRoses je "+inputRoses.name);
 
+            const id = req.params.id;
+            console.log("id je " +id);
+            const data = req.body;
+
+            const isUserExist =await pool.query(
+                "SELECT * FROM roses WHERE name ILIKE $1 AND rose_id != $2 ", [inputRoses.name, inputRoses.rose_id]
+            );
+            if (isUserExist.rows[0]){
+                console.log("Roses exist");
+                return res.status(200).json({
+                    message:"Roses exist",
+                    isExist: true
+                    
+                });
+            } else {
+                
+                const updateRoses = await pool.query("UPDATE roses SET name = $1, description = $2, price = $4  WHERE rose_id = $3 ",
+                [data.name, data.description, data.rose_id, data.price]
+                );
+                var correction= parseInt(data.correction);
+                const correctionTurnover = await pool.query("INSERT INTO turnover (descriptions, roses_id, quantity) VALUES ($1, $2, $3) RETURNING *",
+                [30, data.rose_id, data.correction ]);
+                
+                res.status(200).json({
+                    newRose: updateRoses.rows[0],
+                    message: "Roses was updated",
+                    isExist: false
+                });
+                console.log('Roses was updated!');
+            }
+          
         } catch (err) {
             console.error(err.message);
         }
@@ -250,14 +286,32 @@ app.put("/orders/payed/:id", checkValid, async (req, res) => {
 // create buyer
 
 app.post("/buyers", checkValid, async (req, res)=>{
+
     try{
         const input = req.body;
-        const newBuyer = await pool.query(
-        "INSERT INTO buyers (name, address, city, phone, email) VALUES ($1,$2, $3, $4, $5) RETURNING *",
-        [input.firstName, input.address, input.city, input.phone, input.meil]
+        const isUserExist =await pool.query(
+            "SELECT * FROM buyers WHERE (name ILIKE $1 OR email ILIKE $2) AND email !=$3  ", [input.firstName, input.meil, ""]
         );
-        console.log("Dodat kupac u bazi");
-        res.json(newBuyer.rows[0]);
+        if (isUserExist.rows[0]){
+            console.log("User exist");
+            return res.status(200).json({
+                message:"User exist",
+                isExist: true
+                
+            });
+        } else {
+            const newBuyer = await pool.query(
+            "INSERT INTO buyers (name, address, city, phone, email) VALUES ($1,$2, $3, $4, $5) RETURNING *",
+            [input.firstName, input.address, input.city, input.phone, input.meil]
+            );
+            console.log("The buyer was added in the base!"+ newBuyer.rows[0]);
+            res.status(200).json({
+                message:"Buyer added!",
+                isExist: false
+            });
+
+        };
+      
     } catch (err) {
         console.error(err.message);
     }
@@ -295,12 +349,27 @@ app.put("/buyers/:id", checkValid, async (req, res) => {
     try {
         const {id} = req.params;
         const {input} = req.body;
-        console.log("input 225"+input);
-        const updateRoses = await pool.query("UPDATE buyers SET name = $1, address = $2, city = $3, phone = $4, email = $5 WHERE buyer_id = $6",
-        [input.firstName, input.address, input.city, input.phone, input.meil, input.buyer_id]
+        const isUserExist =await pool.query(
+            "SELECT * FROM buyers WHERE (name ILIKE $1 OR email ILIKE $2) AND email != $3 AND buyer_id != $4", [input.firstName, input.meil, "", input.buyer_id]
         );
-        res.json("Buyer was update");
-        console.log("buyer was updated");
+        if (isUserExist.rows[0]){
+            console.log("User exist");
+            return res.status(200).json({
+                message:"User exist",
+                isExist: true
+                
+            });
+        } else {
+            const updateBuyer = await pool.query("UPDATE buyers SET name = $1, address = $2, city = $3, phone = $4, email = $5 WHERE buyer_id = $6",
+            [input.firstName, input.address, input.city, input.phone, input.meil, input.buyer_id]
+            );
+            console.log("Buyer was updated!");
+            res.status(200).json({
+                message:" Buyer was updated!",
+                isExist: false
+            });
+
+        }; 
 
     } catch (err) {
         console.error(err.message);
@@ -317,45 +386,11 @@ app.get("/buyers_for_orders", checkValid, async(req, res) => {
     }
  });
 
- // create user
-
-// app.post("/insertUser", async (req, res)=>{
-//     try{
-//         // console.log(req.body);
-//         const findUser =await pool.query(
-//             "SELECT email, userPassword FROM users WHERE email =$1", [req.body.email]
-//         );
-//         console.log("korisnik u bazi"+findUser.rows[0]);
-//         const userPassword = await new Promise ((resolve, reject) =>{
-//             bcrypt.hash(req.body.password, 10, function (err,hash) {
-//                 if (err) {
-//                     return res.status(500).json({
-//                         error:err
-//                     });
-//                 } 
-//                 resolve(hash)
-//             });
-//             // return userPassword;
-//         });
-//         const newUser = await pool.query(
-//             "INSERT INTO users (email, userPassword) VALUES ($1,$2) RETURNING *",
-//             [req.body.email, userPassword ]
-//         );
-//         console.log("Dodat korisnik u bazi");
-//         console.log(newUser.rows);
-//         res.json(newUser.rows[0]);
-    
-//     }
-//     catch (err) {
-//         console.error(err.message);
-//     }
-// });
-
 // get a user
 app.post("/users", async(req, res)=>{
     try{
-        
-        
+
+
         const {email, password} = req.body;
         console.log(email, password);
     
@@ -383,6 +418,7 @@ app.post("/users", async(req, res)=>{
     }
     catch (err) {
         console.error(err.message);
+    
     }
 });
 

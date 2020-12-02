@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
     fixedHeight: {
-      height: 144,
+      // height: 144,
     },
   }));
 
@@ -92,15 +92,6 @@ const handleOpenDescription = () =>{
   setDescriptionDialog(true);
   console.log(newData);
 };
-
-// const findDescription = (rowItem) => {
-//   const dataForDescription = tableData.filter(tableD =>tableD.name==rowItem);
-//   console.log(dataForDescription);
-//   setRowData({
-//       ...rowData,
-//       description: dataForDescription.description
-//     });
-// };
 
 // Delete from dialog
 const handleCloseDialog = () => {

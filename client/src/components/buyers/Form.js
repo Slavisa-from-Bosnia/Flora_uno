@@ -5,7 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {SignInContext} from '../../context/auth-context';
+import {SignInContext} from '../../context/auth-context'; 
+import DialogIsValid from './DialogIsValid';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
     meil:"",
     buyer_id:""
   });
+
+  const [isNew, setNew] = useState (false);
+
   const {signInData} = useContext(SignInContext);
   const {docker} = useContext(SignInContext);
 
@@ -97,6 +101,10 @@ const useStyles = makeStyles((theme) => ({
       ...input,
       [e.target.name]: e.target.value
     });
+  }; 
+  
+  const closeDialogIsValid = ()=> {
+    setNew(false);
   };
 
   const onSubmitForm =async e => {
@@ -112,7 +120,9 @@ const useStyles = makeStyles((theme) => ({
           },
           body: JSON.stringify(data)
         });
-        console.log(response);
+        const dataFromS = await response.json();
+        setNew (dataFromS.isExist);
+        console.log(dataFromS);
         props.setTrigger();
         props.getBuyers();
         setInput({
@@ -134,7 +144,7 @@ const useStyles = makeStyles((theme) => ({
       e.preventDefault();
       try{
         const data = {input};
-        const response = await fetch(`http://localhost:5000/buyers/:${input.buyer_id}`, {
+        const response = await fetch(`http://${docker.connection}:5000/buyers/:${input.buyer_id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -142,6 +152,8 @@ const useStyles = makeStyles((theme) => ({
           },
           body: JSON.stringify(data)
         });
+        const dataFromS = await response.json();
+        setNew (dataFromS.isExist);
         props.setTrigger();
         props.getBuyers();
         setInput({
@@ -176,7 +188,7 @@ const useStyles = makeStyles((theme) => ({
       <div className={classes.paper}>
         <form className={classes.form}  onSubmit ={onSubmitForm}>
           <Grid container spacing={2}>
-            <Grid item xs={6} sm={4} md={2}>
+            <Grid item xs={12} sm={6} md={2}>
               <TextField
                 autoComplete="fname"
                 name="firstName"
@@ -197,7 +209,7 @@ const useStyles = makeStyles((theme) => ({
                 }}
               />
             </Grid>
-            <Grid item xs={6} sm={4} md={4}>
+            <Grid item xs={12} sm={6} md={2}>
               <TextField
                 variant="outlined"
                 required
@@ -217,7 +229,7 @@ const useStyles = makeStyles((theme) => ({
                 }}
               />
             </Grid>
-            <Grid item xs={6} sm={4} md={2}>
+            <Grid item xs={12} sm={6} md={2}>
               <TextField
                 variant="outlined"
                 required
@@ -237,7 +249,7 @@ const useStyles = makeStyles((theme) => ({
                 }}
               />
             </Grid>
-            <Grid item xs={6} sm={4} md={2}>
+            <Grid item xs={12} sm={6} md={2}>
               <TextField
                 variant="outlined"
                 fullWidth
@@ -256,7 +268,7 @@ const useStyles = makeStyles((theme) => ({
                 }}
               />
             </Grid>
-            <Grid item xs={6} sm={4} md={2}>
+            <Grid item xs={12} sm={6} md={2}>
               <TextField
                 variant="outlined"
                 fullWidth
@@ -297,6 +309,7 @@ const useStyles = makeStyles((theme) => ({
           </Button>}
         </form>
       </div>
+      <DialogIsValid open = {isNew} closeOpen = {closeDialogIsValid}/>
       
     </Container>
   );

@@ -28,10 +28,10 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       overflow: 'hidden',
       flexDirection: 'column',
-      maxHeight:140
+      maxHeight:440
     },
     fixedHeight: {
-      height: 240,
+      // height: 240,
       margin: theme.spacing(1),
       padding: theme.spacing(1)
     }
@@ -65,7 +65,7 @@ export default function Buyers() {
     if (data.buyer_id && data.payment_method && data.totalSum>0){
       try{
         
-          const response = await fetch(`http://${docker.connecton}:5000/orders`, {
+          const response = await fetch(`http://${docker.connection}:5000/orders`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -191,15 +191,6 @@ const handleSumFromSpecification = (sumFromSpecification) => {
                 />  
             </Grid>  
             <Grid item xs={12} md={12} lg={12} >
-              {/* <Paper className={fixedHeightPaper}>
-                <Form
-                  setTrigger = {handleTrigger}
-                  editData = {editData}
-                  rowData={rowData}
-                  editDataHendler = {editDataHendler}
-                  getBuyers = {getBuyers}
-                />
-              </Paper> */}
               <Box display="flex" justifyContent ='flex-end'>
               <Button 
                 variant="contained"
