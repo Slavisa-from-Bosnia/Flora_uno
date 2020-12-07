@@ -63,9 +63,6 @@ const useStyles = makeStyles((theme) => ({
   const changeFocusToMail = () => {
     mailRef.current.focus();
   };
-  const changeFocusToName = () => {
-    firstNameRef.current.focus();
-  };
   
   useEffect(() => {
    if (props.editData){
@@ -134,11 +131,9 @@ const useStyles = makeStyles((theme) => ({
           buyer_id:""
           
         });
-        firstNameRef.current.focus();
 
       } catch (err) {
         console.error(err.message);
-      
       }
      }   else{
       e.preventDefault();
@@ -165,20 +160,13 @@ const useStyles = makeStyles((theme) => ({
           buyer_id:""
           
         });
-        firstNameRef.current.focus();
         props.editDataHendler();
         
-
       } catch (err) {
         console.error(err.message);
-      
       }
-
     }
-    
   };
-
-  // changeFocusToName();
 
   const classes = useStyles();
 
@@ -197,7 +185,6 @@ const useStyles = makeStyles((theme) => ({
                 fullWidth
                 id="firstName"
                 label="Ime i prezime"
-                autoFocus
                 size="small"
                 onChange={updateField}
                 value={input.firstName}

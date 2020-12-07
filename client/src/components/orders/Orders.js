@@ -9,9 +9,10 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/AddOutlined';
 import Table from  './Table';
 import Dialog from './Dialog';
-import {Link}from 'react-router-dom';
+import {Link, withRouter}from 'react-router-dom';
 import DetailView from '../orders/DetailView';
 import {SignInContext} from '../../context/auth-context';
+import {useHistory, Route, Redirect} from 'react-router-dom';
 
 
 
@@ -44,38 +45,23 @@ export default function Orders(props) {
   const [dataView, setDataView] = useState(false);
   const [rows, setRows]=React.useState([]);
   const {signInData} = useContext(SignInContext);
-  const {docker} = useContext(SignInContext);
+  const {docker} = useContext(SignInContext); 
+
+  const history = useHistory();
 
 
-  
-  // useEffect(()=>{
-  //   getOrders_jb();    
-  // },[]);
 
   const handleClick = (event, data) => {
     setDataForDetailView(data);
-    setDataView(true);
+    // setDataView(true);
     console.log (data);
 
-  }
- 
-
-  // const handleTrigger = ()=>{
-  //   // setTrigger(trigger => !trigger);
-  // };
+    history.push({
+      pathname:'/dashboard/orders/detailview', 
+      dataSecond:data
+    })
+  };
   
-  // const getOrders = async () => {
-  //   try{
-  //     const response = await fetch("http://localhost:5000/orders");
-  //     const jsonData =await response.json();
-
-  //     setOrders(jsonData);
-  //     console.log(jsonData);
-
-  //   } catch (err) {
-  //     console.error(err.message);
-  //   }
-  // };
   const getOrders_jb = async () => {
     try{
       const response = await fetch(`http://${docker.connection}:5000/orders_jb`, {
@@ -95,15 +81,6 @@ export default function Orders(props) {
     }
   };
 
-
-
-  // Table edit data
-// const handleEditData = (data) => {
-//   console.log(data);
-//   setRowData(data);
-//   // setEditData(true);
-// };
-
 // From form
 const editDataHendler = () => {
   // setEditData(false);
@@ -116,22 +93,6 @@ const handleOpenDialog = (data) => {
   setRowData(data);
 };
 
-// Delete from dialog
-// const handleCloseDialog = () => {
-//   // setOpen(false);
-//   console.log(rowData);
-//   onDeleteClick(rowData);
-// };
-
-// const onDeleteClick = async (rowData) => {
-//   try {getOrders();
-//     console.log(deleteBuyers);
-
-//   } catch (err) {
-//     console.error(err.message);
-//   }
-
-// };
 const changeDelivered =()=> {
   getOrders_jb();
 };
@@ -147,8 +108,6 @@ const closeOpen = () => {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <div>
-    {!dataView && 
       <div className={classes.root}>
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
@@ -166,16 +125,6 @@ const closeOpen = () => {
                 />  
             </Grid>  
             <Grid item xs={12} md={12} lg={12} >
-              {/* <Paper className={fixedHeightPaper}>
-                <Form
-                  setTrigger = {handleTrigger}
-                  editData = {editData}
-                  rowData={rowData}
-                  editDataHendler = {editDataHendler}
-
-                  getBuyers = {getBuyers}
-                />
-              </Paper> */}
               <Box display="flex" justifyContent ='flex-end'>
                 <Button 
                   variant="contained"
@@ -191,21 +140,8 @@ const closeOpen = () => {
               </Box>
             </Grid>
           </Grid>
-          {/* <Dialog open = {open} closeOpen={closeOpen} rowData={rowData} handleCloseDialog={handleCloseDialog}/> */}
         </Container>
       </div>
-   }
-   {dataView && 
-     <DetailView 
-     order_id ={dataForDetailView.order_id}
-     address = {dataForDetailView.address}
-     city = {dataForDetailView.city}
-     buyerName = {dataForDetailView.name} 
-     data = {dataForDetailView}
-     shipping_date = {dataForDetailView.shipping_date}
-     />
-    }
-  </div>
-
-  );
+  )
+  
 }

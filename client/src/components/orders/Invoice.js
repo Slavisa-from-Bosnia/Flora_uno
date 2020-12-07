@@ -7,15 +7,15 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Remove from '@material-ui/icons/Remove';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
+// import Remove from '@material-ui/icons/Remove';
+// import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import CardAddress from "./CardAddress";
 import CardInvoice from './CardInvoice';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+// import Link from '@material-ui/core/Link';
 import {SignInContext} from '../../context/auth-context';
 
 
@@ -76,7 +76,6 @@ function subtotal(items) {
   return items.map(({ sum }) => sum).reduce((sumi, i) => sumi + i, 0);
 }
 
-
 export default function SpanningTable(props) {
   const [specification, setSpecification] = useState([]);
   const [specificationWithSum, setSpecificationWithSum] = useState([]);
@@ -87,14 +86,10 @@ export default function SpanningTable(props) {
   const {signInData} = useContext(SignInContext);
   const {docker} = useContext(SignInContext);
 
-
-  
-
   useEffect(()=> {
     getSpecification(props.order_id);
     console.log(specification);
   }, []);
-
 
   function calculateSum(data){
     var i = 0;
@@ -108,7 +103,6 @@ export default function SpanningTable(props) {
    setSpecificationWithSum(sum);
    console.log(sum);
   };
-
 
   const getSpecification = async (order_id) => {
     try{
@@ -132,7 +126,6 @@ export default function SpanningTable(props) {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-
   return (
     <main className={classes.content}>
 
@@ -142,70 +135,65 @@ export default function SpanningTable(props) {
           <Grid item xs={8} md={8} lg={8}>
               <CardInvoice order_id={props.order_id} shipping_date={props.shipping_date}/>
           </Grid>
-          <Grid item xs={4} md={4} lg={4} 
-          >
-              <CardAddress
-               address={props.address}
-               city={props.city}
-               buyerName={props.buyerName}
-              />
+          <Grid item xs={4} md={4} lg={4}>
+            <CardAddress
+              address={props.address}
+              city={props.city}
+              buyerName={props.buyerName}
+            />
           </Grid>
           <Grid item xs={12} md ={12} lg={12}>
-              <TableContainer component={Paper} className={classes.container}>
-                <Table className={classes.table} stickyHeader  aria-label="spanning table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Artikal</TableCell>
-                      <TableCell align="right">Količina (komada)</TableCell>
-                      <TableCell align="right">Jedinična cijena (KM)</TableCell>
-                      <TableCell align="right">Ukupno (KM)</TableCell>
+            <TableContainer component={Paper} className={classes.container}>
+              <Table className={classes.table} stickyHeader  aria-label="spanning table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Artikal</TableCell>
+                    <TableCell align="right">Količina (komada)</TableCell>
+                    <TableCell align="right">Jedinična cijena (KM)</TableCell>
+                    <TableCell align="right">Ukupno (KM)</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {specificationWithSum.map((row) => 
+                    <TableRow 
+                      // hover 
+                      // aria-checked={isItemSelected(row.name)}
+                      key={row.turnover_id}
+                      // selected={isItemSelected(row.name)}
+                      >
+                        <TableCell>{row.name}</TableCell>
+                        <TableCell align="right">{row.reserved-row.quantity}</TableCell>
+                        <TableCell align="right">{row.first_price}</TableCell>
+                        <TableCell align="right">{ccyFormat(row.sum)}</TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {specificationWithSum.map((row) => 
-                      <TableRow 
-                        // hover 
-                        // aria-checked={isItemSelected(row.name)}
-                        key={row.turnover_id}
-                        // selected={isItemSelected(row.name)}
-
-                        >
-                          <TableCell>{row.name}</TableCell>
-                          <TableCell align="right">{row.reserved-row.quantity}</TableCell>
-                          <TableCell align="right">{row.price}</TableCell>
-                          <TableCell align="right">{ccyFormat(row.sum)}</TableCell>
-                      </TableRow>
                   )}
 
-                    <TableRow>
-                      <TableCell rowSpan={3} colSpan={2}/>
-                      {/* <TableCell rowSpan={4}/> */}
-                      <TableCell align="right" >Ukupni iznos</TableCell>
-                      <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                     
-                      <TableCell align="right">{`PDV ${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
-                      <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                    
-                      <TableCell align="right" >Ukupno sa PDV</TableCell>
-                      <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
-                      
-                    </TableRow>
-                    
-                    
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                  <TableRow>
+                    <TableCell rowSpan={3} colSpan={2}/>
+                    {/* <TableCell rowSpan={4}/> */}
+                    <TableCell align="right" >Ukupni iznos</TableCell>
+                    <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="right">{`PDV ${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
+                    <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="right" >Ukupno sa PDV</TableCell>
+                    <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
-          
+          {/* <Grid item >
+            <Typography variant="h6" component="h2">
+              {`jsdfjsdofjsdfjsdfsjdf`}
+            </Typography>
+          </Grid> */}
         </Grid>
-      
-       
       </Container>
-  </main>
+    </main>
    
   );
-}
+};

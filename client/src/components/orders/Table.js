@@ -87,7 +87,7 @@ const headCells = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Kupac' },
   { id: 'totalSum', numeric: true, disablePadding: false, label: 'Iznos KM (bez PDV)' },
   { id: 'date_of_order', numeric: true, disablePadding: false, label: 'Datum narudžbe' },
-  { id: 'shipped', numeric: true, disablePadding: false, label: 'Isporučeno' },
+  { id: 'shipped', numeric: true, disablePadding: false, label: 'Otpremljeno' },
   { id: 'payed', numeric: true, disablePadding: false, label: 'Plaćeno' },
 ];
 
@@ -264,16 +264,6 @@ export default function EnhancedTable(props) {
     setOrderBy(property);
   };
 
-  // const handleSelectAllClick = (event) => {
-  //   if (event.target.checked) {
-  //     const newSelecteds = rows.map((n) => n.name);
-  //     setSelected(newSelecteds);
-  //     return;
-  //   }
-  //   setSelected([]);
-  // };
-
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -325,7 +315,6 @@ export default function EnhancedTable(props) {
     }
   
   };
-
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 

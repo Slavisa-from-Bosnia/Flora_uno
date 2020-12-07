@@ -41,7 +41,7 @@ app.use(express.json());
                 turnoverData.push(turnoverDataRow);
             }
             console.log("turnoverdata 37" +turnoverData);
-            var query1 = format('INSERT INTO turnover (descriptions, descriptions_id, roses_id, reserved, price) VALUES %L returning *', turnoverData );
+            var query1 = format('INSERT INTO turnover (descriptions, descriptions_id, roses_id, reserved, first_price) VALUES %L returning *', turnoverData );
             const newTurnover = await pool.query(query1);
             console.log("newTurnover.rows 40"+newTurnover.rows);
         } catch (err) {
@@ -60,11 +60,12 @@ app.use(express.json());
             console.error(err.message);
         }
     });
-    // get a spacification
+
+    // get spacification
     app.get("/specification/:id", async (req,res) => {
         try {
             const id = parseInt(req.params.id);
-            console.log("id 68"+id);
+            console.log("id 68"+""+id);
             const rose =await pool.query("SELECT *FROM turnover INNER JOIN roses ON (turnover.roses_id = roses.rose_id) WHERE turnover.descriptions_id =$1  ORDER BY turnover.dateOfTurnover DESC", [id]);
             res.json(rose.rows);
             console.log("rose.rows 71"+rose.rows);
@@ -75,74 +76,74 @@ app.use(express.json());
     });
 
     //  delete order 
-app.delete("/orders/:order_id", checkValid, async (req,res) => {
+    app.delete("/orders/:order_id", checkValid, async (req,res) => {
 
-    console.log("linija 81"+ "" +req.params.order_id);
-    try {
-        const {order_id} = req.params;
-        const deleteTurnovers = await pool.query("DELETE FROM turnover WHERE descriptions IN ($1) and descriptions_id IN ($2)", [20 ,order_id]);
-        console.log("obrisan turnover");
-        const deleteOrder = await pool.query("DELETE FROM orders WHERE order_id IN ($1) ", [order_id]);
-        console.log("obrisan order");
-        console.log(`Order ${order_id} was/were deleted`);
-        res.json("podaci obrisani");
-    } catch (err) {
-        console.error(err.message);
-    }
-});
+        console.log("linija 81"+ "" +req.params.order_id);
+        try {
+            const {order_id} = req.params;
+            const deleteTurnovers = await pool.query("DELETE FROM turnover WHERE descriptions IN ($1) and descriptions_id IN ($2)", [20 ,order_id]);
+            console.log("obrisan turnover");
+            const deleteOrder = await pool.query("DELETE FROM orders WHERE order_id IN ($1) ", [order_id]);
+            console.log("obrisan order");
+            console.log(`Order ${order_id} was/were deleted`);
+            res.json("podaci obrisani");
+        } catch (err) {
+            console.error(err.message);
+        }
+    });
 
     //  update order
-app.put("/orders/shipped/:id", checkValid, async (req, res) => {
-    try {
-        const {id} = req.params;
-        const shipped = req.body.nShipped;
-        console.log(req.body);
-        console.log("poslati podaci 101" + " " +id+ shipped);
-        if(shipped){
-            const updateOrder = await pool.query("UPDATE orders SET shipped = $1, shipping_date = CURRENT_TIMESTAMP(2)  WHERE order_id = $2 returning * ",
-            [shipped, id]
-            );
-            const updateTurnover = await pool.query("UPDATE turnover SET quantity = -reserved, reserved = 0 WHERE descriptions =$1 AND descriptions_id = $2 returning * ",
-            [20, id]
-            );
+    app.put("/orders/shipped/:id", checkValid, async (req, res) => {
+        try {
+            const {id} = req.params;
+            const shipped = req.body.nShipped;
+            console.log(req.body);
+            console.log("poslati podaci 101" + " " +id+ shipped);
+            if(shipped == true){
+                const updateOrder = await pool.query("UPDATE orders SET shipped = $1, shipping_date = CURRENT_TIMESTAMP(2)  WHERE order_id = $2 returning * ",
+                [shipped, id]
+                );
+                const updateTurnover = await pool.query("UPDATE turnover SET quantity = -reserved, reserved = 0 WHERE descriptions =$1 AND descriptions_id = $2 returning * ",
+                [20, id]
+                );
 
-            console.log("Order was updated true!");
-            // console.log(updateOrder);
-            res.json(updateOrder.rows[0]);
-        } else {
-            const updateOrder = await pool.query("UPDATE orders SET shipped = $1, shipping_date = null  WHERE order_id = $2 returning * ",
-            [shipped, id]
-            );
-            const updateTurnover = await pool.query("UPDATE turnover SET quantity = 0, reserved = -quantity WHERE descriptions =$1 AND descriptions_id = $2 returning * ",
-            [20, id]
-            );
+                console.log("Order was updated true!");
+                // console.log(updateOrder);
+                res.json(updateOrder.rows[0]);
+            } else if(shipped == false) {
+                const updateOrder = await pool.query("UPDATE orders SET shipped = $1, shipping_date = null  WHERE order_id = $2 returning * ",
+                [shipped, id]
+                );
+                const updateTurnover = await pool.query("UPDATE turnover SET quantity = 0, reserved = -quantity WHERE descriptions =$1 AND descriptions_id = $2 returning * ",
+                [20, id]
+                );
 
-            console.log("Order was updated false !");
-            // console.log(updateOrder);
-            res.json(updateOrder.rows[0]);
+                console.log("Order was updated false !");
+                // console.log(updateOrder);
+                res.json(updateOrder.rows[0]);
+            }
+        } catch (err) {
+            console.error(err.message);
         }
-    } catch (err) {
-        console.error(err.message);
-    }
-});
+    });
 
-app.put("/orders/payed/:id", checkValid, async (req, res) => {
-    try {
-        const {id} = req.params;6
+    app.put("/orders/payed/:id", checkValid, async (req, res) => {
+        try {
+            const {id} = req.params;6
 
-        const payed = req.body.nPayed;
-        console.log(req.body);
-        console.log("poslati podaci 118" + " " +id+ payed);
-        const updateOrder = await pool.query("UPDATE orders SET payed = $1  WHERE order_id = $2 returning * ",
-        [payed, id]
-        );
-        console.log("Order was updated!");
-        // console.log(updateOrder);
-        res.json(updateOrder.rows[0]);
-    } catch (err) {
-        console.error(err.message);
-    }
-});
+            const payed = req.body.nPayed;
+            console.log(req.body);
+            console.log("poslati podaci 118" + " " +id+ payed);
+            const updateOrder = await pool.query("UPDATE orders SET payed = $1  WHERE order_id = $2 returning * ",
+            [payed, id]
+            );
+            console.log("Order was updated!");
+            // console.log(updateOrder);
+            res.json(updateOrder.rows[0]);
+        } catch (err) {
+            console.error(err.message);
+        }
+    });
 
     // create a rose
 
@@ -167,7 +168,7 @@ app.put("/orders/payed/:id", checkValid, async (req, res) => {
             );
             console.log(newRose);
             const rose_id= parseInt(newRose.rows[0].rose_id);
-            const initialTurnover = await pool.query("INSERT INTO turnover (descriptions, roses_id, quantity, price) VALUES ($1, $2, $3, $4) RETURNING *",
+            const initialTurnover = await pool.query("INSERT INTO turnover (descriptions, roses_id, quantity, first_price) VALUES ($1, $2, $3, $4) RETURNING *",
             [10, rose_id, inputRoses.initial_quantity, inputRoses.price]);
             
             res.status(200).json({

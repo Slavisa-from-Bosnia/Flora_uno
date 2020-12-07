@@ -1,22 +1,22 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+// import TableBody from '@material-ui/core/TableBody';
+// import TableCell from '@material-ui/core/TableCell';
+// import TableContainer from '@material-ui/core/TableContainer';
+// import TableHead from '@material-ui/core/TableHead';
+// import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Remove from '@material-ui/icons/Remove';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
+// import Remove from '@material-ui/icons/Remove';
+// import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import Button from '@material-ui/core/Button';
-import CardAddress from "./CardAddress";
-import CardInvoice from './CardInvoice';
+// import CardAddress from "./CardAddress";
+// import CardInvoice from './CardInvoice';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import clsx from 'clsx';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+// import Typography from '@material-ui/core/Typography';
+// import Link from '@material-ui/core/Link';
 import Print from '@material-ui/icons/Print';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -52,10 +52,6 @@ const useStyles = makeStyles((theme) =>({
   }
 }));
  
-
-
-
-
 export default function SpanningTable(props) {
  
   // const [delivered, setDelivered] = useState(false);
@@ -66,11 +62,10 @@ export default function SpanningTable(props) {
   const {docker} = useContext(SignInContext);
 
 
-
   useEffect(()=>{
     setShipped(props.data.shipped);  
     setPayed(props.data.payed);
-  },[props.data.shipped]);
+  },[props.shipped]);
 
 
   const handleDelivered =async e => {
@@ -87,7 +82,8 @@ export default function SpanningTable(props) {
         },
         body: JSON.stringify({nShipped})
       });
-      console.log(response);
+      const jsonData = await response.json();
+      console.log(jsonData);
       setShipped(nShipped);
       
     } catch (err) {
@@ -117,10 +113,7 @@ export default function SpanningTable(props) {
     }
   };
 
-
-
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
 
   return (
     <main className={classes.content}>
@@ -150,7 +143,7 @@ export default function SpanningTable(props) {
                 color="primary"
                 />
               }
-                label="Isporučeno"
+                label="Otpremljeno"
               />
             </Grid>
             <Grid item xs={3} sm={3} md={3}>
@@ -169,7 +162,6 @@ export default function SpanningTable(props) {
           </Grid>
         </Paper>
       </Container>
-  </main>
-   
+    </main>
   );
 }

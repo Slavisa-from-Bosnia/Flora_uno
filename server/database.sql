@@ -49,7 +49,7 @@ CREATE TABLE turnover (
     descriptions_id INT,
     roses_id INT,
     quantity INT,
-    price FLOAT,
+    first_price FLOAT,
     sumData FLOAT,
     dateOfTurnover TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     reserved INT DEFAULT 0

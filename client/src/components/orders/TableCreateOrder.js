@@ -67,12 +67,10 @@ export default function SpanningTable(props) {
     props.deleteSpecification(rowItem);
   }
 
-
   return (
     <TableContainer component={Paper} className={classes.container}>
       <Table className={classes.table} stickyHeader  aria-label="spanning table">
         <TableHead>
-          
           <TableRow>
             <TableCell>Briši stavku</TableCell>
             <TableCell>Artikal</TableCell>
@@ -96,7 +94,7 @@ export default function SpanningTable(props) {
                 <TableCell align="right">{row.price}</TableCell>
                 <TableCell align="right">{ccyFormat(row.sum)}</TableCell>
             </TableRow>
-        )}
+          )}
 
           <TableRow>
             <TableCell rowSpan={3} colSpan={2} />

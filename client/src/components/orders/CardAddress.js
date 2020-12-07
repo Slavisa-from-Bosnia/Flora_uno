@@ -11,7 +11,7 @@ const useStyles = makeStyles({
     minWidth: 200,
     // margin:"30px",
     alignContent:"right",
-    height: 275
+    height: 300
   },
   bullet: {
     display: 'inline-block',
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     transform: 'scale(0.8)',
   },
   title: {
-    fontSize: 12,
+    fontSize: 14,
     marginBottom:35
   },
   pos: {

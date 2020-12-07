@@ -16,11 +16,13 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 // import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
+import Home from '@material-ui/icons/Home';
+
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems} from './ListItems';
 import Buyers from '../../components/buyers/Buyers';
-import {Switch, Route, Link} from 'react-router-dom';
+import {Switch, Route, Link, useHistory} from 'react-router-dom';
 import Roses from '../../components/roses/Roses';
 import Orders from '../../components/orders/Orders';
 import CreateOrder from '../../components/orders/CreateOrder';
@@ -133,6 +135,12 @@ export default function Dashboard() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const history = useHistory();
+
+  const handleStart= ()=>{
+    history.push("/");
+  };
+
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
@@ -152,6 +160,15 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Flora_uno
           </Typography>
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleStart}
+            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+          >
+            <Home />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -177,8 +194,11 @@ export default function Dashboard() {
               <Switch>
                   <Route path = {'/dashboard/buyers'} component = {Buyers}/>
                   <Route path = {'/dashboard/roses'} component = {Roses}/>
-                  <Route path = {'/dashboard/orders'} component = {Orders}/>
+                  <Route exact path = {'/dashboard/orders'} component = {Orders}/>
                   <Route path = {'/dashboard/createOrder'} component = {CreateOrder}/>
+                  <Route path = {'/dashboard/orders/detailview'} component = {DetailView}/>
+                  <Route path = {'/dashboard/orders/Orders'} component = {Orders}/>
+
               </Switch>
             </Grid>  
           </Grid>

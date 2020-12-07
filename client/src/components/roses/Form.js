@@ -301,7 +301,7 @@ const useStyles = makeStyles((theme) => ({
                     startIcon={<Description />}
                     onClick = {props.handleOpenDescription}
                   >
-                    Koriguj opis
+                    Kor. opisa
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
