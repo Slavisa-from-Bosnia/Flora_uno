@@ -5,9 +5,6 @@ WORKDIR /user/src/app
 
 COPY package*.json ./
 
-# digitalocean
-RUN npm install -g nodemon
-
 RUN npm install
 
 COPY . .
