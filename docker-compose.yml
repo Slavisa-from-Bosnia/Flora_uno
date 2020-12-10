@@ -17,7 +17,6 @@ services:
       # volumes: 
       #   - ./client:/user/src/app
 
-
     web:
       container_name: node_app
       restart: always
@@ -25,6 +24,7 @@ services:
         context: ./server
         dockerfile: Dockerfile
       command: npm rebuild 
+      comman: npm nodemon rebuild
       ports:
         - "5000:5000"
       depends_on:
