@@ -5,7 +5,7 @@ WORKDIR /user/src/app
 
 COPY package*.json ./
 
-RUN CI=true
+# RUN CI=true
 
 RUN npm install
 
