@@ -3,7 +3,7 @@
 CREATE DATABASE flora_uno;
 
 -- -- docker
-CREATE USER postgres WITH PASSWORD = 'postgresslavisa8';
+-- CREATE USER postgres WITH PASSWORD = 'postgresslavisa8';
 
 -- SET timezone = "Europe/Belgrade";
 
