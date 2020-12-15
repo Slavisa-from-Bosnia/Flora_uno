@@ -95,8 +95,9 @@ export default function SpanningTable(props) {
     var i = 0;
     var sum =[];
    for(i=0; i<data.length; i++){
-     var rowSum = data[i].reserved * data[i].price;
-     var rowData = {"name":data[i].name, "price":data[i].price, "reserved":data[i].reserved, "sum": rowSum, "quantity": data[i].quantity};
+     var rowSum =Math.abs(data[i].reserved+ data[i].quantity) * data[i].first_price;
+     console.log(rowSum);
+     var rowData = {"name":data[i].name, "first_price":data[i].first_price, "reserved":data[i].reserved, "sum": rowSum, "quantity": data[i].quantity};
      sum.push(rowData);
      console.log(rowData);
    }

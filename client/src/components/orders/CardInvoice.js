@@ -50,17 +50,21 @@ export default function SimpleCard(props) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
   function formatDate(date) {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+    if (date){
+      var d = new Date(date),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
 
-    if (month.length < 2) 
-        month = '0' + month;
-    if (day.length < 2) 
-        day = '0' + day;
+      if (month.length < 2) 
+          month = '0' + month;
+      if (day.length < 2) 
+          day = '0' + day;
 
-    return [day,month,year].join('-');
+      return [day,month,year].join('-');
+  } else {
+    return ("____________")
+  }
 }
 
 
@@ -73,7 +77,7 @@ export default function SimpleCard(props) {
           title="Contemplative Reptile"
         />
          <Typography className={classes.pos} variant="body2" component="p" color="textSecondary">
-          Novo Naselje bb, 76330 Ugljevik, PDV broj _______, tel: 065 -     /    
+          Novo Naselje bb, 76330 Ugljevik, PDV broj _______, tel: +387 66 723 989 (viber)    
         </Typography>
         <Typography variant="h6" component="h2">
         {`Faktura - otpremnica broj: ${props.order_id}, datum isporuke: ${formatDate(props.shipping_date)}`}

@@ -76,9 +76,9 @@ const handleEditData = (rowData) => {
 };
 
 // From form
-const editDataHendler = () => {
-  setEditData(false);
-};
+  function editDataHendler() {
+    setEditData(false);
+  }
 
 // Table open delete dialog
 const handleOpenDeleteDialog = (data) => {
