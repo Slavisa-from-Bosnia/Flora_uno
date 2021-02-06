@@ -50,6 +50,7 @@ services:
         - TZ="Europe/Belgrade"
       networks:
         - first 
+     
 
 volumes:
   postgres:
@@ -57,6 +58,8 @@ volumes:
 networks:
   first:
     driver: bridge
+    config:
+       -  subnet: 172.33.0.0/16
 
         
 
