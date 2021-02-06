@@ -58,7 +58,9 @@ volumes:
 networks:
   first:
     driver: bridge
-    config:
+    ipam:
+      driver: default
+      config:
        -  subnet: 172.33.0.0/16
 
         
