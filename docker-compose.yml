@@ -42,8 +42,8 @@ services:
         - "5432:5432"
       restart: always
       volumes:
-        - postgres:/var/lib/postgresql/data 
-        - ./server/database.sql:/docker-entrypoint-initdb.d/init.sql
+        - /mnt/volume-hel1-1:/var/lib/postgresql/data 
+        # - ./server/database.sql:/docker-entrypoint-initdb.d/init.sql
       environment: 
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
@@ -52,8 +52,8 @@ services:
         - first 
      
 
-volumes:
-  postgres:
+volumes: 
+  # postgres:
 
 networks:
   first:
