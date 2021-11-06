@@ -52,7 +52,7 @@ services:
         - first 
      
 
-volumes: 
+# volumes: 
   # postgres:
 
 networks:
